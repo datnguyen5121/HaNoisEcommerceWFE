@@ -23,9 +23,8 @@ function App() {
                         <Route path='product' element={<div>hehe</div>}>
                             <Route path=':id' element={<ProductDetail />} />
                         </Route>
-                        <Route path='cart' element={<Cart />} />e 
+                        <Route path='cart' element={<Cart />} />e
                         <Route path='checkout' element={<Checkout />} />
-
                         <Route path='login' element={<Login />} />
                         <Route path='register' element={<Register />} />
                     </Route>
@@ -33,6 +32,7 @@ function App() {
                         <Route path='product' element={<div>register</div>} />
                         <Route path='account' element={<div>register</div>} />
                     </Route>
+                    <Route path='routenaysebixoa2' element={<NotFound />} />
                     <Route path='*' element={<NotFound />} />
                 </Routes>
             </BrowserRouter>
