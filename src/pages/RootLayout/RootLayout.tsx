@@ -1,16 +1,20 @@
-import Header from '../../components/Header';
-import { Outlet } from 'react-router-dom';
+import Footer from '../../components/Footer'
+import Header from '../../components/Header'
+import { Outlet } from 'react-router-dom'
 function RootLayout() {
     return (
         <>
-            <div className="fixed top-0 left-0 right-0">
+            <div className=''>
                 <Header />
             </div>
-            <div className="bg-[#E5E7EB] mt-12 min-h-screen h-full pb-7">
+            <div className=''>
                 <Outlet />
             </div>
+            <div className=''>
+                <Footer />
+            </div>
         </>
-    );
+    )
 }
 
-export default RootLayout;
+export default RootLayout
