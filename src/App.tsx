@@ -9,6 +9,7 @@ import NotFound from './pages/NotFound'
 import Category from './pages/FrontEnd/Category'
 import AdminLayout from './pages/Admin/RootLayout'
 import ProductDetail from './components/ProductDetail'
+
 function App() {
     //check login
     return (
