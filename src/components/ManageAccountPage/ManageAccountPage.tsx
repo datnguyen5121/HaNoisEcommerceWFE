@@ -7,8 +7,8 @@ import { Button, Modal } from 'antd'
 import { ErrorMessage, Field, Formik } from 'formik'
 import { useLocation } from 'react-router-dom'
 import { initialValues } from '../../type/initialValues'
-import { validationSchema } from '../../type/validationSchema'
 import { AccountValues } from '../../type/AccountValues'
+import { validationSchemaAccount } from '../../type/validationSchemaAccount'
 
 type Props = {
     setAccount: Dispatch<React.SetStateAction<AccountValues[]>>
@@ -37,18 +37,18 @@ const ManageAccountPage = ({ setAccount }: Props) => {
         }
     }, [])
     const handleSubmit = (values: AccountValues) => {
-        setAccount((product: any) => {
-            let newProduct = [...product]
-            const productIndex = newProduct.findIndex((product) => product._id === values._id)
-            if (productIndex !== -1) {
-                newProduct[productIndex] = values
+        setAccount((account: any) => {
+            let newAccount = [...account]
+            const accountIndex = newAccount.findIndex((account) => account._id === values._id)
+            if (accountIndex !== -1) {
+                newAccount[accountIndex] = values
             } else {
-                newProduct = newProduct.concat({
+                newAccount = newAccount.concat({
                     ...values,
-                    _id: product.length + 1
+                    _id: account.length + 1
                 })
             }
-            return newProduct
+            return newAccount
         })
     }
 
@@ -56,13 +56,13 @@ const ManageAccountPage = ({ setAccount }: Props) => {
         <div className={`productPageContainer px-[20px] py-[10px]`}>
             <HeaderManageProduct />
             <div className={`h-[50px] flex items-center justify-center`}>
-                <h2 className={`text-[25px]`}>Product Page</h2>
+                <h2 className={`text-[25px]`}>Account Page</h2>
             </div>
             <div className={`h-[50px] flex items-center justify-center`}>
                 <input
                     className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
                     type='text'
-                    placeholder='Search Product'
+                    placeholder='Search Account'
                 />
             </div>
             <div className={`mt-[30px] flex flex-col justify-center items-center`}>
@@ -73,88 +73,109 @@ const ManageAccountPage = ({ setAccount }: Props) => {
                     <Modal title='Create A New Account' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
                         <Formik<AccountValues>
                             onSubmit={handleSubmit}
-                            validationSchema={validationSchema}
+                            validationSchema={validationSchemaAccount}
                             initialValues={state == null ? initialValues : state}
                         >
                             {(formik) => (
                                 <form action='' onSubmit={formik.handleSubmit}>
                                     <div className={`my-2`}>
-                                        <label htmlFor='productName' className='me-[10px] font-[700]'>
-                                            Product Name
+                                        <label htmlFor='email' className='me-[10px] font-[700]'>
+                                            Email
                                         </label>
                                         <Field
                                             as='input'
-                                            name='productName'
+                                            name='email'
                                             className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
                                         />
-                                        <ErrorMessage
-                                            className={`${styles.error}`}
-                                            name='productName'
-                                            component='div'
-                                        />
+                                        <ErrorMessage className={`${styles.error}`} name='email' component='div' />
                                     </div>
                                     <div className={`my-2`}>
-                                        <label htmlFor='description' className='me-[10px] font-[700]'>
-                                            Description
+                                        <label htmlFor='password' className='me-[10px] font-[700]'>
+                                            Password
                                         </label>
                                         <Field
                                             as='input'
-                                            name='description'
+                                            name='password'
                                             className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
                                         />
-                                        <ErrorMessage
-                                            className={`${styles.error}`}
-                                            name='description'
-                                            component='div'
-                                        />
+                                        <ErrorMessage className={`${styles.error}`} name='password' component='div' />
                                     </div>
                                     <div className={`my-2`}>
-                                        <label htmlFor='datePublish' className='me-[10px] font-[700]'>
-                                            Date Publish
+                                        <label htmlFor='firstName' className='me-[10px] font-[700]'>
+                                            First Name
                                         </label>
                                         <Field
                                             as='input'
-                                            name='datePublish'
+                                            name='firstName'
                                             className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
                                         />
-                                        <ErrorMessage
-                                            className={`${styles.error}`}
-                                            name='datePublish'
-                                            component='div'
-                                        />
+                                        <ErrorMessage className={`${styles.error}`} name='firstName' component='div' />
                                     </div>
                                     <div className={`my-2`}>
-                                        <label htmlFor='category' className='me-[10px] font-[700]'>
-                                            Category
+                                        <label htmlFor='lastName' className='me-[10px] font-[700]'>
+                                            Last Name
                                         </label>
                                         <Field
                                             as='input'
-                                            name='category'
+                                            name='lastName'
                                             className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
                                         />
-                                        <ErrorMessage className={`${styles.error}`} name='category' component='div' />
+                                        <ErrorMessage className={`${styles.error}`} name='lastName' component='div' />
                                     </div>
                                     <div className={`my-2`}>
-                                        <label htmlFor='size' className='me-[10px] font-[700]'>
-                                            Size
+                                        <label htmlFor='address' className='me-[10px] font-[700]'>
+                                            Address
                                         </label>
                                         <Field
                                             as='input'
-                                            name='size'
+                                            name='address'
                                             className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
                                         />
-                                        <ErrorMessage className={`${styles.error}`} name='size' component='div' />
+                                        <ErrorMessage className={`${styles.error}`} name='address' component='div' />
                                     </div>
                                     <div className={`my-2`}>
-                                        <label htmlFor='imgUrl' className='me-[10px] font-[700]'>
-                                            Image Url
+                                        <label htmlFor='gender' className='me-[10px] font-[700]'>
+                                            Gender
                                         </label>
                                         <Field
                                             as='input'
-                                            name='imgUrl'
+                                            name='gender'
                                             className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
                                         />
-                                        <ErrorMessage className={`${styles.error}`} name='imgUrl' component='div' />
+                                        <ErrorMessage className={`${styles.error}`} name='gender' component='div' />
+                                    </div>
+                                    <div className={`my-2`}>
+                                        <label htmlFor='roleId' className='me-[10px] font-[700]'>
+                                            Role
+                                        </label>
+                                        <Field
+                                            as='input'
+                                            name='roleId'
+                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
+                                        />
+                                        <ErrorMessage className={`${styles.error}`} name='roleId' component='div' />
+                                    </div>
+                                    <div className={`my-2`}>
+                                        <label htmlFor='createdAt' className='me-[10px] font-[700]'>
+                                            Created At
+                                        </label>
+                                        <Field
+                                            as='input'
+                                            name='createdAt'
+                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
+                                        />
+                                        <ErrorMessage className={`${styles.error}`} name='createdAt' component='div' />
+                                    </div>
+                                    <div className={`my-2`}>
+                                        <label htmlFor='updatedAt' className='me-[10px] font-[700]'>
+                                            Updated At
+                                        </label>
+                                        <Field
+                                            as='input'
+                                            name='updatedAt'
+                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
+                                        />
+                                        <ErrorMessage className={`${styles.error}`} name='updatedAt' component='div' />
                                     </div>
                                 </form>
                             )}
@@ -182,15 +203,15 @@ const ManageAccountPage = ({ setAccount }: Props) => {
                             <tr key={index}>
                                 <td className='w-11'>{index + 1}</td>
                                 <td className='w-36'>{account.email}</td>
-                                <td className='w-40'>{account.password}</td>
+                                <td className='w-36 break-all'>{account.password}</td>
                                 <td className='w-28'>{account.firstName}</td>
-                                <td className='w-32'>{account.lastName}</td>
-                                <td className='w-12'>{account.address}</td>
-                                <td className='w-40'>{account.gender}</td>
+                                <td className='w-20'>{account.lastName}</td>
+                                <td className='w-28'>{account.address}</td>
+                                <td className='w-16'>{account.gender}</td>
                                 <td className='w-16'>{account.roleId}</td>
-                                <td className='w-52'>{account.createdAt}</td>
-                                <td className='w-52'>{account.updatedAt}</td>
-                                <td className='w-36'>
+                                <td className='w-36'>{account.createdAt}</td>
+                                <td className='w-36'>{account.updatedAt}</td>
+                                <td className='w-28'>
                                     <div>
                                         <button className={`${styles.editBtn}`}>Edit</button>
                                         <button

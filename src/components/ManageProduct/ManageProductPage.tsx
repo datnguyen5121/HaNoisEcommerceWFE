@@ -8,7 +8,7 @@ import { ProductValues } from '../../type/ProductValues'
 import { ErrorMessage, Field, Formik } from 'formik'
 import { useLocation } from 'react-router-dom'
 import { initialValues } from '../../type/initialValues'
-import { validationSchema } from '../../type/validationSchema'
+import { validationSchemaProduct } from '../../type/validationSchemaProduct'
 
 type Props = {
     setProduct: Dispatch<React.SetStateAction<ProductValues[]>>
@@ -72,7 +72,7 @@ const ManageProductPage = ({ setProduct }: Props) => {
                     <Modal title='Create A New Product' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
                         <Formik<ProductValues>
                             onSubmit={handleSubmit}
-                            validationSchema={validationSchema}
+                            validationSchema={validationSchemaProduct}
                             initialValues={state == null ? initialValues : state}
                         >
                             {(formik) => (

@@ -1,5 +1,5 @@
 import * as Yup from 'yup'
-export const validationSchema = Yup.object({
+export const validationSchemaProduct = Yup.object({
     productName: Yup.string().required('Product name is required'),
     description: Yup.string().required('Description is required'),
     datePublish: Yup.string().required('Date published is required'),

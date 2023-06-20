@@ -17,9 +17,6 @@ td {
     margin-right: left;
     border-radius: 6px;
 }
-.createProductBtn {
-    background-color: rgb(224, 224, 224);
-    color: black;
-    padding: 10px 10px;
-    border-radius: 6px;
+.error {
+    color: red;
 }
