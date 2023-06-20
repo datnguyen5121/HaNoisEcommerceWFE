@@ -20,17 +20,15 @@ function App() {
                         <Route path=':gender' element={<Category />}>
                             <Route path=':category' element={<div>nike</div>} />
                         </Route>
-                        <Route path='product' element={<div>hehe</div>}>
-                            <Route path=':id' element={<ProductDetail />} />
-                        </Route>
-                        <Route path='cart' element={<Cart />} />e
+                        <Route path='product/:id' element={<ProductDetail />}></Route>
+                        <Route path='cart' element={<Cart />} />
                         <Route path='checkout' element={<Checkout />} />
                         <Route path='login' element={<Login />} />
                         <Route path='register' element={<Register />} />
                     </Route>
                     <Route path='admin' element={<AdminLayout />}>
-                        <Route path='product' element={<div>register</div>} />
-                        <Route path='account' element={<div>register</div>} />
+                        <Route path='manage-product' element={<div>register</div>} />
+                        <Route path='manage-account' element={<div>register</div>} />
                     </Route>
                     <Route path='routenaysebixoa2' element={<NotFound />} />
                     <Route path='*' element={<NotFound />} />
