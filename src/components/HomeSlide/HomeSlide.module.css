@@ -1,0 +1,60 @@
+.homeSlide {
+    margin-bottom: 50px;
+}
+
+.slide {
+    overflow-x: scroll;
+}
+
+.slideHeading {
+    display: flex;
+    justify-content: space-between;
+
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.heading {
+    font-size: 26px;
+}
+
+.btnGrp {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btnGrp button {
+    height: 48px;
+    width: 48px;
+    color: #111111;
+    cursor: pointer;
+    background-color: #e5e5e5;
+    border-radius: 24px;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+::-webkit-scrollbar-button {
+    background: black;
+}
+
+.slideItems {
+    display: flex;
+    gap: 12px;
+    width: max-content;
+}
+
+.slideItem {
+    width: 380px;
+}
+
+.slideItemText {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+}
+
+.textLeft p {
+    color: #757575;
+}
