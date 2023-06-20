@@ -9,6 +9,7 @@ import NotFound from './pages/NotFound'
 import Category from './pages/FrontEnd/Category'
 import AdminLayout from './pages/Admin/RootLayout'
 import ProductDetail from './components/ProductDetail'
+import ProductByCategory from './pages/FrontEnd/ProductByCategory'
 function App() {
     //check login
     return (
@@ -18,21 +19,20 @@ function App() {
                     <Route path='/' element={<RootLayout />}>
                         <Route path='/' element={<Home />} />
                         <Route path=':gender' element={<Category />}>
-                            <Route path=':category' element={<div>nike</div>} />
+                            <Route path=':category' element={<ProductByCategory />} />
                         </Route>
                         <Route path='product' element={<div>hehe</div>}>
                             <Route path=':id' element={<ProductDetail />} />
                         </Route>
                         <Route path='cart' element={<Cart />} />e
                         <Route path='checkout' element={<Checkout />} />
-                        <Route path='login' element={<Login />} />
-                        <Route path='register' element={<Register />} />
                     </Route>
+                    <Route path='login' element={<Login />} />
+                    <Route path='register' element={<Register />} />
                     <Route path='admin' element={<AdminLayout />}>
                         <Route path='product' element={<div>register</div>} />
                         <Route path='account' element={<div>register</div>} />
                     </Route>
-                    <Route path='routenaysebixoa2' element={<NotFound />} />
                     <Route path='*' element={<NotFound />} />
                 </Routes>
             </BrowserRouter>
