@@ -1,0 +1,17 @@
+.user::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translateY(-50%);
+
+    width: 30px;
+    height: 20px;
+    background-color: transparent;
+    display: none;
+}
+
+.group:hover .user,
+.group:hover .user::before {
+    display: block;
+}
