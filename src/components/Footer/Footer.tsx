@@ -7,7 +7,7 @@ function Footer() {
     const aboutNike = ['News', 'Careers', 'Investors', 'Sustainability']
     const policy = ['Guides', 'Terms of Sale', 'Terms of Use', 'Nike Privacy Policy']
     return (
-        <div className='bg-black container '>
+        <div className='bg-black'>
             <div className='flex justify-between py-10'>
                 <div className='grid grid-cols-3 gap-20 text-sm'>
                     <div className='font-medium text-white'>
