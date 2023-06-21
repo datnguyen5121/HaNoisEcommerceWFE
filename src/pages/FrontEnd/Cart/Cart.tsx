@@ -371,6 +371,9 @@ function Cart() {
                     <p>Total</p>
                     <p>$500</p>
                 </div>
+                <div className='flex items-center justify-center w-full text-center h-[2.8rem] bg-black text-white rounded-[2rem] cursor-pointer'>
+                    Checkout
+                </div>
             </div>
         </div>
     )
