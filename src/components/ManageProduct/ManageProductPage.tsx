@@ -5,7 +5,7 @@ import { Dispatch, useEffect, useState } from 'react'
 import { getProducts, removeToManageProduct } from '../../redux/features/manageProductSlice'
 import { Button, Modal } from 'antd'
 import { ProductValues } from '../../type/ProductValues'
-import { ErrorMessage, Field, Formik } from 'formik'
+import { ErrorMessage, Field, FieldArray, Formik } from 'formik'
 import { useLocation } from 'react-router-dom'
 import { initialValues } from '../../type/initialValues'
 import { validationSchemaProduct } from '../../type/validationSchemaProduct'
@@ -13,8 +13,26 @@ import { validationSchemaProduct } from '../../type/validationSchemaProduct'
 type Props = {
     setProduct: Dispatch<React.SetStateAction<ProductValues[]>>
 }
+type PropsArray3 = {
+    subnavName: string
+    list: string[]
+}
+
+type PropsArray2 = {
+    navName: string
+    list: PropsArray3[]
+}
+type PropsArray1 = PropsArray2[]
 
 const ManageProductPage = ({ setProduct }: Props) => {
+    const [inputTag1, setInputTag1] = useState<string>('')
+
+    const handleAddValue = (value: string) => {
+        // arrayHelpers.push(value)
+    }
+    const handleChangeInput1 = (e: any) => {
+        setInputTag1(e.target.value)
+    }
     const [isModalOpen, setIsModalOpen] = useState(false)
     const { state } = useLocation()
     const showModal = () => {
@@ -77,29 +95,25 @@ const ManageProductPage = ({ setProduct }: Props) => {
                         >
                             {(formik) => (
                                 <form action='' onSubmit={formik.handleSubmit}>
-                                    <div className={`my-2`}>
-                                        <label htmlFor='productName' className='me-[10px] font-[700]'>
-                                            Product Name
+                                    <div className={`my-2 grid`}>
+                                        <label htmlFor='title' className='me-[10px] font-[700]'>
+                                            Title
                                         </label>
                                         <Field
                                             as='input'
-                                            name='productName'
-                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
+                                            name='title'
+                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px] rounded-md   `}
                                         />
-                                        <ErrorMessage
-                                            className={`${styles.error}`}
-                                            name='productName'
-                                            component='div'
-                                        />
+                                        <ErrorMessage className={`${styles.error}`} name='title' component='div' />
                                     </div>
-                                    <div className={`my-2`}>
+                                    <div className={`my-2 grid`}>
                                         <label htmlFor='description' className='me-[10px] font-[700]'>
                                             Description
                                         </label>
                                         <Field
                                             as='input'
                                             name='description'
-                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
+                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px] rounded-md   `}
                                         />
                                         <ErrorMessage
                                             className={`${styles.error}`}
@@ -107,14 +121,38 @@ const ManageProductPage = ({ setProduct }: Props) => {
                                             component='div'
                                         />
                                     </div>
-                                    <div className={`my-2`}>
+                                    <div>
+                                        <label htmlFor='inputValue'>Giá trị:</label>
+                                        <Field
+                                            type='text'
+                                            id='inputValue'
+                                            name='inputValue'
+                                            onChange={handleChangeInput1}
+                                        />
+                                        <button type='button' onClick={() => handleAddValue(inputTag1)}>
+                                            Thêm
+                                        </button>
+                                    </div>
+
+                                    <FieldArray name='myArray'>
+                                        {({ form, push }) => (
+                                            <div>
+                                                {form.values.myArray.map((value: any, index: any) => (
+                                                    <div key={index}>{value}</div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </FieldArray>
+
+                                    <ErrorMessage name='inputValue' component='div' />
+                                    <div className={`my-2 grid`}>
                                         <label htmlFor='datePublish' className='me-[10px] font-[700]'>
                                             Date Publish
                                         </label>
                                         <Field
                                             as='input'
                                             name='datePublish'
-                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
+                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px] rounded-md   `}
                                         />
                                         <ErrorMessage
                                             className={`${styles.error}`}
@@ -122,36 +160,36 @@ const ManageProductPage = ({ setProduct }: Props) => {
                                             component='div'
                                         />
                                     </div>
-                                    <div className={`my-2`}>
+                                    <div className={`my-2 grid`}>
                                         <label htmlFor='category' className='me-[10px] font-[700]'>
                                             Category
                                         </label>
                                         <Field
                                             as='input'
                                             name='category'
-                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
+                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px] rounded-md   `}
                                         />
                                         <ErrorMessage className={`${styles.error}`} name='category' component='div' />
                                     </div>
-                                    <div className={`my-2`}>
+                                    <div className={`my-2 grid`}>
                                         <label htmlFor='size' className='me-[10px] font-[700]'>
                                             Size
                                         </label>
                                         <Field
                                             as='input'
                                             name='size'
-                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
+                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px] rounded-md   `}
                                         />
                                         <ErrorMessage className={`${styles.error}`} name='size' component='div' />
                                     </div>
-                                    <div className={`my-2`}>
+                                    <div className={`my-2 grid`}>
                                         <label htmlFor='imgUrl' className='me-[10px] font-[700]'>
                                             Image Url
                                         </label>
                                         <Field
                                             as='input'
                                             name='imgUrl'
-                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
+                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px] rounded-md   `}
                                         />
                                         <ErrorMessage className={`${styles.error}`} name='imgUrl' component='div' />
                                     </div>
@@ -164,7 +202,7 @@ const ManageProductPage = ({ setProduct }: Props) => {
                     <thead>
                         <tr>
                             <th>STT</th>
-                            <th>ProductName</th>
+                            <th>title</th>
                             <th>Description</th>
                             <th>DatePublish</th>
                             <th>Category</th>
@@ -180,10 +218,11 @@ const ManageProductPage = ({ setProduct }: Props) => {
                         {productItems.map((product, index) => (
                             <tr key={index}>
                                 <td className='w-11'>{index + 1}</td>
-                                <td className='w-36'>{product.productName}</td>
+                                <td className='w-36'>{product.title}</td>
                                 <td className='w-40'>{product.description}</td>
                                 <td className='w-28'>{product.datePublish}</td>
                                 <td className='w-32'>{product.category}</td>
+                                <td className='w-32'>{product.gender}</td>
                                 <td className='w-12'>{product.size}</td>
                                 <td className='w-40'>{product.imgUrl}</td>
                                 <td className='w-16'>{product.price}</td>
