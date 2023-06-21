@@ -28,7 +28,7 @@ function App() {
                     <Route path='login' element={<Login />} />
                     <Route path='register' element={<Register />} />
                     <Route path='admin' element={<AdminLayout />}>
-                        <Route path='manage-product' element={<div>register</div>} />
+                        <Route path='manage-product' element={<div>regster</div>} />
                         <Route path='manage-account' element={<div>register</div>} />
                     </Route>
                     <Route path='*' element={<NotFound />} />
