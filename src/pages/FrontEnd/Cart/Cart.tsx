@@ -17,7 +17,7 @@ function Cart() {
                             <h3 className={`mb-[0.4rem] ${styles.h3Heading}`}>Nike Air Force 1 '07 LX</h3>
                             <p className='mb-[0.4rem]'>Men's Shoes</p>
                             <p className='mb-[0.4rem]'>White/Beach/White/Smoke Grey</p>
-                            <div>
+                            <div className='flex'>
                                 <label htmlFor='' className='me-[5px]'>
                                     Size
                                 </label>
@@ -37,6 +37,10 @@ function Cart() {
                                     <option value='43'>43</option>
                                     <option value='43.5s'>43.5</option>
                                 </select>
+                                <label htmlFor='quantity' className='px-[1rem]'>
+                                    Quantity
+                                </label>
+                                <p>1</p>
                             </div>
                         </div>
                         <div>
@@ -57,7 +61,7 @@ function Cart() {
                             <h3 className={`mb-[0.4rem] ${styles.h3Heading}`}>Nike Blazer Low '77 Jumbo</h3>
                             <p className='mb-[0.4rem]'>Men's Shoes</p>
                             <p className='mb-[0.4rem]'>White/Photon Dust/Light Smoke Grey/University Red</p>
-                            <div>
+                            <div className='flex'>
                                 <label htmlFor='' className='me-[5px]'>
                                     Size
                                 </label>
@@ -77,6 +81,10 @@ function Cart() {
                                     <option value='43'>43</option>
                                     <option value='43.5s'>43.5</option>
                                 </select>
+                                <label htmlFor='quantity' className='px-[1rem]'>
+                                    Quantity
+                                </label>
+                                <p>1</p>
                             </div>
                         </div>
                         <div>
@@ -97,7 +105,7 @@ function Cart() {
                             <h3 className={`mb-[0.4rem] ${styles.h3Heading}`}>Nike Air Max 90</h3>
                             <p className='mb-[0.4rem]'>Men's Shoes</p>
                             <p className='mb-[0.4rem]'>Photon Dust/Metallic Silver/Black/University Red</p>
-                            <div>
+                            <div className='flex'>
                                 <label htmlFor='' className='me-[5px]'>
                                     Size
                                 </label>
@@ -117,6 +125,10 @@ function Cart() {
                                     <option value='43'>43</option>
                                     <option value='43.5s'>43.5</option>
                                 </select>
+                                <label htmlFor='quantity' className='px-[1rem]'>
+                                    Quantity
+                                </label>
+                                <p>1</p>
                             </div>
                         </div>
                         <div>
@@ -137,7 +149,7 @@ function Cart() {
                             <h3 className={`mb-[0.4rem] ${styles.h3Heading}`}>Nike Air Flight Lite Mid</h3>
                             <p className='mb-[0.4rem]'>Men's Shoes</p>
                             <p className='mb-[0.4rem]'>Black/Varsity Red/White</p>
-                            <div>
+                            <div className='flex'>
                                 <label htmlFor='' className='me-[5px]'>
                                     Size
                                 </label>
@@ -157,6 +169,10 @@ function Cart() {
                                     <option value='43'>43</option>
                                     <option value='43.5s'>43.5</option>
                                 </select>
+                                <label htmlFor='quantity' className='px-[1rem]'>
+                                    Quantity
+                                </label>
+                                <p>1</p>
                             </div>
                         </div>
                         <div>
@@ -177,7 +193,7 @@ function Cart() {
                             <h3 className={`mb-[0.4rem] ${styles.h3Heading}`}>Air Jordan 1 Mid</h3>
                             <p className='mb-[0.4rem]'>Men's Shoes</p>
                             <p className='mb-[0.4rem]'>University Blue/White/Black</p>
-                            <div>
+                            <div className='flex'>
                                 <label htmlFor='' className='me-[5px]'>
                                     Size
                                 </label>
@@ -197,6 +213,10 @@ function Cart() {
                                     <option value='43'>43</option>
                                     <option value='43.5s'>43.5</option>
                                 </select>
+                                <label htmlFor='quantity' className='px-[1rem]'>
+                                    Quantity
+                                </label>
+                                <p>1</p>
                             </div>
                         </div>
                         <div>
@@ -217,7 +237,7 @@ function Cart() {
                             <h3 className={`mb-[0.4rem] ${styles.h3Heading}`}>Nike React Phantom Run Flyknit 2</h3>
                             <p className='mb-[0.4rem]'>Men's Road Running Shoes</p>
                             <p className='mb-[0.4rem]'>Black/White</p>
-                            <div>
+                            <div className='flex'>
                                 <label htmlFor='' className='me-[5px]'>
                                     Size
                                 </label>
@@ -237,6 +257,10 @@ function Cart() {
                                     <option value='43'>43</option>
                                     <option value='43.5s'>43.5</option>
                                 </select>
+                                <label htmlFor='quantity' className='px-[1rem]'>
+                                    Quantity
+                                </label>
+                                <p>1</p>
                             </div>
                         </div>
                         <div>
@@ -257,7 +281,7 @@ function Cart() {
                             <h3 className={`mb-[0.4rem] ${styles.h3Heading}`}>Jordan Stadium 90</h3>
                             <p className='mb-[0.4rem]'>Men's Shoes</p>
                             <p className='mb-[0.4rem]'>Brown/Black/University Red/Sand Drift</p>
-                            <div>
+                            <div className='flex'>
                                 <label htmlFor='' className='me-[5px]'>
                                     Size
                                 </label>
@@ -277,6 +301,10 @@ function Cart() {
                                     <option value='43'>43</option>
                                     <option value='43.5s'>43.5</option>
                                 </select>
+                                <label htmlFor='quantity' className='px-[1rem]'>
+                                    Quantity
+                                </label>
+                                <p>1</p>
                             </div>
                         </div>
                         <div>
@@ -297,7 +325,7 @@ function Cart() {
                             <h3 className={`mb-[0.4rem] ${styles.h3Heading}`}>Jumpman Two Trey</h3>
                             <p className='mb-[0.4rem]'>Men's Shoes</p>
                             <p className='mb-[0.4rem]'>Black/Dark Concord/White/True Red</p>
-                            <div>
+                            <div className='flex'>
                                 <label htmlFor='' className='me-[5px]'>
                                     Size
                                 </label>
@@ -317,6 +345,10 @@ function Cart() {
                                     <option value='43'>43</option>
                                     <option value='43.5s'>43.5</option>
                                 </select>
+                                <label htmlFor='quantity' className='px-[1rem]'>
+                                    Quantity
+                                </label>
+                                <p>1</p>
                             </div>
                         </div>
                         <div>
