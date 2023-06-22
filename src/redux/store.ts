@@ -2,11 +2,13 @@ import { configureStore } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import manageProductReducer from './features/manageProductSlice'
 import manageAccountReducer from './features/manageAccountSlice'
+import cartReducer from './features/cartSlice'
 
 const store = configureStore({
     reducer: {
         manageProduct: manageProductReducer,
-        manageAccount: manageAccountReducer
+        manageAccount: manageAccountReducer,
+        cart: cartReducer
     }
 })
 export default store
