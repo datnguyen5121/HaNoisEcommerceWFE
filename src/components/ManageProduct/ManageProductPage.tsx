@@ -200,9 +200,11 @@ const ManageProductPage = ({ setProduct }: Props) => {
             }
             setListSubNav(cloneArr)
         }
-    }, [categoryTag, productTag])
+    }, [categoryTag])
     useEffect(() => {
         let cloneArr = [...listNav]
+        console.log('tag', tagSelect)
+
         let index = cloneArr.findIndex((item) => item.navName == tagSelect)
         if (index >= 0) {
             let newArrProductObj = cloneArr[index].list.map((item) => item.subnavName)
