@@ -176,7 +176,7 @@ const ManageProductPage = ({ setProduct }: Props) => {
 
     let handleChangeTagSelect = (value: string) => {
         console.log('tag select', value)
-        setTagSelect(value), setProductTag([]), setCategoryTag([])
+        setTagSelect(value), setProductTag([]), setCategoryTag([]), setProductTagSelect('')
     }
     let handleChangeProductTagSelect = (value: string) => {
         console.log('product select', value)
@@ -207,8 +207,12 @@ const ManageProductPage = ({ setProduct }: Props) => {
 
         let index = cloneArr.findIndex((item) => item.navName == tagSelect)
         if (index >= 0) {
+            console.log('dattttt')
+
             let newArrProductObj = cloneArr[index].list.map((item) => item.subnavName)
             setProductTag(newArrProductObj)
+        } else {
+            setListSubNav([])
         }
         // else {
         //     setTagSelect('')
