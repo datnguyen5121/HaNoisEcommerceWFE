@@ -3,6 +3,7 @@ import styles from './Register.module.css'
 import { Formik, Field, Form, ErrorMessage } from 'formik'
 import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
+import { registerUser } from '../../../redux/authRequest'
 
 const Register: FC = () => {
     const navigate = useNavigate()
@@ -12,7 +13,8 @@ const Register: FC = () => {
         email: '',
         password: '',
         address: '',
-        gender: ''
+        gender: '',
+        phone: ''
     }
 
     const validationSchema = Yup.object().shape({
@@ -21,11 +23,20 @@ const Register: FC = () => {
         email: Yup.string().email('Please enter a valid email address.').required('Email is required'),
         password: Yup.string().required('Password is required'),
         address: Yup.string().required('Address is required'),
-        gender: Yup.string().required('Gender is required')
+        gender: Yup.string().required('Gender is required'),
+        phone: Yup.string().required('Phone is required')
     })
 
-    const handleSubmit = (values: any) => {
-        console.log(values)
+    const handleSubmit = (values: {
+        firstName: string
+        lastName: string
+        email: string
+        password: string
+        address: string
+        gender: string
+        phone: string
+    }) => {
+        registerUser(values, navigate)
     }
 
     return (
@@ -101,6 +112,20 @@ const Register: FC = () => {
                                         placeholder='Last Name'
                                     />
                                     <ErrorMessage name='lastName' component='div' className={styles.error} />
+                                </div>
+
+                                <div className={styles.inputContainer}>
+                                    <Field
+                                        type='text'
+                                        name='phone'
+                                        className={
+                                            errors.phone && touched.phone
+                                                ? `${styles.input} ${styles.errorBorder}`
+                                                : `${styles.input}`
+                                        }
+                                        placeholder='Phone number'
+                                    />
+                                    <ErrorMessage name='phone' component='div' className={styles.error} />
                                 </div>
 
                                 <div className={styles.inputContainer}>
