@@ -55,7 +55,37 @@ function Cart() {
                                             <label htmlFor='quantity' className='px-[1rem]'>
                                                 Quantity
                                             </label>
-                                            <p>{item.quantity}</p>
+                                            <div className='bg-gray-200 rounded-[6px] flex items-center'>
+                                                <button
+                                                    className={`cursor-pointer text-[16px] text-orange-500 px-[1rem] flex items-center`}
+                                                    onClick={() => dispatch(decreaseQuantity(index))}
+                                                >
+                                                    <svg
+                                                        xmlns='http://www.w3.org/2000/svg'
+                                                        height='1em'
+                                                        fill='currentColor'
+                                                        fontSize='currentFontsize'
+                                                        viewBox='0 0 448 512'
+                                                    >
+                                                        <path d='M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z' />
+                                                    </svg>
+                                                </button>
+                                                <p> {item.quantity}</p>
+                                                <button
+                                                    className={`cursor-pointer text-[16px] text-orange-500 px-[1rem] flex items-center`}
+                                                    onClick={() => dispatch(increaseQuantity(index))}
+                                                >
+                                                    <svg
+                                                        xmlns='http://www.w3.org/2000/svg'
+                                                        height='1em'
+                                                        fill='currentColor'
+                                                        fontSize='currentFontsize'
+                                                        viewBox='0 0 448 512'
+                                                    >
+                                                        <path d='M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z' />
+                                                    </svg>
+                                                </button>
+                                            </div>
                                         </div>
                                         <div className='mt-[0.6rem]'>
                                             <button
@@ -94,7 +124,10 @@ function Cart() {
                             <p>Total</p>
                             <p>${totalPrice}</p>
                         </div>
-                        <div className='flex items-center justify-center w-full text-center h-[2.8rem] bg-black text-white rounded-[2rem] cursor-pointer hover:bg-gray-600'>
+                        <div
+                            onClick={() => dispatch(notifyCheckoutSuccess())}
+                            className='flex items-center justify-center w-full text-center h-[2.8rem] bg-black text-white rounded-[2rem] cursor-pointer hover:bg-gray-600'
+                        >
                             Checkout
                         </div>
                     </div>

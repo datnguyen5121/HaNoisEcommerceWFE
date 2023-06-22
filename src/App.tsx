@@ -10,11 +10,25 @@ import Category from './pages/FrontEnd/Category'
 import AdminLayout from './pages/Admin/RootLayout'
 import ProductDetail from './components/ProductDetail'
 import ProductByCategory from './pages/FrontEnd/ProductByCategory'
+import { ToastContainer } from 'react-toastify'
 function App() {
     //check login
     return (
         <>
             <BrowserRouter>
+                <ToastContainer
+                    position='top-right'
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme='light'
+                />
+                <ToastContainer />
                 <Routes>
                     <Route path='/' element={<RootLayout />}>
                         <Route path='/' element={<Home />} />
