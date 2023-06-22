@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import RootLayout from './pages/RootLayout'
 import Home from './pages/FrontEnd/Home'
 import Login from './pages/FrontEnd/Login'
@@ -9,8 +9,23 @@ import NotFound from './pages/NotFound'
 import Category from './pages/FrontEnd/Category'
 import AdminLayout from './pages/Admin/RootLayout'
 import ProductDetail from './components/ProductDetail'
+import { useEffect, useState } from 'react'
+import { ProductValues } from './type/ProductValues'
+import { AccountValues } from './type/AccountValues'
 import ProductByCategory from './pages/FrontEnd/ProductByCategory'
 function App() {
+    const [product, setProduct] = useState<ProductValues[]>(() => {
+        return JSON.parse(localStorage.getItem('product') || '[]')
+    })
+    useEffect(() => {
+        localStorage.setItem('product', JSON.stringify(product))
+    }, [product])
+    const [account, setAccount] = useState<AccountValues[]>(() => {
+        return JSON.parse(localStorage.getItem('account') || '[]')
+    })
+    useEffect(() => {
+        localStorage.setItem('account', JSON.stringify(account))
+    }, [account])
     //check login
     return (
         <>
@@ -21,15 +36,15 @@ function App() {
                         <Route path=':gender' element={<Category />}>
                             <Route path=':category' element={<ProductByCategory />} />
                         </Route>
-                        <Route path='product/:id' element={<ProductDetail />}></Route>
-                        <Route path='cart' element={<Cart />} />
+                        <Route path='product' element={<div>hehe</div>}>
+                            <Route path=':id' element={<ProductDetail />} />
+                        </Route>
+                        <Route path='cart' element={<Cart />} />e
                         <Route path='checkout' element={<Checkout />} />
                     </Route>
-                    <Route path='login' element={<Login />} />
-                    <Route path='register' element={<Register />} />
                     <Route path='admin' element={<AdminLayout />}>
-                        <Route path='manage-product' element={<div>register</div>} />
-                        <Route path='manage-account' element={<div>register</div>} />
+                        <Route path='product' element={<div>register</div>} />
+                        <Route path='account' element={<div>register</div>} />
                     </Route>
                     <Route path='*' element={<NotFound />} />
                 </Routes>
