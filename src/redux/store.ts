@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import manageProductReducer from './features/manageProductSlice'
 import manageAccountReducer from './features/manageAccountSlice'
+
 const store = configureStore({
     reducer: {
         manageProduct: manageProductReducer,
