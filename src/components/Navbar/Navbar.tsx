@@ -1,6 +1,8 @@
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 import style from './Navbar.module.css'
 function Navbar() {
+    const location = useLocation()
+    const pathName: string = location.pathname
     const category = ['men', 'women', 'sale']
     const subCategory = [
         {
@@ -52,6 +54,9 @@ function Navbar() {
         }
     ]
 
+    if (pathName == '/login' || pathName == '/register') {
+        return
+    }
     return (
         <>
             <nav className='flex justify-center pb-3 relative z-50 bg-white '>
