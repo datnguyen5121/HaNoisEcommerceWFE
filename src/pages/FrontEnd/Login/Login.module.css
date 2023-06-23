@@ -23,7 +23,7 @@
     font-weight: 700;
 }
 .inputContainer {
-    min-height: 80px;
+    min-height: 60px;
 }
 .input {
     background-color: #fff;
@@ -45,10 +45,13 @@
     display: inline-block;
     font-size: 16px;
     padding: 8px 0;
+    margin-top: 30px;
 }
 
 .error {
     color: #fe0000;
+    font-size: 14px;
+    margin-bottom: 16px;
 }
 
 .errorBorder {

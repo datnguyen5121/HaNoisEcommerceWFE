@@ -7,6 +7,7 @@ function Footer() {
     const aboutNike = ['News', 'Careers', 'Investors', 'Sustainability']
     const policy = ['Guides', 'Terms of Sale', 'Terms of Use', 'Nike Privacy Policy']
     return (
+
         <div className='bg-black '>
             <div className=' w-11/12 mx-auto'>
                 <div className='flex  justify-between py-10'>
@@ -41,6 +42,7 @@ function Footer() {
                                 ))}
                             </ul>
                         </div>
+
                     </div>
                     <div className='flex text-white gap-3'>
                         <i className='fa-brands fa-twitter w-7 h-7 text-center text-lg leading-7 rounded-full bg-gray-600 text-black'></i>
