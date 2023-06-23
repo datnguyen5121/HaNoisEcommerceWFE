@@ -1,11 +1,11 @@
 import HeaderManageProduct from '../HeaderManageProduct/HeaderManageProduct'
 import styles from './ManageProductPage.module.css'
 import { useAppDispatch, useAppSelector } from '../../redux/store'
-import { Dispatch, useEffect, useState } from 'react'
+import { ChangeEvent, Dispatch, useEffect, useState } from 'react'
 import { getProducts, removeToManageProduct } from '../../redux/features/manageProductSlice'
 import { Button, Modal } from 'antd'
 import { ProductValues } from '../../type/ProductValues'
-import { ErrorMessage, Field, Formik } from 'formik'
+import { ErrorMessage, Field, Formik, Form } from 'formik'
 import { useLocation } from 'react-router-dom'
 import { initialValues } from '../../type/initialValues'
 import { validationSchemaProduct } from '../../type/validationSchemaProduct'
@@ -99,6 +99,26 @@ const ManageProductPage = ({ setProduct }: Props) => {
             dispatch(getProducts())
         }
     }, [])
+
+    const [size, setSize] = useState<string[]>([])
+    const [selectedImages, setSelectedImages] = useState<File[]>([])
+
+    const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const files = Array.from(e.target.files || [])
+        setSelectedImages((prevSelectedImages) => [...prevSelectedImages, ...files])
+    }
+    const uploadImage = () => {
+        // Extract the file names from selectedImages
+        const fileNames = selectedImages.map((file) => file.name)
+        console.log(fileNames)
+    }
+
+    const handleChooseSize = (e: ChangeEvent<HTMLInputElement>) => {
+        const sizes = e.target.value
+        console.log('sizes giay la === ', sizes)
+        setSize((prevSize) => [...prevSize, sizes])
+    }
+
     const handleSubmit = (values: ProductValues) => {
         setProduct((product: any) => {
             let newProduct = [...product]
@@ -111,22 +131,11 @@ const ManageProductPage = ({ setProduct }: Props) => {
                     _id: product.length + 1
                 })
             }
+            console.log('values === ', newProduct)
             return newProduct
         })
     }
-    // const handleSubmitSubNav = () => {
-    //     let listSubNavName: SubNavName[] = []
-    //     productTag.map((item, index) => {
-    //         listSubNavName.push({ subnavName: item, list: categoryTag })
-    //     })
-    //     let Nav: NavName[] = []
-    //     let NavObj: NavName = {} as NavName
-    //     tag.map((item, index) => {
-    //         NavObj = { navName: item, list: listSubNavName }
-    //     })
-    //     Nav = [...listNav, NavObj]
-    //     setListSubNav(Nav)
-    // }
+
     const handleSubmitTag = () => {
         let listSubNavName: SubNavName[] = []
         productTag.map((item, _) => {
@@ -210,11 +219,6 @@ const ManageProductPage = ({ setProduct }: Props) => {
             let newArrProductObj = cloneArr[index].list.map((item) => item.subnavName)
             setProductTag(newArrProductObj)
         }
-        // else {
-        //     setTagSelect('')
-        //     setProductTagSelect('')
-        //     setProductTagSelect('')
-        // }
     }, [tagSelect])
     useEffect(() => {
         let cloneArr = [...listNav]
@@ -248,7 +252,7 @@ const ManageProductPage = ({ setProduct }: Props) => {
                 />
             </div>
             <div className={`mt-[30px] flex flex-col justify-center items-center`}>
-                <div className='flex justify-start w-full mb-6'>
+                <div className='flex justify-start w-full gap-3 mb-6'>
                     <Button className='bg-blue-500' type='primary' onClick={showModal}>
                         Create a new Product
                     </Button>
@@ -259,84 +263,124 @@ const ManageProductPage = ({ setProduct }: Props) => {
                             initialValues={state == null ? initialValues : state}
                         >
                             {(formik) => (
-                                <form action='' onSubmit={formik.handleSubmit}>
-                                    <div className={`my-2 grid`}>
-                                        <label htmlFor='title' className='me-[10px] font-[700]'>
-                                            Title
-                                        </label>
-                                        <Field
-                                            as='input'
-                                            name='title'
-                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px] rounded-md   `}
-                                        />
-                                        <ErrorMessage className={`${styles.error}`} name='title' component='div' />
-                                    </div>
-                                    <div className={`my-2 grid`}>
-                                        <label htmlFor='description' className='me-[10px] font-[700]'>
-                                            Description
-                                        </label>
-                                        <Field
-                                            as='input'
-                                            name='description'
-                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px] rounded-md   `}
-                                        />
-                                        <ErrorMessage
-                                            className={`${styles.error}`}
-                                            name='description'
-                                            component='div'
-                                        />
-                                    </div>
+                                <div>
+                                    <Form onSubmit={formik.handleSubmit}>
+                                        <div className={`my-[0.8rem] grid`}>
+                                            <label htmlFor='title' className='mb-[0.2rem] font-[700]'>
+                                                Title
+                                            </label>
+                                            <Field
+                                                as='input'
+                                                name='title'
+                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px]  px-[10px] py-[5px] rounded-md   `}
+                                            />
+                                            <ErrorMessage className={`${styles.error}`} name='title' component='div' />
+                                        </div>
+                                        <div className={`my-[0.8rem] grid`}>
+                                            <label htmlFor='description' className='mb-[0.2rem] font-[700]'>
+                                                Description
+                                            </label>
+                                            <Field
+                                                as='input'
+                                                name='description'
+                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px]  px-[10px] py-[5px] rounded-md   `}
+                                            />
+                                            <ErrorMessage
+                                                className={`${styles.error}`}
+                                                name='description'
+                                                component='div'
+                                            />
+                                        </div>
 
-                                    <ErrorMessage name='inputValue' component='div' />
-                                    <div className={`my-2 grid`}>
-                                        <label htmlFor='datePublish' className='me-[10px] font-[700]'>
-                                            Date Publish
-                                        </label>
-                                        <Field
-                                            as='input'
-                                            name='datePublish'
-                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px] rounded-md   `}
-                                        />
-                                        <ErrorMessage
-                                            className={`${styles.error}`}
-                                            name='datePublish'
-                                            component='div'
-                                        />
-                                    </div>
-                                    <div className={`my-2 grid`}>
-                                        <label htmlFor='category' className='me-[10px] font-[700]'>
-                                            Category
-                                        </label>
-                                        <Field
-                                            as='input'
-                                            name='category'
-                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px] rounded-md   `}
-                                        />
-                                        <ErrorMessage className={`${styles.error}`} name='category' component='div' />
-                                    </div>
-                                    <div className={`my-2 grid`}>
-                                        <label htmlFor='size' className='me-[10px] font-[700]'>
-                                            Size
-                                        </label>
-                                        <Field
-                                            as='input'
-                                            name='size'
-                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px] rounded-md   `}
-                                        />
-                                        <ErrorMessage className={`${styles.error}`} name='size' component='div' />
-                                    </div>
-                                    <div className={`my-2 grid`}>
-                                        <label htmlFor='imgUrl' className='me-[10px] font-[700]'>
-                                            Image Url
-                                        </label>
-                                        <Field
-                                            as='input'
-                                            name='imgUrl'
-                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px] rounded-md   `}
-                                        />
-                                        <ErrorMessage className={`${styles.error}`} name='imgUrl' component='div' />
-                                    </div>
-                                </form>
+                                        <ErrorMessage name='inputValue' component='div' />
+                                        <div className={`my-[0.8rem] grid`}>
+                                            <label htmlFor='datePublish' className='mb-[0.2rem] font-[700]'>
+                                                Date Publish
+                                            </label>
+                                            <Field
+                                                as='input'
+                                                name='datePublish'
+                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px]  px-[10px] py-[5px] rounded-md   `}
+                                            />
+                                            <ErrorMessage
+                                                className={`${styles.error}`}
+                                                name='datePublish'
+                                                component='div'
+                                            />
+                                        </div>
+                                        <div className={`my-[0.8rem] grid`}>
+                                            <label htmlFor='category' className='mb-[0.2rem] font-[700]'>
+                                                Category
+                                            </label>
+                                            <Field
+                                                as='input'
+                                                name='category'
+                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px]  px-[10px] py-[5px] rounded-md   `}
+                                            />
+                                            <ErrorMessage
+                                                className={`${styles.error}`}
+                                                name='category'
+                                                component='div'
+                                            />
+                                        </div>
+                                        <div className={`my-[0.8rem] grid`}>
+                                            <label htmlFor='size' className='mb-[0.2rem] font-[700]'>
+                                                Size
+                                            </label>
+                                            <Field
+                                                as='select'
+                                                multiple
+                                                onChange={handleChooseSize}
+                                                name='size'
+                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px]  px-[10px] py-[5px] rounded-md`}
+                                            >
+                                                <option value='37'>37</option>
+                                                <option value='37.5'>37.5</option>
+                                                <option value='38'>38.5</option>
+                                                <option value='39'>39</option>
+                                                <option value='39.5'>39.5</option>
+                                                <option value='40'>40</option>
+                                                <option value='40.5'>40.5</option>
+                                                <option value='41'>41</option>
+                                                <option value='41'>41.5</option>
+                                                <option value='42'>42</option>
+                                                <option value='42.5'>42.5</option>
+                                                <option value='43'>43</option>
+                                                <option value='43.5'>43.5</option>
+                                                <option value='44'>44</option>
+                                            </Field>
+                                            <ErrorMessage className={`${styles.error}`} name='size' component='div' />
+                                        </div>
+                                        <div className={`my-[0.8rem] grid`}>
+                                            <label htmlFor='imgUrl' className='mb-[0.2rem] font-[700]'>
+                                                Image Url
+                                            </label>
+                                            <input
+                                                className='mb-[0.6rem]'
+                                                type='file'
+                                                id='imageInput'
+                                                multiple
+                                                name='imgUrl'
+                                                onChange={handleImageChange}
+                                            />
+                                            <button
+                                                className='w-[4.6rem] h-[1.8rem] bg-blue-600 text-white rounded-md'
+                                                onClick={() => uploadImage()}
+                                            >
+                                                Upload
+                                            </button>
+                                            <ErrorMessage className={`${styles.error}`} name='imgUrl' component='div' />
+                                        </div>
+                                        <div>
+                                            <button
+                                                className='bg-blue-600 w-[4.6rem] h-[1.8rem] text-white rounded-md'
+                                                type='submit'
+                                            >
+                                                Submit
+                                            </button>
+                                        </div>
+                                    </Form>
+                                </div>
                             )}
                         </Formik>
                     </Modal>
@@ -558,8 +602,6 @@ const ManageProductPage = ({ setProduct }: Props) => {
                             <th>Size</th>
                             <th>imgUrl</th>
                             <th>Price</th>
-                            <th>createdAt</th>
-                            <th>updatedAt</th>
                             <th>Feature</th>
                         </tr>
                     </thead>
@@ -575,8 +617,6 @@ const ManageProductPage = ({ setProduct }: Props) => {
                                 <td className='w-12'>{product.size}</td>
                                 <td className='w-40'>{product.imgUrl}</td>
                                 <td className='w-16'>{product.price}</td>
-                                <td className='w-52'>{product.createdAt}</td>
-                                <td className='w-52'>{product.updatedAt}</td>
                                 <td className='w-36'>
                                     <div>
                                         <button className={`${styles.editBtn}`}>Edit</button>
