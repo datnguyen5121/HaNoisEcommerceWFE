@@ -358,8 +358,10 @@ const ManageProductPage = ({ setProduct }: Props) => {
                                 {(formik) => (
                                     <form action=''>
                                         <div className={`my-2 grid`}>
-                                            <label>Please Enter Tag You Want To Create:</label>
-                                            <section className='grid-cols-1'>
+                                            <label className='text-xl'>
+                                                Please Enter <span className='font-bold'>Tag</span> You Want To Create:
+                                            </label>
+                                            <section className='grid-cols-1 flex justify-between'>
                                                 <Field
                                                     as='input'
                                                     name='tagInput'
@@ -373,7 +375,7 @@ const ManageProductPage = ({ setProduct }: Props) => {
                                                     component='div'
                                                 />
                                                 <button
-                                                    className=' border-black border-[1px]'
+                                                    className=' border-black rounded-md p-[4px] border-[1px]'
                                                     onClick={(e) => {
                                                         handleAddTag(e, inputTag1)
                                                     }}
@@ -382,18 +384,22 @@ const ManageProductPage = ({ setProduct }: Props) => {
                                                 </button>
                                             </section>
                                             <section className='grid'>
-                                                <label className='grid-cols-1'>Tag: </label>
+                                                <label className='grid-cols-1 py-[10px] text-xl font-semibold'>
+                                                    Tag You Select:{' '}
+                                                </label>
                                                 <Field
                                                     as='select'
                                                     name='tag'
-                                                    className='border-[1px]'
+                                                    className='border-[1px] p-[10px] rounded-md'
                                                     onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                                                         handleChangeTagSelect(e.target.value)
                                                     }}
                                                 >
                                                     {
                                                         <>
-                                                            <option value=''>Please choose a tag</option>
+                                                            <option className='font-bold' value=''>
+                                                                Please choose a tag
+                                                            </option>
                                                             {tag.length > 0 &&
                                                                 tag.map((item: string) => (
                                                                     <option key={item} value={item}>
@@ -409,10 +415,10 @@ const ManageProductPage = ({ setProduct }: Props) => {
                                                     name='tag'
                                                     component='div'
                                                 />
-                                                <ul className='flex gap-[5px] flex-col'>
+                                                <ul className='flex gap-[5px] flex-col p-[10px]'>
                                                     {tag.map((tag) => {
                                                         return (
-                                                            <div className=' flex justify- gap-[5px] flex-row'>
+                                                            <div className=' flex justify-between gap-[5px] px-[20px] flex-row'>
                                                                 <li key={tag}>{tag}</li>
                                                                 <button className='w-[30px] h-[30px] text-white bg-black'>
                                                                     {' '}
@@ -425,9 +431,12 @@ const ManageProductPage = ({ setProduct }: Props) => {
                                             </section>
                                         </div>
                                         {tagSelect && (
-                                            <div className={`my-2 grid`}>
-                                                <label>Please Enter Product Tag You Want To Create:</label>
-                                                <section className='grid-cols-1'>
+                                            <div className={`my-2 grid grid-cols-1 `}>
+                                                <label className='text-xl'>
+                                                    Please Enter <span className='font-bold'>Product Tag</span> You Want
+                                                    To Create:
+                                                </label>
+                                                <section className='grid-cols-1 flex justify-between'>
                                                     <Field
                                                         as='input'
                                                         name='productTag'
@@ -441,21 +450,23 @@ const ManageProductPage = ({ setProduct }: Props) => {
                                                         component='div'
                                                     />
                                                     <button
-                                                        className=' border-black border-[1px]'
+                                                        className='  border-black rounded-md p-[4px] border-[1px]'
                                                         onClick={(e) => {
                                                             handleAddProductTag(e, inputProductTag)
                                                         }}
                                                     >
                                                         Add Tag
                                                     </button>
-                                                    <label>List Tag:</label>
                                                 </section>
-                                                <section className='grid'>
-                                                    <label className='grid-cols-1'>Tag: </label>
+                                                <section className='grid py-[10px]'>
+                                                    <label className='grid-cols-1 text-xl font-semibold'>
+                                                        {' '}
+                                                        Product Tag You Select:{' '}
+                                                    </label>
                                                     <Field
                                                         as='select'
                                                         name='tag'
-                                                        className='border-[1px]'
+                                                        className='border-[1px] p-[10px] rounded-md'
                                                         onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                                                             handleChangeProductTagSelect(e.target.value)
                                                         }}
@@ -477,11 +488,13 @@ const ManageProductPage = ({ setProduct }: Props) => {
                                                         name='tag'
                                                         component='div'
                                                     />
-                                                    <label>List Product Tag:</label>
+                                                    <label className='font-semibold py-[10px] text-xl'>
+                                                        List Product Tag:
+                                                    </label>
                                                     <ul className='flex gap-[5px] flex-col'>
                                                         {productTag.map((tag) => {
                                                             return (
-                                                                <div className=' flex justify- gap-[5px] flex-row'>
+                                                                <div className='flex justify-between gap-[5px] px-[20px] flex-row'>
                                                                     <li key={tag}>{tag}</li>
                                                                     <button className='w-[30px] h-[30px] text-white bg-black'>
                                                                         {' '}
@@ -498,7 +511,7 @@ const ManageProductPage = ({ setProduct }: Props) => {
                                         {productTagSelect && (
                                             <div className={`my-2 grid`}>
                                                 <label>Please Enter Category Tag You Want To Create:</label>
-                                                <section className='grid-cols-1'>
+                                                <section className='grid-cols-1 '>
                                                     <Field
                                                         as='input'
                                                         name='categoryTag'
