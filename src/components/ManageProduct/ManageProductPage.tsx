@@ -129,12 +129,12 @@ const ManageProductPage = ({ setProduct }: Props) => {
     // }
     const handleSubmitTag = () => {
         let listSubNavName: SubNavName[] = []
-        productTag.map((item, index) => {
+        productTag.map((item, _) => {
             listSubNavName.push({ subnavName: item, list: categoryTag })
         })
         let Nav: NavName[] = []
         let NavObj: NavName = {} as NavName
-        tag.map((item, index) => {
+        tag.map((item, _) => {
             NavObj = { navName: item, list: listSubNavName }
         })
         Nav = [...listNav, NavObj]
