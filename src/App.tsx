@@ -14,6 +14,7 @@ import ManageAccountPage from './components/ManageAccountPage/ManageAccountPage'
 import { useEffect, useState } from 'react'
 import { ProductValues } from './type/ProductValues'
 import { AccountValues } from './type/AccountValues'
+import ManageCategoryPage from './components/ManageCategoryPage/ManageCategoryPage'
 
 function App() {
     const [product, setProduct] = useState<ProductValues[]>(() => {
@@ -50,6 +51,7 @@ function App() {
                         <Route index element={<Navigate to='product' />}></Route>
                         <Route path='product' index element={<ManageProductPage setProduct={setProduct} />} />
                         <Route path='account' element={<ManageAccountPage setAccount={setAccount} />} />
+                        <Route path='category' element={<ManageCategoryPage />} />
                     </Route>
                     <Route path='*' element={<NotFound />} />
                 </Routes>

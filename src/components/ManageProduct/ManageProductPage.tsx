@@ -233,10 +233,6 @@ const ManageProductPage = ({ setProduct }: Props) => {
             setListNav(cloneArr)
         }
     }, [listSubNav])
-    console.log('listNENav', listNav)
-
-    console.log('listNav', listNav)
-    console.log('listSubNav', listSubNav)
 
     return (
         <div className={`productPageContainer px-[20px] py-[10px]`}>
@@ -511,7 +507,7 @@ const ManageProductPage = ({ setProduct }: Props) => {
                                         {productTagSelect && (
                                             <div className={`my-2 grid`}>
                                                 <label>Please Enter Category Tag You Want To Create:</label>
-                                                <section className='grid-cols-1 '>
+                                                <section className='grid-cols-1 flex justify-between'>
                                                     <Field
                                                         as='input'
                                                         name='categoryTag'
@@ -525,7 +521,7 @@ const ManageProductPage = ({ setProduct }: Props) => {
                                                         component='div'
                                                     />
                                                     <button
-                                                        className=' border-black border-[1px]'
+                                                        className=' border-black border-[1px]  border-black rounded-md p-[4px] border-[1px]'
                                                         onClick={(e) => {
                                                             handleAddCategoryTag(e, inputCategoryTag)
                                                         }}
@@ -534,27 +530,24 @@ const ManageProductPage = ({ setProduct }: Props) => {
                                                     </button>
                                                 </section>
                                                 <section className='grid'>
-                                                    <label className='grid-cols-1'>Tag: </label>
-                                                    {/* <Field as='select' name='tag' className='border-[1px]'>
-                                                    {categoryTag.length > 0 &&
-                                                        categoryTag.map((item) => (
-                                                            <option key={item} value={item}>
-                                                                {item}
-                                                            </option>
-                                                        ))}
-                                                </Field>
-                                                <ErrorMessage
-                                                    className={`${styles.error}`}
-                                                    name='tag'
-                                                    component='div'
-                                                />
-                                                <label className='grid-cols-1'>Tags: </label> */}
-                                                    {categoryTag.map((tag) => (
-                                                        <div key={tag}>
-                                                            <Field type='checkbox' name='tags' value={tag} id={tag} />
-                                                            <label htmlFor={tag}>{tag}</label>
-                                                        </div>
-                                                    ))}
+                                                    <label className='grid-cols-1 text-xl font-semibold py-[10px]'>
+                                                        {' '}
+                                                        List Category Tag:{' '}
+                                                    </label>
+
+                                                    <ul className='flex gap-[5px] flex-col'>
+                                                        {categoryTag.map((tag) => {
+                                                            return (
+                                                                <div className='flex justify-between gap-[5px] px-[20px] flex-row'>
+                                                                    <li key={tag}>{tag}</li>
+                                                                    <button className='w-[30px] h-[30px] text-white bg-black'>
+                                                                        {' '}
+                                                                        -
+                                                                    </button>
+                                                                </div>
+                                                            )
+                                                        })}
+                                                    </ul>
                                                 </section>
                                             </div>
                                         )}

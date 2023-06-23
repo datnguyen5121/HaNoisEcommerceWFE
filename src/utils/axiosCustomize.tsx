@@ -1,10 +1,4 @@
 import axios from 'axios'
-import NProgress from 'nprogress'
-import { store } from '../redux/store'
-import { notification } from 'antd'
-import { memoizedRefreshToken } from './refreshToken'
-
-NProgress.configure({ showSpinner: false, trickleSpeed: 400 })
 
 const instance = axios.create({
     baseURL: 'http://localhost:8080/'
@@ -17,7 +11,6 @@ instance.interceptors.request.use(
         // console.log(access_token);
         // config.headers["Authorization"] = `Bearer ${access_token}`;
         // Do something before request is sent
-        NProgress.start()
         return config
     },
     function (error) {
@@ -29,7 +22,6 @@ instance.interceptors.request.use(
 // Add a response interceptor
 instance.interceptors.response.use(
     function (response) {
-        NProgress.done()
         // console.log('>>> interceptor',response);
         // Any status code that lie within the range of 2xx cause this function to trigger
         // Do something with response data
