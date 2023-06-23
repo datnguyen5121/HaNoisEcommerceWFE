@@ -22,9 +22,9 @@ function App() {
                         <Route path=':gender' element={<Category />}>
                             <Route path=':category' element={<ProductByCategory />} />
                         </Route>
-                        <Route path='product' element={<div>hehe</div>}>
-                            <Route path=':id' element={<ProductDetail />} />
-                        </Route>
+
+                        <Route path='product/:id' element={<ProductDetail />}></Route>
+
                         <Route path='cart' element={<Cart />} />
                         <Route path='checkout' element={<Checkout />} />
                         <Route path='account' element={<Account />} />
@@ -32,8 +32,8 @@ function App() {
                         <Route path='register' element={<Register />} />
                     </Route>
                     <Route path='admin' element={<AdminLayout />}>
-                        <Route path='product' element={<div>register</div>} />
-                        <Route path='account' element={<div>register</div>} />
+                        <Route path='manage-product' element={<div>register</div>} />
+                        <Route path='manage-account' element={<div>register</div>} />
                     </Route>
                     <Route path='*' element={<NotFound />} />
                 </Routes>
