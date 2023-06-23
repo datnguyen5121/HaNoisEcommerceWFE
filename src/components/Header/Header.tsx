@@ -1,35 +1,22 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCartShopping, faMagnifyingGlass, faSpinner, faUser, faXmark } from '@fortawesome/free-solid-svg-icons'
-import Logo from '../../assets/Logo.svg'
-import Navbar from '../Navbar/Navbar'
+import { faCartShopping, faUser } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
+import Navbar from '../Navbar/Navbar'
+import Logo from '../../assets/Logo.svg'
 import style from './Header.module.css'
+import Search from '../Search'
+
 function Header() {
     return (
         <>
             <header className='bg-white border-b z-[99] relative'>
-                <div className='container mx-auto'>
+                <div className='w-11/12 mx-auto'>
                     <div className='flex items-center justify-between'>
                         <Link to={'/'}>
                             <img src={Logo} alt='nike' />
                         </Link>
 
-                        <div className='bg-gray-100 h-[40px] w-[400px] rounded-full flex items-center border border-transparent focus-within:border-gray-300'>
-                            <input
-                                type='text'
-                                className='bg-transparent outline-none px-4 flex-1 py-2'
-                                spellCheck={false}
-                                placeholder='Search'
-                            />
-                            <button>
-                                <FontAwesomeIcon icon={faXmark} />
-                            </button>
-                            {/*<FontAwesomeIcon icon={faSpinner} className='w-3 h-3' />*/}
-
-                            <button className='px-3  h-full rounded-br-full rounded-tr-full'>
-                                <FontAwesomeIcon icon={faMagnifyingGlass} />
-                            </button>
-                        </div>
+                        <Search />
 
                         <div className='flex gap-x-5'>
                             <div className='relative'>
