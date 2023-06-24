@@ -12,6 +12,10 @@ import ProductDetail from './components/ProductDetail'
 import { ToastContainer } from 'react-toastify'
 import ManageProductPage from './components/ManageProduct/ManageProductPage'
 import ManageAccountPage from './components/ManageAccountPage/ManageAccountPage'
+import ProductByCategory from './pages/FrontEnd/ProductByCategory'
+
+import Account from './pages/FrontEnd/Account'
+
 
 function App() {
     //check login
@@ -37,15 +41,15 @@ function App() {
                         <Route path=':gender' element={<Category />}>
                             <Route path=':category' element={<div>nike</div>} />
                         </Route>
-                        <Route path='product' element={<div>hehe</div>}>
-                            <Route path=':id' element={<ProductDetail />} />
-                        </Route>
+                        <Route path='product/:id' element={<ProductDetail />}></Route>
                         <Route path='cart' element={<Cart />} />
                         <Route path='checkout' element={<Checkout />} />
+
+                        <Route path='account' element={<Account />} />
                         <Route path='login' element={<Login />} />
                         <Route path='register' element={<Register />} />
                     </Route>
-                    <Route path='/admin' element={<AdminLayout />}>
+                    <Route path='admin' element={<AdminLayout />}>
                         <Route index element={<Navigate to='product' />}></Route>
                         <Route path='product' index element={<ManageProductPage />} />
                         <Route path='account' element={<ManageAccountPage />} />
