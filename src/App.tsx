@@ -12,9 +12,6 @@ import ProductDetail from './components/ProductDetail'
 import { ToastContainer } from 'react-toastify'
 import ManageProductPage from './components/ManageProduct/ManageProductPage'
 import ManageAccountPage from './components/ManageAccountPage/ManageAccountPage'
-import { useEffect, useState } from 'react'
-import { ProductValues } from './type/ProductValues'
-import { AccountValues } from './type/AccountValues'
 
 function App() {
     //check login

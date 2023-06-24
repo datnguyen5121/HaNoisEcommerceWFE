@@ -1,7 +1,7 @@
 import HeaderManageProduct from '../HeaderManageProduct/HeaderManageProduct'
 import styles from './ManageProductPage.module.css'
 import { useAppDispatch, useAppSelector } from '../../redux/store'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { getProducts, removeToManageProduct } from '../../redux/features/manageProductSlice'
 import { Button, Modal } from 'antd'
 import { ProductValues } from '../../type/ProductValues'
@@ -11,6 +11,7 @@ import { initialValues } from '../../type/initialValues'
 import { validationSchemaProduct } from '../../type/validationSchemaProduct'
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated'
+import { createNewProduct } from '../../services/productService'
 const animatedComponents = makeAnimated()
 
 const multipleSize = [
@@ -70,8 +71,9 @@ const ManageProductPage = () => {
 
     console.log(size)
 
-    const handleSubmit = (values: ProductValues) => {
-        console.log(values)
+    const handleSubmit = async (values: ProductValues) => {
+        const newProduct = await createNewProduct(values)
+        console.log('newProduct === ', newProduct)
     }
 
     return (
