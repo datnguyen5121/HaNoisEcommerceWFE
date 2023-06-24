@@ -1,0 +1,68 @@
+.login {
+    margin: 0 auto;
+    width: 300px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+}
+.logo {
+    width: 70px;
+    margin: 0 auto;
+}
+.title {
+    color: #111;
+    display: inline-block;
+    transform: scaleX(0.7);
+    font-size: 26px;
+    line-height: 26px;
+    margin: 0 auto 30px auto;
+    max-width: 25ch;
+    text-align: center;
+    font-weight: 700;
+}
+.inputContainer {
+    min-height: 60px;
+}
+.input {
+    background-color: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 3px;
+    box-sizing: border-box;
+    color: #8d8d8d;
+    font: 14px Helvetica;
+    height: 40px;
+    line-height: 17px;
+    padding: 0 16px;
+    width: 100%;
+}
+
+.submit {
+    border: 1px solid black;
+    color: white;
+    background-color: black !important;
+    display: inline-block;
+    font-size: 16px;
+    padding: 8px 0;
+    margin-top: 30px;
+}
+
+.error {
+    color: #fe0000;
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+
+.errorBorder {
+    border-color: #fe0000;
+}
+
+.notMember {
+    margin: 20px 0;
+}
+
+.joinUs {
+    text-decoration: underline;
+    cursor: pointer;
+}

@@ -1,6 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-.ant-btn-primary {
-    background-color: blue;
+::-webkit-scrollbar-track {
+    border-radius: 10px;
+}
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #7f7f7f;
+}
+/* Ẩn cục chặn của thanh cuộn */
+::-webkit-scrollbar-button {
+    display: none;
 }

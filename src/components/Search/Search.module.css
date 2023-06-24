@@ -1,0 +1,16 @@
+.customHeightSearchResult {
+    max-height: min(calc(100vh - 100px), 734px);
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.rotating {
+    animation: spin 0.5s linear infinite;
+}

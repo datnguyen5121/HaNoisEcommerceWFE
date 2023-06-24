@@ -1,0 +1,36 @@
+.subnav::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: transparent;
+    width: 100%;
+    height: 20px;
+    display: none;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Màu overlay */
+    z-index: 1;
+    backdrop-filter: blur(1px);
+    display: none;
+    transition: opacity 0.3s ease; /* Hiệu ứng chuyển đổi opacity */
+}
+nav:has(.navbar:hover) + .overlay {
+    display: block;
+}
+
+.navbar:hover .subnav,
+.navbar:hover .subnav::before {
+    display: block;
+}
+
+.navbar:hover .category {
+    border-bottom-color: black;
+}
