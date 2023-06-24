@@ -4,7 +4,21 @@ import { Dispatch, useEffect, useState } from 'react'
 import { Button, Modal } from 'antd'
 import { ProductValues } from '../../type/ProductValues'
 import { useLocation } from 'react-router-dom'
-import { getAllProductTag, getAllTag, getProductTag, getTag, updateProductTag } from '../../services/apiService'
+import {
+    createNewProductTag,
+    deleteProductTag,
+    deleteTag,
+    getAllProductTag,
+    getAllTag,
+    getProductTag,
+    getTag,
+    updateProductTag,
+    updateTagById
+} from '../../services/apiService'
+import ModalEditProductTag from './ModalEditProductTag'
+import ModalCreateProductTag from './ModalCreateProductTag'
+import ModalEditTag from './ManageEditTag'
+import ModalCreateTag from './ManageCreateTag'
 
 interface ITag {
     _id: string
@@ -27,13 +41,18 @@ interface ProductTagState {
     navName: string
     list: SubNavName[]
 }
-interface ProductForm {
+export interface ProductForm {
     subnavName: string
     subnavNameId: string
     list: string[]
 }
+
 const ManageCategoryPage = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [isModalCreateTagOpen, setModalCreateTagOpen] = useState(false)
+    const [isModalEditOpen, setIsModalEditOpen] = useState(false)
+    const [isModalCreateOpen, setIsModalCreateOpen] = useState(false)
+    const [isModalEditTagOpen, setIsModalEditTagOpen] = useState(false)
+
     let [tagList, setTagList] = useState<ITag[]>([])
     let [productTagList, setProductTagList] = useState<ProductTagState[]>([])
 
@@ -45,28 +64,29 @@ const ManageCategoryPage = () => {
     let [subnavNameInput, setSubNavNameInput] = useState<string>('')
     let [subnavNameListInput, setSubNavNameListInput] = useState<string[]>([])
     let [categoryInput, setCategoryInput] = useState<string>('')
-    const showModal = () => {
-        setIsModalOpen(true)
+    let [navNameInput, setNavNameInput] = useState<string>('')
+    let [navNameId, setNavNameId] = useState<string>('')
+
+    const showModalEdit = () => {
+        setIsModalEditOpen(true)
+    }
+    const showModalEditTag = () => {
+        setIsModalEditTagOpen(true)
+    }
+    const showModalCreateTag = () => {
+        setModalCreateTagOpen(true)
+    }
+    const showModalCreate = () => {
+        setIsModalCreateOpen(true)
     }
 
-    const handleOk = async () => {
-        try {
-            const res = await updateProductTag(productForm.subnavNameId, {
-                subnavName: subnavNameInput,
-                list: subnavNameListInput
-            })
-            console.log(res.data)
-            FetchAllProductTag()
-            setIsModalOpen(false)
-        } catch (error) {
-            console.error('Error updating product tag:', error)
-        }
+    const handleCancelEdit = () => {
+        setIsModalEditOpen(false)
     }
 
-    const handleCancel = () => {
-        setIsModalOpen(false)
+    const handleCancelCreate = () => {
+        setIsModalCreateOpen(false)
     }
-
     let FetchAllTag = async () => {
         let res = await getAllTag()
         setTagList(res.data)
@@ -124,65 +144,44 @@ const ManageCategoryPage = () => {
         }, [])
         return newObj
     }
-    console.log(productTagList)
     useEffect(() => {
         setSubNavNameInput(productForm.subnavName)
         setSubNavNameListInput(productForm.list)
     }, [productForm])
 
-    const subCategory = [
-        {
-            navName: 'men',
-            list: [
-                {
-                    navName: 'men',
-                    subnavName: 'shoes',
-                    list: ['jordan', 'running', 'basketball']
-                },
-                {
-                    navName: 'men',
-                    subnavName: 'clothing',
-                    list: ['jordan', 'shorts', 'T-Shirts']
-                },
-                {
-                    navName: 'men',
-                    subnavName: 'shop by sport',
-                    list: ['running', 'football', 'basketball', 'yoga', 'tennis', 'golf']
-                },
-                {
-                    navName: 'men',
-                    subnavName: 'shop by brand',
-                    list: ['nike SB', 'ACG', 'NBA']
-                }
-            ]
-        },
-        {
-            navName: 'women',
-            list: [
-                { navName: 'woman', subnavName: 'shoes', list: ['jordan', 'running', 'basketball'] },
-                { navName: 'woman', subnavName: 'clothing', list: ['jordan', 'shorts', 'T-Shirts'] }
-            ]
-        }
-    ]
-
-    let FetchProductCart = async (subnavName: string, navNameId: string) => {
-        let res = await getProductTag({ subnavName: subnavName, navName: navNameId })
+    let handleEditTag = (item: ITag) => {
+        showModalEditTag()
+        setNavNameInput(item.navName)
+        setNavNameId(item._id)
     }
     let handleEditProductTag = (item: SubNavName) => {
-        showModal()
+        showModalEdit()
         setProductForm({ subnavName: item.subnavName, subnavNameId: item.subnavNameId, list: item.list })
     }
-    let handleAddList = (values: string) => {
-        let cloneList = [...subnavNameListInput, values]
-        setSubNavNameListInput(cloneList)
-        setCategoryInput('')
+    let handleCreateProductTag = (navNameId: string) => {
+        showModalCreate()
+        setNavNameId(navNameId)
     }
-    let handleChangeCategoryInput = (e: any) => {
-        setCategoryInput(e.target.value)
+    let handDeleteProductTag = async (productTagId: string) => {
+        if (confirm(`Are you sure delete the product tag ${productTagId}`)) {
+            let res = await deleteProductTag({ _id: productTagId })
+            if (res.EC == 0) {
+                FetchAllTag()
+                FetchAllProductTag()
+            }
+        }
     }
-    let handDeleteProductTag = (values: string) => {}
-    let handleOnChangeSubNavName = (e: any) => {
-        setSubNavNameInput(e.target.value)
+    let handleDeleteTag = async (tagId: string) => {
+        if (confirm(`Are you sure delete the tag ${tagId}`)) {
+            let res = await deleteTag({ _id: tagId })
+            if (res.EC == 0) {
+                FetchAllTag()
+                FetchAllProductTag()
+            }
+        }
+    }
+    let handleCreateTag = () => {
+        showModalCreateTag()
     }
     return (
         <div className={`productPageContainer px-[20px] py-[10px]`}>
@@ -193,21 +192,48 @@ const ManageCategoryPage = () => {
 
             <div className={`mt-[30px] flex flex-col justify-center `}>
                 <section className=' gap-[10px] flex flex-col h-500px'>
+                    <div className='text-xl font-semibold'>Add Tag:</div>
+                    <button
+                        className='border-[1px] w-[50px] p-[10px] hover:opacity-50 text-blue-500 rounded-lg'
+                        onClick={() => {
+                            handleCreateTag()
+                        }}
+                    >
+                        <i className='fa-solid fa-plus'></i>
+                    </button>
+
                     <label className='font-semibold text-2xl'>Tag List:</label>
                     {tagList.length > 0 &&
                         tagList.map((item) => {
                             return (
-                                <div className='flex w-[200px] justify-between'>
-                                    {' '}
+                                <div className='flex w-[400px]  justify-between' key={item._id}>
                                     <li className='text-xl' id={item._id}>
                                         {item.navName}
-                                    </li>{' '}
-                                    <button className='border-[1px] w-[50px] p-[10px] hover:opacity-50 text-green-500 rounded-lg'>
-                                        <i className='fa-solid fa-pen-to-square'></i>
-                                    </button>
-                                    <button className='border-[1px] w-[50px] p-[10px] hover:opacity-50 text-red-500 rounded-lg'>
-                                        <i className='fa-solid fa-trash'></i>
-                                    </button>
+                                    </li>
+                                    <div className='flex gap-[20px]'>
+                                        <button
+                                            className='border-[1px] w-[50px] p-[10px] hover:opacity-50 text-green-500 rounded-lg'
+                                            onClick={() => handleEditTag(item)}
+                                        >
+                                            <i className='fa-solid fa-pen-to-square'></i>
+                                        </button>
+                                        <button
+                                            className='border-[1px] w-[50px] p-[10px] hover:opacity-50 text-red-500 rounded-lg'
+                                            onClick={() => {
+                                                handleDeleteTag(item._id)
+                                            }}
+                                        >
+                                            <i className='fa-solid fa-trash'></i>
+                                        </button>
+                                        <button
+                                            className='border-[1px] w-[50px] p-[10px] hover:opacity-50 text-blue-500 rounded-lg'
+                                            onClick={() => {
+                                                handleCreateProductTag(item._id)
+                                            }}
+                                        >
+                                            <i className='fa-solid fa-plus'></i>
+                                        </button>
+                                    </div>
                                 </div>
                             )
                         })}
@@ -217,14 +243,17 @@ const ManageCategoryPage = () => {
                     {productTagList.length > 0 &&
                         productTagList.map((item: ProductTagState) => {
                             return (
-                                <div className='border-1px border-black py-[20px]'>
+                                <div className='border-1px border-black py-[20px]' key={`navName-${item.navName}`}>
                                     <section className=''>
                                         <span className='font-semibold text-4xl '>{item.navName}</span>
                                         <section className='flex flex-row gap-[10px] py-[10px]'>
                                             {item.list.length > 0 &&
                                                 item.list.map((item1) => {
                                                     return (
-                                                        <section className=' border-[1px] border-black  rounded-md p-[10px]'>
+                                                        <section
+                                                            className=' border-[1px] border-black  rounded-md p-[10px]'
+                                                            key={item1.subnavNameId}
+                                                        >
                                                             <div className='flex-row flex gap-[10px] my-[10px]'>
                                                                 <div className='font-semibold text-2xl'>
                                                                     {item1.subnavName}
@@ -247,7 +276,7 @@ const ManageCategoryPage = () => {
                                                             {item1.list.length > 0 &&
                                                                 item1.list.map((item2) => {
                                                                     return (
-                                                                        <div>
+                                                                        <div key={`${item1}-category${item2}`}>
                                                                             <span>{item2}</span>
                                                                         </div>
                                                                     )
@@ -261,29 +290,50 @@ const ManageCategoryPage = () => {
                             )
                         })}
                 </section>
-                <Modal title='Basic Modal' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-                    <label>SubnavName</label>
-                    <input value={subnavNameInput} onChange={handleOnChangeSubNavName}></input>
-                    <label>SubnavNameId</label>
-                    <input value={productForm.subnavNameId}></input>
-                    <label>List</label>
-                    <input type='text' name='' id='' value={categoryInput} onChange={handleChangeCategoryInput}></input>
-                    <button
-                        onClick={() => {
-                            handleAddList(categoryInput)
-                        }}
-                    >
-                        Add
-                    </button>
-                    {subnavNameListInput.length >= 0 &&
-                        subnavNameListInput.map((item, index) => {
-                            return (
-                                <li>
-                                    {item} <button>Delete</button>
-                                </li>
-                            )
-                        })}
-                </Modal>
+                <ModalCreateTag
+                    isModalCreateTagOpen={isModalCreateTagOpen}
+                    setIsModalCreateTagOpen={setModalCreateTagOpen}
+                    FetchAllTag={FetchAllTag}
+                    FetchAllProductTag={FetchAllProductTag}
+                    navNameInput={navNameInput}
+                    setNavNameInput={setNavNameInput}
+                />
+                <ModalEditTag
+                    isModalEditTagOpen={isModalEditTagOpen}
+                    setIsModalEditTagOpen={setIsModalEditTagOpen}
+                    FetchAllTag={FetchAllTag}
+                    FetchAllProductTag={FetchAllProductTag}
+                    navNameInput={navNameInput}
+                    setNavNameInput={setNavNameInput}
+                    navNameId={navNameId}
+                />
+                <ModalEditProductTag
+                    isModalEditOpen={isModalEditOpen}
+                    setIsModalEditOpen={setIsModalEditOpen}
+                    handleCancelEdit={handleCancelEdit}
+                    subnavNameInput={subnavNameInput}
+                    productForm={productForm}
+                    categoryInput={categoryInput}
+                    subnavNameListInput={subnavNameListInput}
+                    setSubNavNameListInput={setSubNavNameListInput}
+                    setSubNavNameInput={setSubNavNameInput}
+                    setCategoryInput={setCategoryInput}
+                    FetchAllProductTag={FetchAllProductTag}
+                />
+                <ModalCreateProductTag
+                    isModalCreateOpen={isModalCreateOpen}
+                    setIsModalCreateOpen={setIsModalCreateOpen}
+                    handleCancelCreate={handleCancelCreate}
+                    subnavNameInput={subnavNameInput}
+                    navNameId={navNameId}
+                    productForm={productForm}
+                    categoryInput={categoryInput}
+                    subnavNameListInput={subnavNameListInput}
+                    setSubNavNameListInput={setSubNavNameListInput}
+                    setSubNavNameInput={setSubNavNameInput}
+                    setCategoryInput={setCategoryInput}
+                    FetchAllProductTag={FetchAllProductTag}
+                />
             </div>
         </div>
     )
