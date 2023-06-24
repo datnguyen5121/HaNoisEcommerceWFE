@@ -9,63 +9,16 @@ import { ErrorMessage, Field, Formik, Form } from 'formik'
 import { useLocation } from 'react-router-dom'
 import { initialValues } from '../../type/initialValues'
 import { validationSchemaProduct } from '../../type/validationSchemaProduct'
+import Select from 'react-select'
+import makeAnimated from 'react-select/animated'
+const animatedComponents = makeAnimated()
 
 type Props = {
     setProduct: Dispatch<React.SetStateAction<ProductValues[]>>
 }
-interface FakeData {
-    tag: string
-    subNav: string
-    category: string[]
-    brand: string
-}
-interface SubNavName {
-    subnavName: string
-    list: string[]
-}
-interface NavName {
-    navName: string
-    list: SubNavName[]
-}
+const multipleSize = ['37', '37.5', '38', '38.5', '39', '39.5', '40', '40.5', '41', '41.5', '42.5', '43', '43.5', '44']
 const ManageProductPage = ({ setProduct }: Props) => {
-    let fakeData: FakeData[] = [
-        {
-            tag: 'Nam',
-            subNav: 'Giay',
-            category: ['Giay', 'Giay The Thao'],
-            brand: 'Nike'
-        },
-        {
-            tag: 'Nu',
-            subNav: 'Tui xach',
-            category: ['Giay', 'Giay The Thao'],
-            brand: 'Dat'
-        },
-        {
-            tag: 'Khac',
-            subNav: 'QuanAo',
-            category: ['Giay', 'Giay The Thao'],
-            brand: 'Adidas'
-        }
-    ]
-
-    const [inputTag1, setInputTag1] = useState<string>('')
-    const [tag, setTag] = useState<string[]>([] as string[])
-
-    const [inputProductTag, setInputProductTag] = useState<string>('')
-    const [productTag, setProductTag] = useState<string[]>([] as string[])
-
-    const [inputCategoryTag, setInputCategoryTag] = useState<string>('')
-    const [categoryTag, setCategoryTag] = useState<string[]>([] as string[])
-
-    const [listNav, setListNav] = useState<NavName[]>([])
-    const [listSubNav, setListSubNav] = useState<SubNavName[]>([])
-
-    const [tagSelect, setTagSelect] = useState<string>('')
-    const [productTagSelect, setProductTagSelect] = useState<string>('')
-
     const [isModalOpen, setIsModalOpen] = useState(false)
-    const [isModalCategoryOpen, setIsModalCategoryOpen] = useState(false)
 
     const { state } = useLocation()
     const showModal = () => {
@@ -79,19 +32,6 @@ const ManageProductPage = ({ setProduct }: Props) => {
     const handleCancel = () => {
         setIsModalOpen(false)
     }
-    const showModalCategory = () => {
-        setIsModalCategoryOpen(true)
-    }
-
-    const handleOkCategory = () => {
-        handleSubmitTag()
-        setIsModalCategoryOpen(false)
-    }
-
-    const handleCancelCategory = () => {
-        setIsModalCategoryOpen(false)
-    }
-
     const productItems = useAppSelector((state) => state.manageProduct.products)
     const dispatch = useAppDispatch()
     useEffect(() => {
@@ -135,109 +75,6 @@ const ManageProductPage = ({ setProduct }: Props) => {
             return newProduct
         })
     }
-
-    const handleSubmitTag = () => {
-        let listSubNavName: SubNavName[] = []
-        productTag.map((item, _) => {
-            listSubNavName.push({ subnavName: item, list: categoryTag })
-        })
-        let Nav: NavName[] = []
-        let NavObj: NavName = {} as NavName
-        tag.map((item, _) => {
-            NavObj = { navName: item, list: listSubNavName }
-        })
-        Nav = [...listNav, NavObj]
-        setListNav(Nav)
-    }
-    let handleAddTag = (e: any, input: string) => {
-        e.preventDefault()
-        if (input) {
-            setTag([...tag, input])
-            setInputTag1('')
-        }
-    }
-    const handleChangeInput1 = (e: any) => {
-        setInputTag1(e.target.value)
-    }
-
-    let handleAddProductTag = (e: any, input: string) => {
-        e.preventDefault()
-
-        if (input) {
-            setProductTag([...productTag, input])
-            setInputProductTag('')
-        }
-    }
-    let handleChangeInputProductTag = (e: any) => {
-        setInputProductTag(e.target.value)
-    }
-    let handleAddCategoryTag = (e: any, input: string) => {
-        e.preventDefault()
-
-        if (input) {
-            setCategoryTag([...categoryTag, input])
-            setInputCategoryTag('')
-        }
-    }
-    let handleChangeInputCategoryTag = (e: any) => {
-        setInputCategoryTag(e.target.value)
-    }
-
-    let handleChangeTagSelect = (value: string) => {
-        console.log('tag select', value)
-        setTagSelect(value), setProductTag([]), setCategoryTag([])
-    }
-    let handleChangeProductTagSelect = (value: string) => {
-        console.log('product select', value)
-        setProductTagSelect(value), setCategoryTag([])
-    }
-    useEffect(() => {
-        let cloneArr = [...listSubNav]
-        let index = listSubNav.findIndex((item) => item.subnavName == productTagSelect)
-        if (index >= 0) {
-            setCategoryTag(cloneArr[index].list)
-        }
-    }, [productTagSelect])
-    useEffect(() => {
-        let cloneArr = [...listSubNav]
-        if (productTagSelect && categoryTag.length > 0) {
-            let index = listSubNav.findIndex((item) => item.subnavName == productTagSelect)
-            if (index < 0) {
-                cloneArr.push({ subnavName: productTagSelect, list: categoryTag })
-            } else {
-                cloneArr[index].list = categoryTag
-            }
-            setListSubNav(cloneArr)
-        }
-    }, [categoryTag])
-    useEffect(() => {
-        let cloneArr = [...listNav]
-        console.log('tag', tagSelect)
-
-        let index = cloneArr.findIndex((item) => item.navName == tagSelect)
-        if (index >= 0) {
-            let newArrProductObj = cloneArr[index].list.map((item) => item.subnavName)
-            setProductTag(newArrProductObj)
-        }
-    }, [tagSelect])
-    useEffect(() => {
-        let cloneArr = [...listNav]
-        let cloneListSubNav = [...listSubNav]
-        if (productTagSelect && categoryTag.length > 0) {
-            let index = cloneArr.findIndex((item) => item.navName == tagSelect)
-            if (index < 0) {
-                cloneArr.push({ navName: tagSelect, list: cloneListSubNav })
-            } else {
-                cloneArr[index].list = listSubNav
-            }
-            setListNav(cloneArr)
-        }
-    }, [listSubNav])
-    console.log('listNENav', listNav)
-
-    console.log('listNav', listNav)
-    console.log('listSubNav', listSubNav)
-
     return (
         <div className={`productPageContainer px-[20px] py-[10px]`}>
             <HeaderManageProduct />
@@ -272,7 +109,7 @@ const ManageProductPage = ({ setProduct }: Props) => {
                                             <Field
                                                 as='input'
                                                 name='title'
-                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px]  px-[10px] py-[5px] rounded-md   `}
+                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px]  px-[10px] py-[5px] rounded-md`}
                                             />
                                             <ErrorMessage className={`${styles.error}`} name='title' component='div' />
                                         </div>
@@ -283,7 +120,7 @@ const ManageProductPage = ({ setProduct }: Props) => {
                                             <Field
                                                 as='input'
                                                 name='description'
-                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px]  px-[10px] py-[5px] rounded-md   `}
+                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px]  px-[10px] py-[5px] rounded-md`}
                                             />
                                             <ErrorMessage
                                                 className={`${styles.error}`}
@@ -327,28 +164,34 @@ const ManageProductPage = ({ setProduct }: Props) => {
                                             <label htmlFor='size' className='mb-[0.2rem] font-[700]'>
                                                 Size
                                             </label>
-                                            <Field
-                                                as='select'
-                                                multiple
+                                            {/* <Field
                                                 onChange={handleChooseSize}
                                                 name='size'
+                                                // options={multipleSize}
                                                 className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px]  px-[10px] py-[5px] rounded-md`}
                                             >
                                                 <option value='37'>37</option>
                                                 <option value='37.5'>37.5</option>
-                                                <option value='38'>38.5</option>
+                                                <option value='38'>38</option>
+                                                <option value='38.5'>38.5</option>
                                                 <option value='39'>39</option>
                                                 <option value='39.5'>39.5</option>
                                                 <option value='40'>40</option>
                                                 <option value='40.5'>40.5</option>
                                                 <option value='41'>41</option>
-                                                <option value='41'>41.5</option>
-                                                <option value='42'>42</option>
+                                                <option value='41.5'>41.5</option>
                                                 <option value='42.5'>42.5</option>
                                                 <option value='43'>43</option>
                                                 <option value='43.5'>43.5</option>
                                                 <option value='44'>44</option>
-                                            </Field>
+                                            </Field> */}
+                                            <Select
+                                                closeMenuOnSelect={false}
+                                                components={animatedComponents}
+                                                defaultValue={[multipleSize[0]]}
+                                                isMulti
+                                                options={multipleSize}
+                                            />
                                             <ErrorMessage className={`${styles.error}`} name='size' component='div' />
                                         </div>
                                         <div className={`my-[0.8rem] grid`}>
@@ -359,7 +202,6 @@ const ManageProductPage = ({ setProduct }: Props) => {
                                                 className='mb-[0.6rem]'
                                                 type='file'
                                                 id='imageInput'
-                                                multiple
                                                 name='imgUrl'
                                                 onChange={handleImageChange}
                                             />
@@ -383,212 +225,6 @@ const ManageProductPage = ({ setProduct }: Props) => {
                                 </div>
                             )}
                         </Formik>
-                    </Modal>
-                    <Button className='bg-blue-500' type='primary' onClick={showModalCategory}>
-                        Tag and Product
-                    </Button>
-                    <Modal open={isModalCategoryOpen} onOk={handleOkCategory} onCancel={handleCancelCategory}>
-                        <label>Add Tag and Category</label>
-                        <section>
-                            <Formik<ProductValues>
-                                onSubmit={handleSubmitTag}
-                                validationSchema={validationSchemaProduct}
-                                initialValues={state == null ? initialValues : state}
-                            >
-                                {(formik) => (
-                                    <form action=''>
-                                        <div className={`my-2 grid`}>
-                                            <label>Please Enter Tag You Want To Create:</label>
-                                            <section className='grid-cols-1'>
-                                                <Field
-                                                    as='input'
-                                                    name='tagInput'
-                                                    className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px] rounded-md   `}
-                                                    onChange={handleChangeInput1}
-                                                    value={inputTag1}
-                                                />
-                                                <ErrorMessage
-                                                    className={`${styles.error}`}
-                                                    name='tagInput'
-                                                    component='div'
-                                                />
-                                                <button
-                                                    className=' border-black border-[1px]'
-                                                    onClick={(e) => {
-                                                        handleAddTag(e, inputTag1)
-                                                    }}
-                                                >
-                                                    Add Tag
-                                                </button>
-                                            </section>
-                                            <section className='grid'>
-                                                <label className='grid-cols-1'>Tag: </label>
-                                                <Field
-                                                    as='select'
-                                                    name='tag'
-                                                    className='border-[1px]'
-                                                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                                                        handleChangeTagSelect(e.target.value)
-                                                    }}
-                                                >
-                                                    {
-                                                        <>
-                                                            <option value=''>Please choose a tag</option>
-                                                            {tag.length > 0 &&
-                                                                tag.map((item: string) => (
-                                                                    <option key={item} value={item}>
-                                                                        {item}
-                                                                    </option>
-                                                                ))}
-                                                        </>
-                                                    }
-                                                </Field>
-
-                                                <ErrorMessage
-                                                    className={`${styles.error}`}
-                                                    name='tag'
-                                                    component='div'
-                                                />
-                                                <ul className='flex gap-[5px] flex-col'>
-                                                    {tag.map((tag) => {
-                                                        return (
-                                                            <div className=' flex justify- gap-[5px] flex-row'>
-                                                                <li key={tag}>{tag}</li>
-                                                                <button className='w-[30px] h-[30px] text-white bg-black'>
-                                                                    {' '}
-                                                                    -
-                                                                </button>
-                                                            </div>
-                                                        )
-                                                    })}
-                                                </ul>
-                                            </section>
-                                        </div>
-                                        {tagSelect && (
-                                            <div className={`my-2 grid`}>
-                                                <label>Please Enter Product Tag You Want To Create:</label>
-                                                <section className='grid-cols-1'>
-                                                    <Field
-                                                        as='input'
-                                                        name='productTag'
-                                                        className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px] rounded-md   `}
-                                                        onChange={handleChangeInputProductTag}
-                                                        value={inputProductTag}
-                                                    />
-                                                    <ErrorMessage
-                                                        className={`${styles.error}`}
-                                                        name='productTag'
-                                                        component='div'
-                                                    />
-                                                    <button
-                                                        className=' border-black border-[1px]'
-                                                        onClick={(e) => {
-                                                            handleAddProductTag(e, inputProductTag)
-                                                        }}
-                                                    >
-                                                        Add Tag
-                                                    </button>
-                                                    <label>List Tag:</label>
-                                                </section>
-                                                <section className='grid'>
-                                                    <label className='grid-cols-1'>Tag: </label>
-                                                    <Field
-                                                        as='select'
-                                                        name='tag'
-                                                        className='border-[1px]'
-                                                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                                                            handleChangeProductTagSelect(e.target.value)
-                                                        }}
-                                                    >
-                                                        {productTag.length > 0 && (
-                                                            <>
-                                                                <option value=''>Please choose a product tag</option>
-                                                                {productTag.map((item: string) => (
-                                                                    <option key={item} value={item}>
-                                                                        {item}
-                                                                    </option>
-                                                                ))}
-                                                            </>
-                                                        )}
-                                                    </Field>
-
-                                                    <ErrorMessage
-                                                        className={`${styles.error}`}
-                                                        name='tag'
-                                                        component='div'
-                                                    />
-                                                    <label>List Product Tag:</label>
-                                                    <ul className='flex gap-[5px] flex-col'>
-                                                        {productTag.map((tag) => {
-                                                            return (
-                                                                <div className=' flex justify- gap-[5px] flex-row'>
-                                                                    <li key={tag}>{tag}</li>
-                                                                    <button className='w-[30px] h-[30px] text-white bg-black'>
-                                                                        {' '}
-                                                                        -
-                                                                    </button>
-                                                                </div>
-                                                            )
-                                                        })}
-                                                    </ul>
-                                                </section>
-                                            </div>
-                                        )}
-
-                                        {productTagSelect && (
-                                            <div className={`my-2 grid`}>
-                                                <label>Please Enter Category Tag You Want To Create:</label>
-                                                <section className='grid-cols-1'>
-                                                    <Field
-                                                        as='input'
-                                                        name='categoryTag'
-                                                        className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px] rounded-md   `}
-                                                        onChange={handleChangeInputCategoryTag}
-                                                        value={inputCategoryTag}
-                                                    />
-                                                    <ErrorMessage
-                                                        className={`${styles.error}`}
-                                                        name='categoryTag'
-                                                        component='div'
-                                                    />
-                                                    <button
-                                                        className=' border-black border-[1px]'
-                                                        onClick={(e) => {
-                                                            handleAddCategoryTag(e, inputCategoryTag)
-                                                        }}
-                                                    >
-                                                        Add Tag
-                                                    </button>
-                                                </section>
-                                                <section className='grid'>
-                                                    <label className='grid-cols-1'>Tag: </label>
-                                                    {/* <Field as='select' name='tag' className='border-[1px]'>
-                                                    {categoryTag.length > 0 &&
-                                                        categoryTag.map((item) => (
-                                                            <option key={item} value={item}>
-                                                                {item}
-                                                            </option>
-                                                        ))}
-                                                </Field>
-                                                <ErrorMessage
-                                                    className={`${styles.error}`}
-                                                    name='tag'
-                                                    component='div'
-                                                />
-                                                <label className='grid-cols-1'>Tags: </label> */}
-                                                    {categoryTag.map((tag) => (
-                                                        <div key={tag}>
-                                                            <Field type='checkbox' name='tags' value={tag} id={tag} />
-                                                            <label htmlFor={tag}>{tag}</label>
-                                                        </div>
-                                                    ))}
-                                                </section>
-                                            </div>
-                                        )}
-                                    </form>
-                                )}
-                            </Formik>
-                        </section>
                     </Modal>
                 </div>
                 <table className='w-full'>
