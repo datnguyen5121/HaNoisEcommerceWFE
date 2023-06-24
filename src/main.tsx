@@ -8,6 +8,7 @@ import { PersistGate } from 'redux-persist/integration/react'
 import axios from 'axios'
 axios.defaults.baseURL = 'http://localhost:8080/api'
 
+
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
         <Provider store={store}>
@@ -17,3 +18,4 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         </Provider>
     </React.StrictMode>
 )
+
