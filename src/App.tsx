@@ -17,18 +17,6 @@ import { ProductValues } from './type/ProductValues'
 import { AccountValues } from './type/AccountValues'
 
 function App() {
-    const [product, setProduct] = useState<ProductValues[]>(() => {
-        return JSON.parse(localStorage.getItem('product') || '[]')
-    })
-    useEffect(() => {
-        localStorage.setItem('product', JSON.stringify(product))
-    }, [product])
-    const [account, setAccount] = useState<AccountValues[]>(() => {
-        return JSON.parse(localStorage.getItem('account') || '[]')
-    })
-    useEffect(() => {
-        localStorage.setItem('account', JSON.stringify(account))
-    }, [account])
     //check login
     return (
         <>
@@ -62,8 +50,8 @@ function App() {
                     </Route>
                     <Route path='/admin' element={<AdminLayout />}>
                         <Route index element={<Navigate to='product' />}></Route>
-                        <Route path='product' index element={<ManageProductPage setProduct={setProduct} />} />
-                        <Route path='account' element={<ManageAccountPage setAccount={setAccount} />} />
+                        <Route path='product' index element={<ManageProductPage />} />
+                        <Route path='account' element={<ManageAccountPage />} />
                     </Route>
                     <Route path='*' element={<NotFound />} />
                 </Routes>

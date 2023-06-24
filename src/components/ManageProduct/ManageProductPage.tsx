@@ -1,11 +1,11 @@
 import HeaderManageProduct from '../HeaderManageProduct/HeaderManageProduct'
 import styles from './ManageProductPage.module.css'
 import { useAppDispatch, useAppSelector } from '../../redux/store'
-import { ChangeEvent, Dispatch, useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { getProducts, removeToManageProduct } from '../../redux/features/manageProductSlice'
 import { Button, Modal } from 'antd'
 import { ProductValues } from '../../type/ProductValues'
-import { ErrorMessage, Field, Formik, Form } from 'formik'
+import { ErrorMessage, Field, Formik, Form, FormikProps } from 'formik'
 import { useLocation } from 'react-router-dom'
 import { initialValues } from '../../type/initialValues'
 import { validationSchemaProduct } from '../../type/validationSchemaProduct'
@@ -13,11 +13,17 @@ import Select from 'react-select'
 import makeAnimated from 'react-select/animated'
 const animatedComponents = makeAnimated()
 
-type Props = {
-    setProduct: Dispatch<React.SetStateAction<ProductValues[]>>
-}
-const multipleSize = ['37', '37.5', '38', '38.5', '39', '39.5', '40', '40.5', '41', '41.5', '42.5', '43', '43.5', '44']
-const ManageProductPage = ({ setProduct }: Props) => {
+const multipleSize = [
+    { value: '37', label: '37' },
+    { value: '38', label: '38' },
+    { value: '39', label: '39' },
+    { value: '40', label: '40' },
+    { value: '41', label: '41' },
+    { value: '42', label: '42' },
+    { value: '43', label: '43' },
+    { value: '44', label: '44' }
+]
+const ManageProductPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
 
     const { state } = useLocation()
@@ -43,38 +49,31 @@ const ManageProductPage = ({ setProduct }: Props) => {
     const [size, setSize] = useState<string[]>([])
     const [selectedImages, setSelectedImages] = useState<File[]>([])
 
-    const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const files = Array.from(e.target.files || [])
-        setSelectedImages((prevSelectedImages) => [...prevSelectedImages, ...files])
-    }
-    const uploadImage = () => {
-        // Extract the file names from selectedImages
+    // const handleImageChange = (e: ChangeEvent<HTMLInputElement>, formik: FormikProps<ProductValues>) => {
+    //     const files = Array.from(e.target.files || [])
+    //     setSelectedImages((prevSelectedImages) => [...prevSelectedImages, ...files])
+    //     const fileNames = files.map((file) => file.name)
+    //     formik.setFieldValue('imgUrl', fileNames)
+    // }
+
+    const uploadImage = (formik: FormikProps<ProductValues>) => {
         const fileNames = selectedImages.map((file) => file.name)
         console.log(fileNames)
+        formik.setFieldValue('imgUrl', fileNames)
     }
 
-    const handleChooseSize = (e: ChangeEvent<HTMLInputElement>) => {
-        const sizes = e.target.value
-        console.log('sizes giay la === ', sizes)
-        setSize((prevSize) => [...prevSize, sizes])
+    const handleChooseSize = (selectedOptions: any) => {
+        const sizes = selectedOptions.map((option: any) => option.value)
+        setSize((prevSize) => [...prevSize, ...sizes])
+        console.log('Cac size da chon === ', sizes)
     }
+
+    console.log(size)
 
     const handleSubmit = (values: ProductValues) => {
-        setProduct((product: any) => {
-            let newProduct = [...product]
-            const productIndex = newProduct.findIndex((product) => product._id === values._id)
-            if (productIndex !== -1) {
-                newProduct[productIndex] = values
-            } else {
-                newProduct = newProduct.concat({
-                    ...values,
-                    _id: product.length + 1
-                })
-            }
-            console.log('values === ', newProduct)
-            return newProduct
-        })
+        console.log(values)
     }
+
     return (
         <div className={`productPageContainer px-[20px] py-[10px]`}>
             <HeaderManageProduct />
@@ -164,32 +163,14 @@ const ManageProductPage = ({ setProduct }: Props) => {
                                             <label htmlFor='size' className='mb-[0.2rem] font-[700]'>
                                                 Size
                                             </label>
-                                            {/* <Field
-                                                onChange={handleChooseSize}
+                                            <Field
                                                 name='size'
-                                                // options={multipleSize}
-                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px]  px-[10px] py-[5px] rounded-md`}
-                                            >
-                                                <option value='37'>37</option>
-                                                <option value='37.5'>37.5</option>
-                                                <option value='38'>38</option>
-                                                <option value='38.5'>38.5</option>
-                                                <option value='39'>39</option>
-                                                <option value='39.5'>39.5</option>
-                                                <option value='40'>40</option>
-                                                <option value='40.5'>40.5</option>
-                                                <option value='41'>41</option>
-                                                <option value='41.5'>41.5</option>
-                                                <option value='42.5'>42.5</option>
-                                                <option value='43'>43</option>
-                                                <option value='43.5'>43.5</option>
-                                                <option value='44'>44</option>
-                                            </Field> */}
-                                            <Select
+                                                as={Select}
                                                 closeMenuOnSelect={false}
                                                 components={animatedComponents}
-                                                defaultValue={[multipleSize[0]]}
                                                 isMulti
+                                                value={size}
+                                                onChange={handleChooseSize}
                                                 options={multipleSize}
                                             />
                                             <ErrorMessage className={`${styles.error}`} name='size' component='div' />
@@ -203,11 +184,14 @@ const ManageProductPage = ({ setProduct }: Props) => {
                                                 type='file'
                                                 id='imageInput'
                                                 name='imgUrl'
-                                                onChange={handleImageChange}
+                                                onChange={(event) => {
+                                                    formik.setFieldValue('imgUrl', event.currentTarget.files)
+                                                }}
+                                                multiple
                                             />
                                             <button
                                                 className='w-[4.6rem] h-[1.8rem] bg-blue-600 text-white rounded-md'
-                                                onClick={() => uploadImage()}
+                                                onClick={() => uploadImage(formik)}
                                             >
                                                 Upload
                                             </button>
@@ -237,7 +221,7 @@ const ManageProductPage = ({ setProduct }: Props) => {
                             <th>Category</th>
                             <th>Size</th>
                             <th>imgUrl</th>
-                            <th>Price</th>
+                            {/* <th>Price</th> */}
                             <th>Feature</th>
                         </tr>
                     </thead>
@@ -250,9 +234,8 @@ const ManageProductPage = ({ setProduct }: Props) => {
                                 <td className='w-28'>{product.datePublish}</td>
                                 <td className='w-32'>{product.category}</td>
                                 <td className='w-32'>{product.size}</td>
-                                <td className='w-12'>{product.size}</td>
-                                <td className='w-40'>{product.imgUrl}</td>
-                                <td className='w-16'>{product.price}</td>
+                                <td className='w-40'>asdfsafdsdf</td>
+                                {/* <td className='w-16'>{product.price}</td> */}
                                 <td className='w-36'>
                                     <div>
                                         <button className={`${styles.editBtn}`}>Edit</button>

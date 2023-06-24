@@ -5,9 +5,7 @@ export const initialValues: ProductValues = {
     description: '',
     datePublish: '',
     category: [],
-    size: [],
-    imgUrl: [],
-    price: 0,
-    createdAt: '',
-    updatedAt: ''
+    size: ['37', '38', '39', '40', '41', '42', '43', '44'],
+    imgUrl: {}
+    // price: 0
 }

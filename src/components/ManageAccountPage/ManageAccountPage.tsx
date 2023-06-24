@@ -9,12 +9,9 @@ import { useLocation } from 'react-router-dom'
 import { initialValues } from '../../type/initialValues'
 import { AccountValues } from '../../type/AccountValues'
 import { validationSchemaAccount } from '../../type/validationSchemaAccount'
+import ColumnGroup from 'antd/es/table/ColumnGroup'
 
-type Props = {
-    setAccount: Dispatch<React.SetStateAction<AccountValues[]>>
-}
-
-const ManageAccountPage = ({ setAccount }: Props) => {
+const ManageAccountPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const { state } = useLocation()
     const showModal = () => {
@@ -37,19 +34,7 @@ const ManageAccountPage = ({ setAccount }: Props) => {
         }
     }, [])
     const handleSubmit = (values: AccountValues) => {
-        setAccount((account: any) => {
-            let newAccount = [...account]
-            const accountIndex = newAccount.findIndex((account) => account._id === values._id)
-            if (accountIndex !== -1) {
-                newAccount[accountIndex] = values
-            } else {
-                newAccount = newAccount.concat({
-                    ...values,
-                    _id: account.length + 1
-                })
-            }
-            return newAccount
-        })
+        console.log(values)
     }
 
     return (
