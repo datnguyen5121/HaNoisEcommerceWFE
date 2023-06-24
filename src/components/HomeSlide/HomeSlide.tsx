@@ -15,19 +15,25 @@ interface Props {
 
 const HomeSlide: FC<Props> = ({ data, heading }) => {
     function scrollLeft() {
+
         const container = document.getElementById('homeSlideContainer')!
         container.style.scrollBehavior = 'smooth'
 
+
         if (container) {
+            container.style.scrollBehavior = 'smooth'
             container.scrollLeft -= 300
         }
     }
 
     function scrollRight() {
+
         const container = document.getElementById('homeSlideContainer')!
         container.style.scrollBehavior = 'smooth'
 
+
         if (container) {
+            container.style.scrollBehavior = 'smooth'
             container.scrollLeft += 300
         }
     }
