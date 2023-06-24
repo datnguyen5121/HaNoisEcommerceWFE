@@ -12,9 +12,13 @@ import ProductDetail from './components/ProductDetail'
 import { ToastContainer } from 'react-toastify'
 import ManageProductPage from './components/ManageProduct/ManageProductPage'
 import ManageAccountPage from './components/ManageAccountPage/ManageAccountPage'
+
+import ManageCategoryPage from './components/ManageCategoryPage/ManageCategoryPage'
+
 import ProductByCategory from './pages/FrontEnd/ProductByCategory'
 
 import Account from './pages/FrontEnd/Account'
+
 
 
 function App() {
@@ -51,8 +55,11 @@ function App() {
                     </Route>
                     <Route path='admin' element={<AdminLayout />}>
                         <Route index element={<Navigate to='product' />}></Route>
-                        <Route path='product' index element={<ManageProductPage />} />
-                        <Route path='account' element={<ManageAccountPage />} />
+
+                        <Route path='product' index element={<ManageProductPage  />} />
+                        <Route path='account' element={<ManageAccountPage  />} />
+                        <Route path='category' element={<ManageCategoryPage />} />
+
                     </Route>
                     <Route path='*' element={<NotFound />} />
                 </Routes>
