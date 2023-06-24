@@ -1,6 +1,6 @@
 import HeaderManageProduct from '../HeaderManageProduct/HeaderManageProduct'
 import styles from './ManageAccountPage.module.css'
-import { useAppDispatch, useAppSelector } from '../../redux/store'
+import { useAppDispatch } from '../../redux/store'
 import { Dispatch, useEffect, useState } from 'react'
 import { getAccounts, removeToManageAccount } from '../../redux/features/manageAccountSlice'
 import { Button, Modal } from 'antd'
@@ -26,13 +26,6 @@ const ManageAccountPage = () => {
         setIsModalOpen(false)
     }
 
-    const accountItems = useAppSelector((state) => state.manageAccount.accounts)
-    const dispatch = useAppDispatch()
-    useEffect(() => {
-        if (accountItems.length <= 0) {
-            dispatch(getAccounts())
-        }
-    }, [])
     const handleSubmit = (values: AccountValues) => {
         console.log(values)
     }
@@ -216,7 +209,7 @@ const ManageAccountPage = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {accountItems.map((account, index) => (
+                        {/* {accountItems.map((account: any, index: any) => (
                             <tr key={index}>
                                 <td className='w-11'>{index + 1}</td>
                                 <td className='w-36'>{account.email}</td>
@@ -240,7 +233,7 @@ const ManageAccountPage = () => {
                                     </div>
                                 </td>
                             </tr>
-                        ))}
+                        ))} */}
                     </tbody>
                 </table>
             </div>

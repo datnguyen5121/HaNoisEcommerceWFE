@@ -1,6 +1,6 @@
 import HeaderManageProduct from '../HeaderManageProduct/HeaderManageProduct'
 import styles from './ManageProductPage.module.css'
-import { useAppDispatch, useAppSelector } from '../../redux/store'
+import { useAppDispatch } from '../../redux/store'
 import { useEffect, useState } from 'react'
 import { getProducts, removeToManageProduct } from '../../redux/features/manageProductSlice'
 import { Button, Modal } from 'antd'
@@ -39,13 +39,6 @@ const ManageProductPage = () => {
     const handleCancel = () => {
         setIsModalOpen(false)
     }
-    const productItems = useAppSelector((state) => state.manageProduct.products)
-    const dispatch = useAppDispatch()
-    useEffect(() => {
-        if (productItems.length <= 0) {
-            dispatch(getProducts())
-        }
-    }, [])
 
     const [size, setSize] = useState<string[]>([])
     const [selectedImages, setSelectedImages] = useState<File[]>([])
@@ -228,7 +221,7 @@ const ManageProductPage = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {productItems.map((product, index) => (
+                        {/* {productItems.map((product, index) => (
                             <tr key={index}>
                                 <td className='w-11'>{index + 1}</td>
                                 <td className='w-36'>{product.title}</td>
@@ -237,7 +230,7 @@ const ManageProductPage = () => {
                                 <td className='w-32'>{product.category}</td>
                                 <td className='w-32'>{product.size}</td>
                                 <td className='w-40'>asdfsafdsdf</td>
-                                {/* <td className='w-16'>{product.price}</td> */}
+                                
                                 <td className='w-36'>
                                     <div>
                                         <button className={`${styles.editBtn}`}>Edit</button>
@@ -250,7 +243,7 @@ const ManageProductPage = () => {
                                     </div>
                                 </td>
                             </tr>
-                        ))}
+                        ))} */}
                     </tbody>
                 </table>
             </div>
