@@ -1,7 +1,6 @@
 import { faChevronLeft, faChevronRight, faChevronUp } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
-import PayPal from './PayPal'
 function Checkout() {
     let [payment, setPayment] = useState('')
     let handleChangePayment = (e: any) => {
@@ -76,7 +75,7 @@ function Checkout() {
                             {payment == 'PayInCash' && <div></div>}
                             {payment == 'CreditCard' && (
                                 <section className='max-w-xl'>
-                                    <PayPal />
+                                    <div>Paypal</div>
                                 </section>
                             )}
 

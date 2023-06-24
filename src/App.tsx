@@ -19,8 +19,6 @@ import ProductByCategory from './pages/FrontEnd/ProductByCategory'
 
 import Account from './pages/FrontEnd/Account'
 
-
-
 function App() {
     //check login
     return (
@@ -57,10 +55,9 @@ function App() {
                     <Route path='admin' element={<AdminLayout />}>
                         <Route index element={<Navigate to='product' />}></Route>
 
-                        <Route path='product' index element={<ManageProductPage  />} />
-                        <Route path='account' element={<ManageAccountPage  />} />
+                        <Route path='product' index element={<ManageProductPage />} />
+                        <Route path='account' element={<ManageAccountPage />} />
                         <Route path='category' element={<ManageCategoryPage />} />
-
                     </Route>
                     <Route path='*' element={<NotFound />} />
                 </Routes>
