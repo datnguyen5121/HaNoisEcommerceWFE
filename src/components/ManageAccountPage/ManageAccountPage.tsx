@@ -9,12 +9,9 @@ import { useLocation } from 'react-router-dom'
 import { initialValues } from '../../type/initialValues'
 import { AccountValues } from '../../type/AccountValues'
 import { validationSchemaAccount } from '../../type/validationSchemaAccount'
+import ColumnGroup from 'antd/es/table/ColumnGroup'
 
-type Props = {
-    setAccount: Dispatch<React.SetStateAction<AccountValues[]>>
-}
-
-const ManageAccountPage = ({ setAccount }: Props) => {
+const ManageAccountPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const { state } = useLocation()
     const showModal = () => {
@@ -37,19 +34,7 @@ const ManageAccountPage = ({ setAccount }: Props) => {
         }
     }, [])
     const handleSubmit = (values: AccountValues) => {
-        setAccount((account: any) => {
-            let newAccount = [...account]
-            const accountIndex = newAccount.findIndex((account) => account._id === values._id)
-            if (accountIndex !== -1) {
-                newAccount[accountIndex] = values
-            } else {
-                newAccount = newAccount.concat({
-                    ...values,
-                    _id: account.length + 1
-                })
-            }
-            return newAccount
-        })
+        console.log(values)
     }
 
     return (
@@ -68,118 +53,150 @@ const ManageAccountPage = ({ setAccount }: Props) => {
             <div className={`mt-[30px] flex flex-col justify-center items-center`}>
                 <div className='flex justify-start w-full mb-6'>
                     <Button className='bg-blue-500' type='primary' onClick={showModal}>
-                        Create a new Account
+                        Create a New Account
                     </Button>
-                    <Modal title='Create A New Account' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-                        <Formik<AccountValues>
-                            onSubmit={handleSubmit}
-                            validationSchema={validationSchemaAccount}
-                            initialValues={state == null ? initialValues : state}
-                        >
-                            {(formik) => (
-                                <form action='' onSubmit={formik.handleSubmit}>
-                                    <div className={`my-2`}>
-                                        <label htmlFor='email' className='me-[10px] font-[700]'>
-                                            Email
-                                        </label>
-                                        <Field
-                                            as='input'
-                                            name='email'
-                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
-                                        />
-                                        <ErrorMessage className={`${styles.error}`} name='email' component='div' />
-                                    </div>
-                                    <div className={`my-2`}>
-                                        <label htmlFor='password' className='me-[10px] font-[700]'>
-                                            Password
-                                        </label>
-                                        <Field
-                                            as='input'
-                                            name='password'
-                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
-                                        />
-                                        <ErrorMessage className={`${styles.error}`} name='password' component='div' />
-                                    </div>
-                                    <div className={`my-2`}>
-                                        <label htmlFor='firstName' className='me-[10px] font-[700]'>
-                                            First Name
-                                        </label>
-                                        <Field
-                                            as='input'
-                                            name='firstName'
-                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
-                                        />
-                                        <ErrorMessage className={`${styles.error}`} name='firstName' component='div' />
-                                    </div>
-                                    <div className={`my-2`}>
-                                        <label htmlFor='lastName' className='me-[10px] font-[700]'>
-                                            Last Name
-                                        </label>
-                                        <Field
-                                            as='input'
-                                            name='lastName'
-                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
-                                        />
-                                        <ErrorMessage className={`${styles.error}`} name='lastName' component='div' />
-                                    </div>
-                                    <div className={`my-2`}>
-                                        <label htmlFor='address' className='me-[10px] font-[700]'>
-                                            Address
-                                        </label>
-                                        <Field
-                                            as='input'
-                                            name='address'
-                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
-                                        />
-                                        <ErrorMessage className={`${styles.error}`} name='address' component='div' />
-                                    </div>
-                                    <div className={`my-2`}>
-                                        <label htmlFor='gender' className='me-[10px] font-[700]'>
-                                            Gender
-                                        </label>
-                                        <Field
-                                            as='input'
-                                            name='gender'
-                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
-                                        />
-                                        <ErrorMessage className={`${styles.error}`} name='gender' component='div' />
-                                    </div>
-                                    <div className={`my-2`}>
-                                        <label htmlFor='roleId' className='me-[10px] font-[700]'>
-                                            Role
-                                        </label>
-                                        <Field
-                                            as='input'
-                                            name='roleId'
-                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
-                                        />
-                                        <ErrorMessage className={`${styles.error}`} name='roleId' component='div' />
-                                    </div>
-                                    <div className={`my-2`}>
-                                        <label htmlFor='createdAt' className='me-[10px] font-[700]'>
-                                            Created At
-                                        </label>
-                                        <Field
-                                            as='input'
-                                            name='createdAt'
-                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
-                                        />
-                                        <ErrorMessage className={`${styles.error}`} name='createdAt' component='div' />
-                                    </div>
-                                    <div className={`my-2`}>
-                                        <label htmlFor='updatedAt' className='me-[10px] font-[700]'>
-                                            Updated At
-                                        </label>
-                                        <Field
-                                            as='input'
-                                            name='updatedAt'
-                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
-                                        />
-                                        <ErrorMessage className={`${styles.error}`} name='updatedAt' component='div' />
-                                    </div>
-                                </form>
-                            )}
-                        </Formik>
+                    <Modal
+                        className='text-center'
+                        title='Create A New Account'
+                        open={isModalOpen}
+                        onOk={handleOk}
+                        onCancel={handleCancel}
+                    >
+                        <div className='flex justify-center items-center'>
+                            <Formik<AccountValues>
+                                onSubmit={handleSubmit}
+                                validationSchema={validationSchemaAccount}
+                                initialValues={state == null ? initialValues : state}
+                            >
+                                {(formik) => (
+                                    <form action='' onSubmit={formik.handleSubmit}>
+                                        <div className={`my-2 grid`}>
+                                            <label htmlFor='email' className='me-[10px] font-[700]'>
+                                                Email
+                                            </label>
+                                            <Field
+                                                as='input'
+                                                name='email'
+                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
+                                            />
+                                            <ErrorMessage className={`${styles.error}`} name='email' component='div' />
+                                        </div>
+                                        <div className={`my-2 grid`}>
+                                            <label htmlFor='password' className='me-[10px] font-[700]'>
+                                                Password
+                                            </label>
+                                            <Field
+                                                as='input'
+                                                name='password'
+                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
+                                            />
+                                            <ErrorMessage
+                                                className={`${styles.error}`}
+                                                name='password'
+                                                component='div'
+                                            />
+                                        </div>
+                                        <div className={`my-2 grid`}>
+                                            <label htmlFor='firstName' className='me-[10px] font-[700]'>
+                                                First Name
+                                            </label>
+                                            <Field
+                                                as='input'
+                                                name='firstName'
+                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
+                                            />
+                                            <ErrorMessage
+                                                className={`${styles.error}`}
+                                                name='firstName'
+                                                component='div'
+                                            />
+                                        </div>
+                                        <div className={`my-2 grid`}>
+                                            <label htmlFor='lastName' className='me-[10px] font-[700]'>
+                                                Last Name
+                                            </label>
+                                            <Field
+                                                as='input'
+                                                name='lastName'
+                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
+                                            />
+                                            <ErrorMessage
+                                                className={`${styles.error}`}
+                                                name='lastName'
+                                                component='div'
+                                            />
+                                        </div>
+                                        <div className={`my-2 grid`}>
+                                            <label htmlFor='address' className='me-[10px] font-[700]'>
+                                                Address
+                                            </label>
+                                            <Field
+                                                as='input'
+                                                name='address'
+                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
+                                            />
+                                            <ErrorMessage
+                                                className={`${styles.error}`}
+                                                name='address'
+                                                component='div'
+                                            />
+                                        </div>
+                                        <div className={`my-2 grid`}>
+                                            <label htmlFor='gender' className='me-[10px] font-[700]'>
+                                                Gender
+                                            </label>
+                                            <Field
+                                                as='input'
+                                                name='gender'
+                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
+                                            />
+                                            <ErrorMessage className={`${styles.error}`} name='gender' component='div' />
+                                        </div>
+                                        <div className={`my-2 grid`}>
+                                            <label htmlFor='roleId' className='me-[10px] font-[700]'>
+                                                Role
+                                            </label>
+                                            <Field
+                                                as='input'
+                                                name='roleId'
+                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
+                                            />
+                                            <ErrorMessage className={`${styles.error}`} name='roleId' component='div' />
+                                        </div>
+                                        <div className={`my-2 grid`}>
+                                            <label htmlFor='createdAt' className='me-[10px] font-[700]'>
+                                                Created At
+                                            </label>
+                                            <Field
+                                                as='input'
+                                                name='createdAt'
+                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
+                                            />
+                                            <ErrorMessage
+                                                className={`${styles.error}`}
+                                                name='createdAt'
+                                                component='div'
+                                            />
+                                        </div>
+                                        <div className={`my-2 grid`}>
+                                            <label htmlFor='updatedAt' className='me-[10px] font-[700]'>
+                                                Updated At
+                                            </label>
+                                            <Field
+                                                as='input'
+                                                name='updatedAt'
+                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
+                                            />
+                                            <ErrorMessage
+                                                className={`${styles.error}`}
+                                                name='updatedAt'
+                                                component='div'
+                                            />
+                                        </div>
+                                    </form>
+                                )}
+                            </Formik>
+                        </div>
                     </Modal>
                 </div>
                 <table className='w-full'>
