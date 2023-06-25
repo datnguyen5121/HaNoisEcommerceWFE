@@ -3,8 +3,10 @@ import { faArrowsRotate, faChevronDown } from '@fortawesome/free-solid-svg-icons
 import ProductItem from '../../../components/ProductItem'
 
 import { useState } from 'react'
+
 import Tippy from '@tippyjs/react/headless'
 import FilterContainer from '../../../components/FilterContainer'
+
 function ProductByCategory() {
     const [showFilter, setShowFilter] = useState(true)
     const [showSort, setShowSort] = useState(false)
@@ -12,9 +14,11 @@ function ProductByCategory() {
     const handleShowFilter = () => {
         setShowFilter(!showFilter)
     }
+
     const handleHideSort = () => {
         setShowSort(false)
     }
+
 
     return (
         <>
@@ -28,6 +32,7 @@ function ProductByCategory() {
                         <button className='hidden md:block' onClick={handleShowFilter}>
                             {showFilter ? 'Hide Filters' : 'Show Filters'} <FontAwesomeIcon icon={faArrowsRotate} />
                         </button>
+
                         {/*<Tippy
                             //onClickOutside={handleHideSort}
                             interactive={true}
@@ -67,6 +72,7 @@ function ProductByCategory() {
                                     setShowSort(!showSort)
                                 }}
                             >
+
                                 Sort By <FontAwesomeIcon icon={faChevronDown} />
                             </button>
                         </Tippy>

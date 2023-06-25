@@ -1,0 +1,23 @@
+th,
+td {
+    border: 1px solid #dddddd;
+    text-align: center;
+    padding: 5px;
+}
+.editBtn {
+    background-color: green;
+    color: white;
+    padding: 3px 10px;
+    margin-right: 10px;
+    border-radius: 6px;
+}
+.deleteBtn {
+    background-color: red;
+    color: white;
+    padding: 3px 10px;
+    margin-right: left;
+    border-radius: 6px;
+}
+.error {
+    color: red;
+}

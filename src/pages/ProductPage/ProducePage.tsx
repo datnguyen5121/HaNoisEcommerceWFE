@@ -6,7 +6,7 @@ const ProducePage = () => {
                 <h2>Product Page</h2>
             </div>
             <div>
-                <input type='text' placeholder='Search Product' />
+                <input type='text' placeholder='Search Producdt' />
             </div>
             <div>
                 <button>Create a new Product</button>

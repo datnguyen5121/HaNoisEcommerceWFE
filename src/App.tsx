@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import RootLayout from './pages/RootLayout'
 import Home from './pages/FrontEnd/Home'
 import Login from './pages/FrontEnd/Login'
@@ -9,11 +9,15 @@ import NotFound from './pages/NotFound'
 import Category from './pages/FrontEnd/Category'
 import AdminLayout from './pages/Admin/RootLayout'
 import ProductDetail from './components/ProductDetail'
+import { ToastContainer } from 'react-toastify'
+import ManageProductPage from './components/ManageProduct/ManageProductPage'
+import ManageAccountPage from './components/ManageAccountPage/ManageAccountPage'
+
+import ManageCategoryPage from './components/ManageCategoryPage/ManageCategoryPage'
+
 import ProductByCategory from './pages/FrontEnd/ProductByCategory'
 
 import Account from './pages/FrontEnd/Account'
-
-import { ToastContainer } from 'react-toastify'
 
 function App() {
     //check login
@@ -37,22 +41,25 @@ function App() {
                     <Route path='/' element={<RootLayout />}>
                         <Route path='/' element={<Home />} />
                         <Route path=':gender' element={<Category />}>
-                            <Route path=':category' element={<ProductByCategory />} />
+                            <Route path=':category' element={<div>nike</div>} />
                         </Route>
-
                         <Route path='product/:id' element={<ProductDetail />}></Route>
 
-                        {/*<Route path='cart' element={<Cart />} />*/}
+                        <Route path='cart' element={<Cart />} />
+
                         <Route path='checkout' element={<Checkout />} />
 
                         <Route path='account' element={<Account />} />
+
                         <Route path='login' element={<Login />} />
                         <Route path='register' element={<Register />} />
                     </Route>
-
                     <Route path='admin' element={<AdminLayout />}>
-                        <Route path='manage-product' element={<div>regster</div>} />
-                        <Route path='manage-account' element={<div>register</div>} />
+                        <Route index element={<Navigate to='product' />}></Route>
+
+                        <Route path='product' index element={<ManageProductPage />} />
+                        <Route path='account' element={<ManageAccountPage />} />
+                        <Route path='category' element={<ManageCategoryPage />} />
                     </Route>
                     <Route path='*' element={<NotFound />} />
                 </Routes>

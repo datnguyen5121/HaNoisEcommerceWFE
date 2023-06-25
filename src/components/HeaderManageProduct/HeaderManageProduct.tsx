@@ -10,6 +10,9 @@ const HeaderManageProduct = () => {
                 <NavLink className={`ms-[10px]`} to='/admin/product'>
                     Product
                 </NavLink>
+                <NavLink className={`ms-[10px]`} to='/admin/category'>
+                    Category
+                </NavLink>
             </div>
             <div>
                 <svg xmlns='http://www.w3.org/2000/svg' height='1.5em' fill='rgb(59, 130, 246)' viewBox='0 0 576 512'>
