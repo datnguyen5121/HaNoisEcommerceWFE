@@ -10,7 +10,6 @@ import { useLocation } from 'react-router-dom'
 import { initialValues } from '../../type/initialValues'
 import { validationSchemaProduct } from '../../type/validationSchemaProduct'
 
-
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated'
 import { createNewProduct } from '../../services/productService'
@@ -27,7 +26,6 @@ const multipleSize = [
     { value: '44', label: '44' }
 ]
 const ManageProductPage = () => {
-
     const [isModalOpen, setIsModalOpen] = useState(false)
 
     const { state } = useLocation()
@@ -43,7 +41,7 @@ const ManageProductPage = () => {
         setIsModalOpen(false)
     }
 
-
+    console.log('manageproductpage')
     const [size, setSize] = useState<string[]>([])
     const [selectedImages, setSelectedImages] = useState<File[]>([])
 
@@ -71,7 +69,6 @@ const ManageProductPage = () => {
     const handleSubmit = async (values: ProductValues) => {
         const newProduct = await createNewProduct(values)
         console.log('newProduct === ', newProduct)
-
     }
 
     return (

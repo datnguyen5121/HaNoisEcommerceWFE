@@ -46,7 +46,7 @@ export interface ProductForm {
     subnavNameId: string
     list: string[]
 }
-
+console.log('manageCategorypage')
 const ManageCategoryPage = () => {
     const [isModalCreateTagOpen, setModalCreateTagOpen] = useState(false)
     const [isModalEditOpen, setIsModalEditOpen] = useState(false)
@@ -118,8 +118,7 @@ const ManageCategoryPage = () => {
             let indexNav = result.findIndex((item: any) => item.navName === navName)
 
             if (indexNav !== -1) {
-                let index = result.findIndex((item: any) => item.navName)
-                result[index].list.push({
+                result[indexNav].list.push({
                     navName: navName,
                     navNameId: navNameId,
                     subnavNameId: subnavNameId,
