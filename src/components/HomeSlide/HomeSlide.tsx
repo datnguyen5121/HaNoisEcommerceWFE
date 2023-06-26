@@ -2,7 +2,6 @@ import { FC } from 'react'
 import styles from './HomeSlide.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
-
 interface Props {
     heading: string
     data: Array<{
@@ -49,7 +48,7 @@ const HomeSlide: FC<Props> = ({ data, heading }) => {
                 </div>
             </div>
 
-            <div className={`${styles.slide} w-11/12 mx-auto no-scrollbar`} id='homeSlideContainer'>
+            <div className={`${styles['no-scrollbar']} ${styles.slide} w-11/12 mx-auto `} id='homeSlideContainer'>
                 <div className={styles.slideItems}>
                     {data.map((item, index) => (
                         <div key={index} className={styles.slideItem}>

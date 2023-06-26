@@ -38,6 +38,16 @@ function Header() {
                     className={`absolute z-[999] border  right-0 top-7 min-w-[150px]  bg-white hidden shadow-md ${style.user}`}
                 >
                     <li className='px-3 py-2 hover:bg-gray-200 cursor-pointer'>
+                        <Link className='block' to='/account'>
+                            Account Info
+                        </Link>
+                    </li>
+                    <li className='px-3 py-2 hover:bg-gray-200 cursor-pointer'>
+                        <Link className='block' to='/admin/product'>
+                            Admin Page
+                        </Link>
+                    </li>
+                    <li className='px-3 py-2 hover:bg-gray-200 cursor-pointer'>
                         <div className='block' onClick={() => logoutUser(dispatch)}>
                             Logout
                         </div>
