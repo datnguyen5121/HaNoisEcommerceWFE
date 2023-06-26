@@ -8,6 +8,7 @@ interface CartState {
 const initialState: CartState = {
     items: products
 }
+
 const cartSlice = createSlice({
     name: 'cart',
     initialState,

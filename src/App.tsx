@@ -41,7 +41,9 @@ function App() {
                         <Route path='/' element={<RootLayout />}>
                             <Route path='/' element={<Home />} />
                             <Route path=':gender' element={<Category />}>
-                                <Route path=':category' element={<ProductByCategory />} />
+                                <Route path=':category' element={<ProductByCategory />}>
+                                    <Route path=':subCategory' element={<ProductByCategory />} />
+                                </Route>
                             </Route>
                             <Route path='product/:id' element={<ProductDetail />} />
                             <Route path='cart' element={<Cart />} />

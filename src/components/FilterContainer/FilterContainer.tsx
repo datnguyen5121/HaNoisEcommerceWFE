@@ -1,9 +1,11 @@
 import { memo, useState } from 'react'
 import FilterItem from '../FilterItem'
-
-function FilterContainer() {
-    const [filter, setFilter] = useState<string[]>([])
-
+interface IProps {
+    filter: string[]
+    setFilter: (value: string[]) => void
+}
+function FilterContainer(props: IProps) {
+    const { filter, setFilter } = props
     const handleFilterChange = (value: string, isChecked: boolean) => {
         if (isChecked) {
             setFilter([...filter, value])
@@ -20,7 +22,7 @@ function FilterContainer() {
                 onChange={handleFilterChange}
                 text={'gender'}
                 type={'checkbox'}
-                filterArray={['men', 'women']}
+                filterArray={['Men', 'Women']}
             />
 
             <FilterItem

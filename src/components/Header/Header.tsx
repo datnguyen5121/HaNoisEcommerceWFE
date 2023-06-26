@@ -1,10 +1,11 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCartShopping, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faCartShopping, faUser } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 import Navbar from '../Navbar/Navbar'
 import Logo from '../../assets/Logo.svg'
 import style from './Header.module.css'
 import Search from '../Search'
+
 import { useSelector } from 'react-redux'
 import { logoutUser } from '../../redux/authRequest'
 import { useDispatch } from 'react-redux'
@@ -82,6 +83,16 @@ function Header() {
                                 {renderUserMenu()}
                             </div>
                         </div>
+                        {/*<div className='block sm:hidden'>
+                            <FontAwesomeIcon icon={faBars} className='text-lg cursor-pointer' />
+                            <div className='bg-red-500 fixed right-0 top-0 bottom-0 w-[80vw] p-5'>
+                                <div className='flex gap-x-5 '>
+                                    <div className={`relative ${style.group}`}>
+                                        <div>Your cart</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>*/}
                     </div>
                 </div>
             </header>

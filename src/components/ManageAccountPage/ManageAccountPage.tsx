@@ -1,15 +1,12 @@
 import HeaderManageProduct from '../HeaderManageProduct/HeaderManageProduct'
 import styles from './ManageAccountPage.module.css'
-import { useAppDispatch } from '../../redux/store'
-import { Dispatch, useEffect, useState } from 'react'
-import { getAccounts, removeToManageAccount } from '../../redux/features/manageAccountSlice'
+import { useState } from 'react'
 import { Button, Modal } from 'antd'
 import { ErrorMessage, Field, Formik } from 'formik'
 import { useLocation } from 'react-router-dom'
 import { initialValues } from '../../type/initialValues'
 import { AccountValues } from '../../type/AccountValues'
 import { validationSchemaAccount } from '../../type/validationSchemaAccount'
-import ColumnGroup from 'antd/es/table/ColumnGroup'
 
 const ManageAccountPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
