@@ -2,30 +2,63 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowsRotate, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import ProductItem from '../../../components/ProductItem'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import Tippy from '@tippyjs/react/headless'
 import FilterContainer from '../../../components/FilterContainer'
+import { getProductByGenderCategory } from '../../../services/productService'
+import { useLocation } from 'react-router-dom'
+import { ProductValues } from '../../../type/ProductValues'
 
 function ProductByCategory() {
     const [showFilter, setShowFilter] = useState(true)
     const [showSort, setShowSort] = useState(false)
+    const location = useLocation()
+    const pathName = location.pathname
+    const [gender, category, subCategory] = pathName.split('/').filter((item) => item !== '')
+    const [productList, setProductList] = useState<ProductValues[]>([])
+    const [filter, setFilter] = useState<string[]>([])
 
     const handleShowFilter = () => {
         setShowFilter(!showFilter)
     }
 
+    console.log(productList)
+
     const handleHideSort = () => {
         setShowSort(false)
     }
+    const handleFetchProduct = async () => {
+        console.log('chay lai')
 
+        const res = await getProductByGenderCategory(gender, category, subCategory)
+        setProductList(res.data)
+    }
+
+    const handleProductFilterChange = () => {
+        if (filter.length > 0) {
+            const newProduct = productList.filter((productItem) =>
+                filter.some(
+                    (filterItem) => productItem.gender.includes(filterItem) || productItem.size.includes(filterItem)
+                )
+            )
+            setProductList(newProduct)
+        }
+    }
+
+    useEffect(() => {
+        if (filter.length > 0) {
+            handleProductFilterChange()
+        } else {
+            handleFetchProduct()
+        }
+    }, [pathName, filter])
 
     return (
         <>
             <section className='w-11/12 mx-auto'>
                 {/* breadcrumb */}
 
-                <p className='text-sm'>Jordan / Shoes</p>
                 <div className='sticky top-0 flex justify-between py-3 w-full bg-white z-10'>
                     <h5 className='text-2xl'>Men's Jordan Shoes (46)</h5>
                     <div className='flex gap-5 overflow-hidden '>
@@ -39,7 +72,7 @@ function ProductByCategory() {
                             visible={true}
                             placement='bottom'
                             render={(attrs) => (
-                                <div className={` w-[100vw] px-3 bg-white `} tabIndex={-1} {...attrs}>
+                                <div className={`w-[100vw] px-3 bg-white overflow-hidden`} tabIndex={-1} {...attrs}>
                                     <FilterContainer />
                                 </div>
                             )}
@@ -72,7 +105,6 @@ function ProductByCategory() {
                                     setShowSort(!showSort)
                                 }}
                             >
-
                                 Sort By <FontAwesomeIcon icon={faChevronDown} />
                             </button>
                         </Tippy>
@@ -83,58 +115,19 @@ function ProductByCategory() {
                     {/* filter */}
                     {showFilter && (
                         <div className='hidden md:block  sticky top-[56px] col-span-1 bg-white h-screen overflow-y-auto '>
-                            <FilterContainer />
+                            <FilterContainer filter={filter} setFilter={setFilter} />
                         </div>
                     )}
 
                     {/* list product */}
                     <div className='col-span-3 bg-white'>
                         <div className='grid lg:grid-cols-3  grid-cols-2 gap-4'>
-                            <div className='bg-white'>
-                                <ProductItem isSearch={false} />
-                            </div>
-                            <div className='bg-white'>
-                                <ProductItem isSearch={false} />
-                            </div>
-                            <div className='bg-white'>
-                                <ProductItem isSearch={false} />
-                            </div>
-                            <div className='bg-white'>
-                                <ProductItem isSearch={false} />
-                            </div>
-                            <div className='bg-white'>
-                                <ProductItem isSearch={false} />
-                            </div>
-                            <div className='bg-white'>
-                                <ProductItem isSearch={false} />
-                            </div>
-                            <div className='bg-white'>
-                                <ProductItem isSearch={false} />
-                            </div>
-                            <div className='bg-white'>
-                                <ProductItem isSearch={false} />
-                            </div>
-                            <div className='bg-white'>
-                                <ProductItem isSearch={false} />
-                            </div>
-                            <div className='bg-white'>
-                                <ProductItem isSearch={false} />
-                            </div>
-                            <div className='bg-white'>
-                                <ProductItem isSearch={false} />
-                            </div>
-                            <div className='bg-white'>
-                                <ProductItem isSearch={false} />
-                            </div>
-                            <div className='bg-white'>
-                                <ProductItem isSearch={false} />
-                            </div>
-                            <div className='bg-white'>
-                                <ProductItem isSearch={false} />
-                            </div>
-                            <div className='bg-white'>
-                                <ProductItem isSearch={false} />
-                            </div>
+                            {(productList.length > 0 &&
+                                productList.map((productItem) => (
+                                    <div className='bg-white' key={productItem._id}>
+                                        <ProductItem isSearch={false} data={productItem} />
+                                    </div>
+                                ))) || <div className=''>chua co san pham</div>}
                         </div>
                     </div>
                 </div>

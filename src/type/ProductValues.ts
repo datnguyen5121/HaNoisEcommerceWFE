@@ -1,11 +1,12 @@
 export interface ProductValues {
-    tagName: string
-    productTag: string
+    _id?: string
+    gender: string
+    productName: string
     title: string
     description: string
     datePublish: string
     category: string[]
     size: string[]
-    imgUrl: {}
+    imgUrl: string[]
     price: number
 }

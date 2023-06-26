@@ -74,11 +74,11 @@ function Search() {
                     </div>
                 )}
             >
-                <div className='bg-gray-100 h-[40px] w-[400px] rounded-full flex items-center border border-transparent focus-within:border-gray-300'>
+                <div className='bg-gray-100 h-[40px]  sm:w-[400px] rounded-full flex items-center border border-transparent focus-within:border-gray-300'>
                     <input
                         ref={inputRef}
                         type='text'
-                        className='bg-transparent outline-none px-4 flex-1 py-2'
+                        className='bg-transparent outline-none px-4 w-full flex-1 py-2'
                         spellCheck={false}
                         placeholder='Search'
                         value={searchValue}

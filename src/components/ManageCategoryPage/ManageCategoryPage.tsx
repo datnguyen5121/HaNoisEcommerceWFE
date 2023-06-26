@@ -10,6 +10,7 @@ import {
     deleteTag,
     getAllProductTag,
     getAllTag,
+    getAllTagAdmin,
     getProductTag,
     getTag,
     updateProductTag,
@@ -53,19 +54,19 @@ const ManageCategoryPage = () => {
     const [isModalCreateOpen, setIsModalCreateOpen] = useState(false)
     const [isModalEditTagOpen, setIsModalEditTagOpen] = useState(false)
 
-    let [tagList, setTagList] = useState<ITag[]>([])
-    let [productTagList, setProductTagList] = useState<ProductTagState[]>([])
+    const [tagList, setTagList] = useState<ITag[]>([])
+    const [productTagList, setProductTagList] = useState<ProductTagState[]>([])
 
-    let [productForm, setProductForm] = useState<ProductForm>({
+    const [productForm, setProductForm] = useState<ProductForm>({
         subnavName: '',
         subnavNameId: '',
         list: []
     } as ProductForm)
-    let [subnavNameInput, setSubNavNameInput] = useState<string>('')
-    let [subnavNameListInput, setSubNavNameListInput] = useState<string[]>([])
-    let [categoryInput, setCategoryInput] = useState<string>('')
-    let [navNameInput, setNavNameInput] = useState<string>('')
-    let [navNameId, setNavNameId] = useState<string>('')
+    const [subnavNameInput, setSubNavNameInput] = useState<string>('')
+    const [subnavNameListInput, setSubNavNameListInput] = useState<string[]>([])
+    const [categoryInput, setCategoryInput] = useState<string>('')
+    const [navNameInput, setNavNameInput] = useState<string>('')
+    const [navNameId, setNavNameId] = useState<string>('')
 
     const showModalEdit = () => {
         setIsModalEditOpen(true)
@@ -87,21 +88,22 @@ const ManageCategoryPage = () => {
     const handleCancelCreate = () => {
         setIsModalCreateOpen(false)
     }
-    let FetchAllTag = async () => {
-        let res = await getAllTag()
+    const FetchAllTag = async () => {
+        const res = await getAllTagAdmin()
         setTagList(res.data)
     }
-    let FetchAllProductTag = async () => {
-        let res = await getAllProductTag()
-        let data = handleBuildCategoryData(res.data)
+    const FetchAllProductTag = async () => {
+        const res = await getAllProductTag()
+        const data = handleBuildCategoryData(res.data)
         setProductTagList(data)
     }
     useEffect(() => {
         FetchAllTag()
         FetchAllProductTag()
     }, [])
-    let handleBuildCategoryData = (data: IProductTag[]) => {
-        let newData = data.map((item) => {
+
+    const handleBuildCategoryData = (data: IProductTag[]) => {
+        const newData = data.map((item) => {
             return {
                 navName: item.navName.navName,
                 navNameId: item.navName._id,
@@ -115,11 +117,10 @@ const ManageCategoryPage = () => {
             const navName = obj.navName
             const navNameId = obj.navNameId
             const subnavNameId = obj.subnavNameId
-            let indexNav = result.findIndex((item: any) => item.navName === navName)
+            const indexNav = result.findIndex((item: any) => item.navName === navName)
 
             if (indexNav !== -1) {
-                let index = result.findIndex((item: any) => item.navName)
-                result[index].list.push({
+                result[indexNav].list.push({
                     navName: navName,
                     navNameId: navNameId,
                     subnavNameId: subnavNameId,
@@ -149,38 +150,38 @@ const ManageCategoryPage = () => {
         setSubNavNameListInput(productForm.list)
     }, [productForm])
 
-    let handleEditTag = (item: ITag) => {
+    const handleEditTag = (item: ITag) => {
         showModalEditTag()
         setNavNameInput(item.navName)
         setNavNameId(item._id)
     }
-    let handleEditProductTag = (item: SubNavName) => {
+    const handleEditProductTag = (item: SubNavName) => {
         showModalEdit()
         setProductForm({ subnavName: item.subnavName, subnavNameId: item.subnavNameId, list: item.list })
     }
-    let handleCreateProductTag = (navNameId: string) => {
+    const handleCreateProductTag = (navNameId: string) => {
         showModalCreate()
         setNavNameId(navNameId)
     }
-    let handDeleteProductTag = async (productTagId: string) => {
+    const handDeleteProductTag = async (productTagId: string) => {
         if (confirm(`Are you sure delete the product tag ${productTagId}`)) {
-            let res = await deleteProductTag({ _id: productTagId })
+            const res = await deleteProductTag({ _id: productTagId })
             if (res.EC == 0) {
                 FetchAllTag()
                 FetchAllProductTag()
             }
         }
     }
-    let handleDeleteTag = async (tagId: string) => {
+    const handleDeleteTag = async (tagId: string) => {
         if (confirm(`Are you sure delete the tag ${tagId}`)) {
-            let res = await deleteTag({ _id: tagId })
+            const res = await deleteTag({ _id: tagId })
             if (res.EC == 0) {
                 FetchAllTag()
                 FetchAllProductTag()
             }
         }
     }
-    let handleCreateTag = () => {
+    const handleCreateTag = () => {
         showModalCreateTag()
     }
     return (
