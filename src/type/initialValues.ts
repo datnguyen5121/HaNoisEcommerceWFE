@@ -8,5 +8,5 @@ export const initialValues: ProductValues = {
     category: [],
     size: ['37', '38', '39', '40', '41', '42', '43', '44'],
     imgUrl: null,
-    price: 0
+    price: 123
 }

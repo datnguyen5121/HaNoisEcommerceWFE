@@ -15,3 +15,7 @@
 ::-webkit-scrollbar-button {
     display: none;
 }
+
+#root {
+    overflow: hidden;
+}

@@ -1,4 +1,5 @@
 export interface ProductValues {
+    _id?: string
     gender: string
     productName: string
     title: string

@@ -26,7 +26,7 @@ const ManageAccountPage = () => {
     const handleSubmit = (values: AccountValues) => {
         console.log(values)
     }
-
+    console.log('manageaccountpage')
     return (
         <div className={`productPageContainer px-[20px] py-[10px]`}>
             <HeaderManageProduct />

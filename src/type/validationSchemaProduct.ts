@@ -7,6 +7,6 @@ export const validationSchemaProduct = Yup.object({
     datePublish: Yup.string().required('Date published is required'),
     category: Yup.string().required('Category is required'),
     size: Yup.array().min(1, 'Please select at least one size').required('Please select at least one size'),
-    imgUrl: Yup.string().required('Image is required'),
-    price: Yup.number().required('Price is required')
+    price: Yup.number().required('Price is required'),
+    imgUrl: Yup.string().required('Image is required')
 })

@@ -11,6 +11,8 @@ function Account() {
         gender: 'male',
         phone: '0989642699'
     }
+    console.log('account component')
+
     const phoneRegExp = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/
     return (
         <div className='w-11/12 mx-auto shadow-md p-2'>

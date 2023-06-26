@@ -13,6 +13,8 @@ function Cart() {
     console.log('cart items == ', cart.items)
     const dispatch = useAppDispatch()
     let totalPrice = 0
+    console.log('cart component')
+
     cart.items.length > 0
         ? (totalPrice = cart.items.reduce((total, item) => {
               return total + item.price * item.quantity

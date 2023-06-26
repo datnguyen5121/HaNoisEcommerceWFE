@@ -1,12 +1,53 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCartShopping, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faCartShopping, faUser } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 import Navbar from '../Navbar/Navbar'
 import Logo from '../../assets/Logo.svg'
 import style from './Header.module.css'
 import Search from '../Search'
 
+import { useSelector } from 'react-redux'
+import { logoutUser } from '../../redux/authRequest'
+import { useDispatch } from 'react-redux'
+import { RootState } from '../../redux/store'
+
 function Header() {
+    const user = useSelector((state: RootState) => state?.auth?.login?.currentUser)
+    const dispatch = useDispatch()
+
+    const renderUserMenu = () => {
+        if (user === null) {
+            return (
+                <ul
+                    className={`absolute z-[999] border  right-0 top-7 min-w-[150px]  bg-white hidden shadow-md ${style.user}`}
+                >
+                    <li className='px-3 py-2 hover:bg-gray-200 cursor-pointer'>
+                        <Link className='block' to='/register'>
+                            Register
+                        </Link>
+                    </li>
+                    <li className='px-3 py-2 hover:bg-gray-200 cursor-pointer'>
+                        <Link className='block' to='/login'>
+                            Login
+                        </Link>
+                    </li>
+                </ul>
+            )
+        } else {
+            return (
+                <ul
+                    className={`absolute z-[999] border  right-0 top-7 min-w-[150px]  bg-white hidden shadow-md ${style.user}`}
+                >
+                    <li className='px-3 py-2 hover:bg-gray-200 cursor-pointer'>
+                        <div className='block' onClick={() => logoutUser(dispatch)}>
+                            Logout
+                        </div>
+                    </li>
+                </ul>
+            )
+        }
+    }
+
     return (
         <>
             <header className='bg-white border-b z-[99] relative'>
@@ -29,22 +70,19 @@ function Header() {
                             </div>
                             <div className={`relative ${style.group}`}>
                                 <FontAwesomeIcon icon={faUser} className='text-xl cursor-pointer' />
-                                <ul
-                                    className={`absolute z-[999] border  right-0 top-7 min-w-[150px]  bg-white hidden shadow-md ${style.user}`}
-                                >
-                                    <li className='px-3 py-2 hover:bg-gray-200 cursor-pointer'>
-                                        <Link className='block' to='/register'>
-                                            Đăng ký
-                                        </Link>
-                                    </li>
-                                    <li className='px-3 py-2 hover:bg-gray-200 cursor-pointer'>
-                                        <Link className='block' to='/login'>
-                                            Đăng nhập
-                                        </Link>
-                                    </li>
-                                </ul>
+                                {renderUserMenu()}
                             </div>
                         </div>
+                        {/*<div className='block sm:hidden'>
+                            <FontAwesomeIcon icon={faBars} className='text-lg cursor-pointer' />
+                            <div className='bg-red-500 fixed right-0 top-0 bottom-0 w-[80vw] p-5'>
+                                <div className='flex gap-x-5 '>
+                                    <div className={`relative ${style.group}`}>
+                                        <div>Your cart</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>*/}
                     </div>
                 </div>
             </header>
