@@ -1,18 +1,16 @@
 import HeaderManageProduct from '../HeaderManageProduct/HeaderManageProduct'
 import styles from './ManageProductPage.module.css'
-import { useAppDispatch } from '../../redux/store'
-import { useEffect, useState } from 'react'
-import { getProducts, removeToManageProduct } from '../../redux/features/manageProductSlice'
+import { useState } from 'react'
 import { Button, Modal } from 'antd'
 import { ProductValues } from '../../type/ProductValues'
 import { ErrorMessage, Field, Formik, Form, FormikProps } from 'formik'
 import { useLocation } from 'react-router-dom'
 import { initialValues } from '../../type/initialValues'
 import { validationSchemaProduct } from '../../type/validationSchemaProduct'
-
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated'
-import { createNewProduct } from '../../services/productService'
+import axios from 'axios'
+
 const animatedComponents = makeAnimated()
 
 const multipleSize = [
@@ -41,9 +39,8 @@ const ManageProductPage = () => {
         setIsModalOpen(false)
     }
 
-    console.log('manageproductpage')
     const [size, setSize] = useState<string[]>([])
-    const [selectedImages, setSelectedImages] = useState<File[]>([])
+    // const [selectedImages, setSelectedImages] = useState<File[]>([])
 
     // const handleImageChange = (e: ChangeEvent<HTMLInputElement>, formik: FormikProps<ProductValues>) => {
     //     const files = Array.from(e.target.files || [])
@@ -52,11 +49,11 @@ const ManageProductPage = () => {
     //     formik.setFieldValue('imgUrl', fileNames)
     // }
 
-    const uploadImage = (formik: FormikProps<ProductValues>) => {
-        const fileNames = selectedImages.map((file) => file.name)
-        console.log(fileNames)
-        formik.setFieldValue('imgUrl', fileNames)
-    }
+    // const uploadImage = (formik: FormikProps<ProductValues>) => {
+    //     const fileNames = selectedImages.map((file) => file.name)
+    //     console.log(fileNames)
+    //     formik.setFieldValue('imgUrl', fileNames)
+    // }
 
     const handleChooseSize = (selectedOptions: any) => {
         const sizes = selectedOptions.map((option: any) => option.value)
@@ -66,9 +63,30 @@ const ManageProductPage = () => {
 
     console.log(size)
 
-    const handleSubmit = async (values: ProductValues) => {
-        const newProduct = await createNewProduct(values)
-        console.log('newProduct === ', newProduct)
+    const handleSubmit = async (values: any) => {
+        console.log(values)
+        const formData = new FormData()
+
+        if (values.imgUrl !== null) {
+            for (let i = 0; i < values.imgUrl.length; i++) {
+                formData.append(`imgUrl${i}`, values.imgUrl[i])
+            }
+        }
+        formData.append('gender', values.gender)
+        formData.append('productName', values.productName)
+        formData.append('title', values.title)
+        formData.append('description', values.description)
+        formData.append('datePublish', values.datePublish)
+        formData.append('category', values.category)
+        formData.append('size', values.size)
+        formData.append('imgUrl', values.imgUrl)
+        formData.append('price', values.price)
+        try {
+            const response = await axios.post('/create-new-product', formData)
+            console.log(response.data)
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (
@@ -98,6 +116,32 @@ const ManageProductPage = () => {
                             {(formik) => (
                                 <div>
                                     <Form onSubmit={formik.handleSubmit}>
+                                        <div className={`my-[0.8rem] grid`}>
+                                            <label htmlFor='gender' className='mb-[0.2rem] font-[700]'>
+                                                Gender
+                                            </label>
+                                            <Field
+                                                as='input'
+                                                name='gender'
+                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px]  px-[10px] py-[5px] rounded-md`}
+                                            />
+                                            <ErrorMessage className={`${styles.error}`} name='gender' component='div' />
+                                        </div>
+                                        <div className={`my-[0.8rem] grid`}>
+                                            <label htmlFor='productName' className='mb-[0.2rem] font-[700]'>
+                                                Product Name
+                                            </label>
+                                            <Field
+                                                as='input'
+                                                name='productName'
+                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px]  px-[10px] py-[5px] rounded-md`}
+                                            />
+                                            <ErrorMessage
+                                                className={`${styles.error}`}
+                                                name='productName'
+                                                component='div'
+                                            />
+                                        </div>
                                         <div className={`my-[0.8rem] grid`}>
                                             <label htmlFor='title' className='mb-[0.2rem] font-[700]'>
                                                 Title
@@ -173,6 +217,17 @@ const ManageProductPage = () => {
                                             <ErrorMessage className={`${styles.error}`} name='size' component='div' />
                                         </div>
                                         <div className={`my-[0.8rem] grid`}>
+                                            <label htmlFor='price' className='mb-[0.2rem] font-[700]'>
+                                                Price
+                                            </label>
+                                            <Field
+                                                as='input'
+                                                name='price'
+                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px]  px-[10px] py-[5px] rounded-md`}
+                                            />
+                                            <ErrorMessage className={`${styles.error}`} name='price' component='div' />
+                                        </div>
+                                        <div className={`my-[0.8rem] grid`}>
                                             <label htmlFor='imgUrl' className='mb-[0.2rem] font-[700]'>
                                                 Image Url
                                             </label>
@@ -181,17 +236,18 @@ const ManageProductPage = () => {
                                                 type='file'
                                                 id='imageInput'
                                                 name='imgUrl'
+                                                accept='image/png, image/jpg, image/jpeg'
                                                 onChange={(event) => {
                                                     formik.setFieldValue('imgUrl', event.currentTarget.files)
                                                 }}
                                                 multiple
                                             />
-                                            <button
+                                            {/* <button
                                                 className='w-[4.6rem] h-[1.8rem] bg-blue-600 text-white rounded-md'
                                                 onClick={() => uploadImage(formik)}
                                             >
                                                 Upload
-                                            </button>
+                                            </button> */}
                                             <ErrorMessage className={`${styles.error}`} name='imgUrl' component='div' />
                                         </div>
                                         <div>
@@ -218,7 +274,7 @@ const ManageProductPage = () => {
                             <th>Category</th>
                             <th>Size</th>
                             <th>imgUrl</th>
-                            {/* <th>Price</th> */}
+                            <th>Price</th>
                             <th>Feature</th>
                         </tr>
                     </thead>
