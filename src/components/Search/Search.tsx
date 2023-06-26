@@ -17,10 +17,13 @@ function Search() {
     const handleHideResult = () => {
         setShowResult(false)
     }
+
     const handleClear = () => {
         setSearchValue('')
         setSearchResult([])
-        inputRef.current.focus()
+        if (inputRef.current) {
+            inputRef.current.focus()
+        }
     }
     useEffect(() => {
         if (!debounceValue.trim()) {
