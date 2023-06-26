@@ -5,6 +5,7 @@ import './index.css'
 import { Provider } from 'react-redux'
 import { store, persistor } from './redux/store'
 import { PersistGate } from 'redux-persist/integration/react'
+import 'react-toastify/dist/ReactToastify.css'
 import axios from 'axios'
 axios.defaults.baseURL = 'http://localhost:8080/api'
 

@@ -10,6 +10,7 @@ import {
 } from '../../../redux/features/cartSlice'
 function Cart() {
     const cart = useSelector((state: RootState) => state.cart)
+    console.log('cart items == ', cart.items)
     const dispatch = useAppDispatch()
     let totalPrice = 0
     cart.items.length > 0
