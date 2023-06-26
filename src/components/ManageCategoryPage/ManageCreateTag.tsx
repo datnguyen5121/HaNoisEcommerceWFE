@@ -27,7 +27,6 @@ const ModalCreateTag: React.FC<IProps> = ({
                 FetchAllTag()
                 FetchAllProductTag()
             }
-
             setIsModalCreateTagOpen(false)
         } catch (error) {
             console.error('Error updating  tag:', error)

@@ -1,26 +1,25 @@
+import React, { lazy, Suspense } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
-import RootLayout from './pages/RootLayout'
-import Home from './pages/FrontEnd/Home'
-import Login from './pages/FrontEnd/Login'
-import Register from './pages/FrontEnd/Register'
-import Cart from './pages/FrontEnd/Cart'
-import Checkout from './pages/FrontEnd/Checkout/Checkout'
-import NotFound from './pages/NotFound'
-import Category from './pages/FrontEnd/Category'
-import AdminLayout from './pages/Admin/RootLayout'
-import ProductDetail from './components/ProductDetail'
 import { ToastContainer } from 'react-toastify'
-import ManageProductPage from './components/ManageProduct/ManageProductPage'
-import ManageAccountPage from './components/ManageAccountPage/ManageAccountPage'
 
-import ManageCategoryPage from './components/ManageCategoryPage/ManageCategoryPage'
+const RootLayout = lazy(() => import('./pages/RootLayout'))
+const Home = lazy(() => import('./pages/FrontEnd/Home'))
+const Login = lazy(() => import('./pages/FrontEnd/Login'))
+const Register = lazy(() => import('./pages/FrontEnd/Register'))
+const Cart = lazy(() => import('./pages/FrontEnd/Cart'))
 
-import ProductByCategory from './pages/FrontEnd/ProductByCategory'
-
-import Account from './pages/FrontEnd/Account'
+const ProductByCategory = lazy(() => import('./pages/FrontEnd/ProductByCategory'))
+const Checkout = lazy(() => import('./pages/FrontEnd/Checkout/Checkout'))
+const NotFound = lazy(() => import('./pages/NotFound'))
+const Category = lazy(() => import('./pages/FrontEnd/Category'))
+const AdminLayout = lazy(() => import('./pages/Admin/RootLayout'))
+const ProductDetail = lazy(() => import('./components/ProductDetail'))
+const ManageProductPage = lazy(() => import('./components/ManageProduct/ManageProductPage'))
+const ManageAccountPage = lazy(() => import('./components/ManageAccountPage/ManageAccountPage'))
+const ManageCategoryPage = lazy(() => import('./components/ManageCategoryPage/ManageCategoryPage'))
+const Account = lazy(() => import('./pages/FrontEnd/Account'))
 
 function App() {
-    //check login
     return (
         <>
             <BrowserRouter>
@@ -37,34 +36,31 @@ function App() {
                     theme='light'
                 />
                 <ToastContainer />
-                <Routes>
-                    <Route path='/' element={<RootLayout />}>
-                        <Route path='/' element={<Home />} />
-                        <Route path=':gender' element={<Category />}>
-                            <Route path=':category' element={<ProductByCategory />}>
-                                <Route path=':subCategory' element={<ProductByCategory />} />
+                <Suspense fallback={<div>Loading...</div>}>
+                    <Routes>
+                        <Route path='/' element={<RootLayout />}>
+                            <Route path='/' element={<Home />} />
+                            <Route path=':gender' element={<Category />}>
+                                <Route path=':category' element={<ProductByCategory />}>
+                                    <Route path=':subCategory' element={<ProductByCategory />} />
+                                </Route>
                             </Route>
+                            <Route path='product/:id' element={<ProductDetail />} />
+                            <Route path='cart' element={<Cart />} />
+                            <Route path='checkout' element={<Checkout />} />
+                            <Route path='account' element={<Account />} />
+                            <Route path='login' element={<Login />} />
+                            <Route path='register' element={<Register />} />
                         </Route>
-                        <Route path='product/:id' element={<ProductDetail />}></Route>
-
-                        <Route path='cart' element={<Cart />} />
-
-                        <Route path='checkout' element={<Checkout />} />
-
-                        <Route path='account' element={<Account />} />
-
-                        <Route path='login' element={<Login />} />
-                        <Route path='register' element={<Register />} />
-                    </Route>
-                    <Route path='admin' element={<AdminLayout />}>
-                        <Route index element={<Navigate to='product' />}></Route>
-
-                        <Route path='product' index element={<ManageProductPage />} />
-                        <Route path='account' element={<ManageAccountPage />} />
-                        <Route path='category' element={<ManageCategoryPage />} />
-                    </Route>
-                    <Route path='*' element={<NotFound />} />
-                </Routes>
+                        <Route path='admin' element={<AdminLayout />}>
+                            <Route index element={<Navigate to='product' />} />
+                            <Route path='product' index element={<ManageProductPage />} />
+                            <Route path='account' element={<ManageAccountPage />} />
+                            <Route path='category' element={<ManageCategoryPage />} />
+                        </Route>
+                        <Route path='*' element={<NotFound />} />
+                    </Routes>
+                </Suspense>
             </BrowserRouter>
         </>
     )
