@@ -1,32 +1,43 @@
 import HeaderManageProduct from '../HeaderManageProduct/HeaderManageProduct'
 import styles from './ManageAccountPage.module.css'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button, Modal } from 'antd'
-import { ErrorMessage, Field, Formik } from 'formik'
+import { ErrorMessage, Field, Form, Formik } from 'formik'
 import { useLocation } from 'react-router-dom'
-import { initialValues } from '../../type/initialValues'
 import { AccountValues } from '../../type/AccountValues'
 import { validationSchemaAccount } from '../../type/validationSchemaAccount'
+import { initialAccountValues } from '../../type/initialAccountValues'
+import axios from 'axios'
 
 const ManageAccountPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
+    const [accounts, setAccounts] = useState<any[]>([])
     const { state } = useLocation()
     const showModal = () => {
         setIsModalOpen(true)
     }
-
     const handleOk = () => {
         setIsModalOpen(false)
     }
-
     const handleCancel = () => {
         setIsModalOpen(false)
     }
-
     const handleSubmit = (values: AccountValues) => {
         console.log(values)
     }
-
+    const accountsData = async () => {
+        try {
+            const response = await axios.get('/get-all-user')
+            setAccounts(response.data.data)
+            return response.data
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    useEffect(() => {
+        accountsData()
+    }, [])
+    console.log('accounts === ', accounts)
     return (
         <div className={`productPageContainer px-[20px] py-[10px]`}>
             <HeaderManageProduct />
@@ -56,10 +67,10 @@ const ManageAccountPage = () => {
                             <Formik<AccountValues>
                                 onSubmit={handleSubmit}
                                 validationSchema={validationSchemaAccount}
-                                initialValues={state == null ? initialValues : state}
+                                initialValues={state == null ? initialAccountValues : state}
                             >
                                 {(formik) => (
-                                    <form action='' onSubmit={formik.handleSubmit}>
+                                    <Form onSubmit={formik.handleSubmit}>
                                         <div className={`my-2 grid`}>
                                             <label htmlFor='email' className='me-[10px] font-[700]'>
                                                 Email
@@ -153,37 +164,7 @@ const ManageAccountPage = () => {
                                             />
                                             <ErrorMessage className={`${styles.error}`} name='roleId' component='div' />
                                         </div>
-                                        <div className={`my-2 grid`}>
-                                            <label htmlFor='createdAt' className='me-[10px] font-[700]'>
-                                                Created At
-                                            </label>
-                                            <Field
-                                                as='input'
-                                                name='createdAt'
-                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
-                                            />
-                                            <ErrorMessage
-                                                className={`${styles.error}`}
-                                                name='createdAt'
-                                                component='div'
-                                            />
-                                        </div>
-                                        <div className={`my-2 grid`}>
-                                            <label htmlFor='updatedAt' className='me-[10px] font-[700]'>
-                                                Updated At
-                                            </label>
-                                            <Field
-                                                as='input'
-                                                name='updatedAt'
-                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
-                                            />
-                                            <ErrorMessage
-                                                className={`${styles.error}`}
-                                                name='updatedAt'
-                                                component='div'
-                                            />
-                                        </div>
-                                    </form>
+                                    </Form>
                                 )}
                             </Formik>
                         </div>
@@ -200,13 +181,11 @@ const ManageAccountPage = () => {
                             <th>Address</th>
                             <th>Gender</th>
                             <th>Role ID</th>
-                            <th>createdAt</th>
-                            <th>updatedAt</th>
                             <th>Feature</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {/* {accountItems.map((account: any, index: any) => (
+                        {accounts.map((account: any, index: number) => (
                             <tr key={index}>
                                 <td className='w-11'>{index + 1}</td>
                                 <td className='w-36'>{account.email}</td>
@@ -216,21 +195,24 @@ const ManageAccountPage = () => {
                                 <td className='w-28'>{account.address}</td>
                                 <td className='w-16'>{account.gender}</td>
                                 <td className='w-16'>{account.roleId}</td>
-                                <td className='w-36'>{account.createdAt}</td>
-                                <td className='w-36'>{account.updatedAt}</td>
                                 <td className='w-28'>
                                     <div>
                                         <button className={`${styles.editBtn}`}>Edit</button>
                                         <button
                                             className={`${styles.deleteBtn}`}
-                                            onClick={() => dispatch(removeToManageAccount(account._id))}
+                                            onClick={() => {
+                                                const deleteAccounts = accounts.filter(
+                                                    (value: any) => value._id !== account._id
+                                                )
+                                                setAccounts(deleteAccounts)
+                                            }}
                                         >
                                             Delete
                                         </button>
                                     </div>
                                 </td>
                             </tr>
-                        ))} */}
+                        ))}
                     </tbody>
                 </table>
             </div>

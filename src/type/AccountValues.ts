@@ -7,6 +7,4 @@ export interface AccountValues {
     address: string
     gender: string
     roleId: string
-    createdAt: string
-    updatedAt: string
 }

@@ -1,68 +1,52 @@
 import HeaderManageProduct from '../HeaderManageProduct/HeaderManageProduct'
 import styles from './ManageProductPage.module.css'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button, Modal } from 'antd'
 import { ProductValues } from '../../type/ProductValues'
 import { ErrorMessage, Field, Formik, Form, FormikProps } from 'formik'
 import { useLocation } from 'react-router-dom'
 import { initialValues } from '../../type/initialValues'
 import { validationSchemaProduct } from '../../type/validationSchemaProduct'
-import Select from 'react-select'
-import makeAnimated from 'react-select/animated'
+// import makeAnimated from 'react-select/animated'
 import axios from 'axios'
 
-const animatedComponents = makeAnimated()
+// const animatedComponents = makeAnimated()
 
-const multipleSize = [
-    { value: '37', label: '37' },
-    { value: '38', label: '38' },
-    { value: '39', label: '39' },
-    { value: '40', label: '40' },
-    { value: '41', label: '41' },
-    { value: '42', label: '42' },
-    { value: '43', label: '43' },
-    { value: '44', label: '44' }
-]
+// const multipleSize = [
+//     { value: '37', label: '37' },
+//     { value: '38', label: '38' },
+//     { value: '39', label: '39' },
+//     { value: '40', label: '40' },
+//     { value: '41', label: '41' },
+//     { value: '42', label: '42' },
+//     { value: '43', label: '43' },
+//     { value: '44', label: '44' }
+// ]
 const ManageProductPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
-
+    const [productsNike, setProductsNike] = useState<any[]>([])
+    const [size, setSize] = useState<string[]>([])
+    const [selectedImages, setSelectedImages] = useState<File[]>([])
     const { state } = useLocation()
     const showModal = () => {
         setIsModalOpen(true)
     }
-
-    const handleOk = () => {
-        setIsModalOpen(false)
-    }
-
+    // const handleOk = () => {
+    //     setIsModalOpen(false)
+    // }
     const handleCancel = () => {
         setIsModalOpen(false)
     }
-
-    const [size, setSize] = useState<string[]>([])
-    const [selectedImages, setSelectedImages] = useState<File[]>([])
-
-    // const handleImageChange = (e: ChangeEvent<HTMLInputElement>, formik: FormikProps<ProductValues>) => {
-    //     const files = Array.from(e.target.files || [])
-    //     setSelectedImages((prevSelectedImages) => [...prevSelectedImages, ...files])
-    //     const fileNames = files.map((file) => file.name)
-    //     formik.setFieldValue('imgUrl', fileNames)
-    // }
-
     const uploadImage = (formik: FormikProps<ProductValues>) => {
         const fileNames = selectedImages.map((file) => file.name)
         console.log(fileNames)
         formik.setFieldValue('imgUrl', fileNames)
     }
-
-    const handleChooseSize = (selectedOptions: any) => {
-        const sizes = selectedOptions.map((option: any) => option.value)
-        setSize((prevSize) => [...prevSize, ...sizes])
-        console.log('Cac size da chon === ', sizes)
-    }
-
-    console.log(size)
-
+    // const handleChooseSize = (selectedOptions: any) => {
+    //     const sizes = selectedOptions.map((option: any) => option.value)
+    //     setSize((prevSize) => [...prevSize, ...sizes])
+    //     console.log('Cac size da chon === ', sizes)
+    // }
     const handleSubmit = async (values: any) => {
         console.log(values)
         const formData = new FormData()
@@ -88,7 +72,18 @@ const ManageProductPage = () => {
             console.log(error)
         }
     }
-
+    const productsData = async () => {
+        try {
+            const response = await axios.get('/get-all-product')
+            setProductsNike(response.data.data)
+            return response.data
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    useEffect(() => {
+        productsData()
+    }, [])
     return (
         <div className={`productPageContainer px-[20px] py-[10px]`}>
             <HeaderManageProduct />
@@ -107,7 +102,7 @@ const ManageProductPage = () => {
                     <Button className='bg-blue-500' type='primary' onClick={showModal}>
                         Create a new Product
                     </Button>
-                    <Modal title='Create A New Product' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+                    <Modal title='Create A New Product' open={isModalOpen} onCancel={handleCancel}>
                         <Formik<ProductValues>
                             onSubmit={handleSubmit}
                             validationSchema={validationSchemaProduct}
@@ -204,17 +199,182 @@ const ManageProductPage = () => {
                                             <label htmlFor='size' className='mb-[0.2rem] font-[700]'>
                                                 Size
                                             </label>
-                                            <Field
-                                                name='size'
-                                                as={Select}
-                                                closeMenuOnSelect={false}
-                                                components={animatedComponents}
-                                                isMulti
-                                                value={size}
-                                                onChange={handleChooseSize}
-                                                options={multipleSize}
-                                            />
-                                            <ErrorMessage className={`${styles.error}`} name='size' component='div' />
+                                            <div role='group' aria-labelledby='checkbox-group'>
+                                                <div>
+                                                    <span className='mx-[0.6rem]'>
+                                                        <label className='me-[0.4rem]' htmlFor='size'>
+                                                            37
+                                                        </label>
+                                                        <Field
+                                                            className='ms-[0.2rem]'
+                                                            type='checkbox'
+                                                            name='size'
+                                                            value='37'
+                                                        />
+                                                    </span>
+                                                    <span className='mx-[0.6rem]'>
+                                                        <label className='me-[0.4rem]' htmlFor='size'>
+                                                            37.5
+                                                        </label>
+                                                        <Field
+                                                            className='ms-[0.2rem]'
+                                                            type='checkbox'
+                                                            name='size'
+                                                            value='37.5'
+                                                        />
+                                                    </span>
+                                                    <span className='mx-[0.6rem]'>
+                                                        <label className='me-[0.4rem]' htmlFor='size'>
+                                                            38
+                                                        </label>
+                                                        <Field
+                                                            className='ms-[0.2rem]'
+                                                            type='checkbox'
+                                                            name='size'
+                                                            value='38'
+                                                        />
+                                                    </span>
+                                                    <span className='mx-[0.6rem]'>
+                                                        <label className='me-[0.4rem]' htmlFor='size'>
+                                                            38.5
+                                                        </label>
+                                                        <Field
+                                                            className='ms-[0.2rem]'
+                                                            type='checkbox'
+                                                            name='size'
+                                                            value='38.5'
+                                                        />
+                                                    </span>
+                                                </div>
+                                                <div>
+                                                    <span className='mx-[0.6rem]'>
+                                                        <label className='me-[0.4rem]' htmlFor='size'>
+                                                            39
+                                                        </label>
+                                                        <Field
+                                                            className='ms-[0.2rem]'
+                                                            type='checkbox'
+                                                            name='size'
+                                                            value='39'
+                                                        />
+                                                    </span>
+                                                    <span className='mx-[0.6rem]'>
+                                                        <label className='me-[0.4rem]' htmlFor='size'>
+                                                            39.5
+                                                        </label>
+                                                        <Field
+                                                            className='ms-[0.2rem]'
+                                                            type='checkbox'
+                                                            name='size'
+                                                            value='39.5'
+                                                        />
+                                                    </span>
+                                                    <span className='mx-[0.6rem]'>
+                                                        <label className='me-[0.4rem]' htmlFor='size'>
+                                                            40
+                                                        </label>
+                                                        <Field
+                                                            className='ms-[0.2rem]'
+                                                            type='checkbox'
+                                                            name='size'
+                                                            value='40'
+                                                        />
+                                                    </span>
+                                                    <span className='mx-[0.6rem]'>
+                                                        <label className='me-[0.4rem]' htmlFor='size'>
+                                                            40.5
+                                                        </label>
+                                                        <Field
+                                                            className='ms-[0.2rem]'
+                                                            type='checkbox'
+                                                            name='size'
+                                                            value='40.5'
+                                                        />
+                                                    </span>
+                                                </div>
+                                                <div>
+                                                    <span className='mx-[0.6rem]'>
+                                                        <label className='me-[0.4rem]' htmlFor='size'>
+                                                            41
+                                                        </label>
+                                                        <Field
+                                                            className='ms-[0.2rem]'
+                                                            type='checkbox'
+                                                            name='size'
+                                                            value='41'
+                                                        />
+                                                    </span>
+                                                    <span className='mx-[0.6rem]'>
+                                                        <label className='me-[0.4rem]' htmlFor='size'>
+                                                            41.5
+                                                        </label>
+                                                        <Field
+                                                            className='ms-[0.2rem]'
+                                                            type='checkbox'
+                                                            name='size'
+                                                            value='41.5'
+                                                        />
+                                                    </span>
+                                                    <span className='mx-[0.6rem]'>
+                                                        <label className='me-[0.4rem]' htmlFor='size'>
+                                                            42
+                                                        </label>
+                                                        <Field
+                                                            className='ms-[0.2rem]'
+                                                            type='checkbox'
+                                                            name='size'
+                                                            value='42'
+                                                        />
+                                                    </span>
+                                                    <span className='mx-[0.6rem]'>
+                                                        <label className='me-[0.4rem]' htmlFor='size'>
+                                                            42.5
+                                                        </label>
+                                                        <Field
+                                                            className='ms-[0.2rem]'
+                                                            type='checkbox'
+                                                            name='size'
+                                                            value='42.5'
+                                                        />
+                                                    </span>
+                                                </div>
+                                                <div>
+                                                    <span className='mx-[0.6rem]'>
+                                                        <label className='me-[0.4rem]' htmlFor='size'>
+                                                            43
+                                                        </label>
+                                                        <Field
+                                                            className='ms-[0.2rem]'
+                                                            type='checkbox'
+                                                            name='size'
+                                                            value='43'
+                                                        />
+                                                    </span>
+                                                    <span className='mx-[0.6rem]'>
+                                                        <label className='me-[0.4rem]' htmlFor='size'>
+                                                            43.5
+                                                        </label>
+                                                        <Field
+                                                            className='ms-[0.2rem]'
+                                                            type='checkbox'
+                                                            name='size'
+                                                            value='43.5'
+                                                        />
+                                                    </span>
+                                                    <span className='mx-[0.6rem]'>
+                                                        <label className='me-[0.4rem]' htmlFor='size'>
+                                                            44
+                                                        </label>
+                                                        <Field
+                                                            className='ms-[0.2rem]'
+                                                            type='checkbox'
+                                                            name='size'
+                                                            value='44'
+                                                        />
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <ErrorMessage name='size' component='div' className='error' />
                                         </div>
                                         <div className={`my-[0.8rem] grid`}>
                                             <label htmlFor='price' className='mb-[0.2rem] font-[700]'>
@@ -279,7 +439,7 @@ const ManageProductPage = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {/* {productItems.map((product, index) => (
+                        {productsNike.map((product, index) => (
                             <tr key={index}>
                                 <td className='w-11'>{index + 1}</td>
                                 <td className='w-36'>{product.title}</td>
@@ -287,26 +447,36 @@ const ManageProductPage = () => {
                                 <td className='w-28'>{product.datePublish}</td>
                                 <td className='w-32'>{product.category}</td>
                                 <td className='w-32'>{product.size}</td>
-                                <td className='w-40'>asdfsafdsdf</td>
-                                
+                                <td className='w-40'>
+                                    {product.imgUrl.map((value: any, index: number) => (
+                                        <p className='mt-[1rem] mx-[1rem]' key={index}>
+                                            {value}
+                                        </p>
+                                    ))}
+                                </td>
+                                <td className='w-40'>{product.price}</td>
                                 <td className='w-36'>
                                     <div>
                                         <button className={`${styles.editBtn}`}>Edit</button>
                                         <button
                                             className={`${styles.deleteBtn}`}
-                                            onClick={() => dispatch(removeToManageProduct(product._id))}
+                                            onClick={() => {
+                                                const deleteProduct = productsNike.filter(
+                                                    (value) => value._id !== product._id
+                                                )
+                                                setProductsNike(deleteProduct)
+                                            }}
                                         >
                                             Delete
                                         </button>
                                     </div>
                                 </td>
                             </tr>
-                        ))} */}
+                        ))}
                     </tbody>
                 </table>
             </div>
         </div>
     )
 }
-
 export default ManageProductPage
