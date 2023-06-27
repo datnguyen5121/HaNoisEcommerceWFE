@@ -1,7 +1,19 @@
 import HomeBox from '../../../components/HomeBox/HomeBox'
 import HomeSlide from '../../../components/HomeSlide/HomeSlide'
+import { useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { notifyCheckoutSuccess } from '../../../redux/features/cartSlice'
+import { toast } from 'react-toastify'
+import { RootState } from '../../../redux/store'
 
 function Home() {
+    const location = useLocation()
+    const queryParams = new URLSearchParams(location.search)
+    const successParam = queryParams.get('success')
+    const dispatch = useDispatch()
+    const cart = useSelector((state: RootState) => state.cart)
+
     const fakeData = [
         {
             image: 'https://static.nike.com/a/images/q_auto:eco/t_product_v1/f_auto/dpr_1.3/w_467,c_limit/6c6bdc2e-abbb-4b38-b57d-0a0d557b3f3f/yoga-dri-fit-luxe-cropped-tank-xvfQ34.png',
@@ -34,6 +46,15 @@ function Home() {
             price: '$49.99'
         }
     ]
+
+    useEffect(() => {
+        if (cart.items.length > 0 && successParam === 'true') {
+            dispatch(notifyCheckoutSuccess())
+        }
+        if (cart.items.length > 0 && successParam === 'false') {
+            toast('Checkout Failed')
+        }
+    }, [successParam, cart.items, dispatch])
 
     return (
         <div className='home'>
