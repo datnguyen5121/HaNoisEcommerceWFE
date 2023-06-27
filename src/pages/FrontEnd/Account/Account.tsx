@@ -1,22 +1,23 @@
 import { Field, Formik, Form, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
-
+import { useSelector } from 'react-redux/es/hooks/useSelector'
 function Account() {
     const genderArray = ['male', 'female', 'other']
+    const user = useSelector((state: any) => state.auth.login.currentUser.infoUser)
     const initialValues = {
-        email: 'phucdz@gmail.com',
-        firstName: 'Nguyen',
-        lastName: 'Phuc',
-        address: 'Hà nội',
-        gender: 'male',
-        phone: '0989642699'
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        address: user.address,
+        gender: user.gender,
+        phone: user.phone
     }
-    console.log('account component')
+    console.log(user)
 
     const phoneRegExp = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/
     return (
         <div className='w-11/12 mx-auto shadow-md p-2'>
-            <p className='text-2xl'>Hi, Nguyen Phuc</p>
+            <p className='text-2xl'>{`Hi, ${user.firstName + ' ' + user.lastName} `}</p>
 
             <Formik
                 initialValues={initialValues}
