@@ -442,7 +442,6 @@ const ManageProductPage = () => {
                             <th>STT</th>
                             <th>title</th>
                             <th>Description</th>
-                            <th>DatePublish</th>
                             <th>Category</th>
                             <th>Size</th>
                             <th>imgUrl</th>
@@ -456,7 +455,6 @@ const ManageProductPage = () => {
                                 <td className='w-11'>{index + 1}</td>
                                 <td className='w-36'>{product.title}</td>
                                 <td className='w-40'>{product.description}</td>
-                                <td className='w-28'>{product.datePublish}</td>
                                 <td className='w-32'>{product.category}</td>
                                 <td className='w-32'>{product.size}</td>
                                 <td className='w-40'>

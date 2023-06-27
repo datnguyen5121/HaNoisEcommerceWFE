@@ -5,7 +5,6 @@ export const initialValues: ProductValues = {
     productName: '',
     title: '',
     description: '',
-    datePublish: '',
     category: [],
     size: [],
     imgUrl: null,
