@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import styles from './ProductDetail.module.css'
 import img from '../../assets/imgEXP/Untitled.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faChevronRight, faChevronUp } from '@fortawesome/free-solid-svg-icons'
@@ -26,10 +27,22 @@ function ProductDetail() {
         },
         {
             imgUrl: img
+        },
+        {
+            imgUrl: img
+        },
+        {
+            imgUrl: img
         }
     ]
+    console.log('product detail')
 
     let listCategoryProduct = [
+        {
+            imgUrl: img,
+            cost: '200000đ',
+            gender: 'Nam'
+        },
         {
             imgUrl: img,
             cost: '200000đ',
@@ -100,27 +113,29 @@ function ProductDetail() {
     }
     return (
         <>
-            <section className=''>
-                <section className='py-[60px] product-container flex-row flex justify-center gap-[100px] mx-[100px]'>
-                    <section className='sticky top-0  max-h-[700px] w-[60%] gap-[10px] flex'>
-                        <div className='product-list-img gap-[10px] flex flex-col overflow-y-auto no-scrollbar h-[450px] w-[10%] border-[1px] border-black'>
+            <section className='product-img'>
+                <section className='lg:py-[60px] product-container lg:flex-row flex-col flex justify-center gap-[100px] lg:mx-[100px]'>
+                    <section className='lg:sticky top-0  max-h-[100vh] lg:w-[60%] w-[100%] gap-[10px] flex lg:flex-row flex-col'>
+                        <div
+                            className={`${styles['no-scrollbar']} product-list-img gap-[10px] flex lg:flex-col col:mx-[20px] max-w-screen flex-row lg:overflow-y-auto  overflow-x-scroll no-scrollbar lg:h-[450px] w-[100%]  lg:w-[10%] `}
+                        >
                             {listImgArray &&
                                 listImgArray.map((item, index) => {
                                     return (
                                         <button
-                                            className={` ${index == indexImg && `active:bg-violet-700`}`}
+                                            className={` ${index == indexImg && `active:bg-violet-700`}  lg:w-[100%] `}
                                             key={`img-detail${index}`}
                                             onClick={() => handleChangeImgProductDetail(index)}
                                         >
                                             <img
-                                                className='hover:bg-gradient-to-t w-[60px] mx-auto rounded-md h-[60px]'
+                                                className='hover:bg-gradient-to-t lg:w-[100%] w-[150px] max-w-none lg:mx-auto rounded-md h-[100%]'
                                                 src={item.imgUrl}
                                             ></img>
                                         </button>
                                     )
                                 })}
                         </div>
-                        <div className='product-img relative w-[100%] max-h-[700px] border-[1px] border-black'>
+                        <div className='product-img relative w-[100%] max-h-[700px] '>
                             <img
                                 className=' max-h-[700px] relative w-[100%] object-cover m-auto rounded-sm'
                                 src={listImgArray[indexImg].imgUrl}
@@ -142,11 +157,11 @@ function ProductDetail() {
                         </div>
                     </section>
 
-                    <div className='product-info w-[40%] border-[1px] border-black'>
+                    <div className='product-info lg:w-[40%] lg-px-[0] px-[50px] justify-center flex flex-col lg:items-start items-center '>
                         <div className='mt-[10px] product-title font-semibold  text-2xl'>Jordan 1 Mid</div>
                         <div className='product-price font-semibold mt-[10px] text-base'>1909000đ</div>
 
-                        <div className='mt-[10px] w-[80%] category-product flex flex-wrap gap-[10px]'>
+                        <div className='mt-[10px] lg:w-[80%] w-[100%] category-product flex  flex-wrap gap-[10px]'>
                             <img className='w-[70px] h-[70px]' src={img}></img>
                             <img className='w-[70px] h-[70px]' src={img}></img>
                             <img className='w-[70px] h-[70px]' src={img}></img>
@@ -154,7 +169,7 @@ function ProductDetail() {
                             <img className='w-[70px] h-[70px]' src={img}></img>
                             <img className='w-[70px] h-[70px]' src={img}></img>
                         </div>
-                        <div className='mt-[10px] w-[80%] product-size-container border-[1px] border-black'>
+                        <div className='mt-[10px] lg:w-[80%] w-[100%] product-size-container '>
                             <div className='product-size-title flex justify-between flex-row pr-[20px]'>
                                 <div className='product-size-title1 text-black font-medium'>Select Size</div>
                                 <div className='product-size-title2 text-gray-500 font-medium'>Size Guide</div>
@@ -177,7 +192,7 @@ function ProductDetail() {
                                 </button>
                             </div>
                         </div>
-                        <div className='mt-[20px] w-[80%] add-product flex flex-col gap-[10px]'>
+                        <div className='mt-[20px] lg:w-[80%] w-[100%] add-product flex flex-col gap-[10px]'>
                             <button className='bg-black text-white px-[24px] py-[18px] rounded-full hover:opacity-70'>
                                 Add to Bag
                             </button>
@@ -229,13 +244,19 @@ function ProductDetail() {
                             </button>
                         </div>
                     </section>
-                    <section className=' flex flex-row no-scrollbar gap-[10px] overflow-x-auto ' id='carousel-product'>
+                    <section
+                        className={` flex flex-row ${styles['no-scrollbar']}   gap-[10px] overflow-x-auto `}
+                        id='carousel-product'
+                    >
                         {listCategoryProduct &&
                             listCategoryProduct.map((item, index) => {
                                 return (
-                                    <div className={`product${index} flex-col`}>
-                                        <div className='w-[400px] h-[400px]'>
-                                            <img className='w-[400px] h-[400px]' src={item.imgUrl}></img>
+                                    <div className={`product${index} flex-col`} key={`listImg-${index}`}>
+                                        <div className='lg:w-[400px] lg:h-[400px] w-[35vw]'>
+                                            <img
+                                                className='lg:w-[400px] lg:h-[400px] w-[35vw] '
+                                                src={item.imgUrl}
+                                            ></img>
                                         </div>
                                         <article>{item.gender}</article>
                                         <article>{item.cost}</article>

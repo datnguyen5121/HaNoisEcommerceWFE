@@ -43,7 +43,7 @@ export const registerUser = async (
 ) => {
     try {
         await axios.post('/handle-register', user)
-        navigate('/')
+        navigate('/login')
     } catch (err) {
         alert(err)
     }

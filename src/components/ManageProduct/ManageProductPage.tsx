@@ -37,16 +37,28 @@ const ManageProductPage = () => {
     const handleCancel = () => {
         setIsModalOpen(false)
     }
+
+    // const handleImageChange = (e: ChangeEvent<HTMLInputElement>, formik: FormikProps<ProductValues>) => {
+    //     const files = Array.from(e.target.files || [])
+    //     setSelectedImages((prevSelectedImages) => [...prevSelectedImages, ...files])
+    //     const fileNames = files.map((file) => file.name)
+    //     formik.setFieldValue('imgUrl', fileNames)
+    // }
+
     const uploadImage = (formik: FormikProps<ProductValues>) => {
         const fileNames = selectedImages.map((file) => file.name)
         console.log(fileNames)
         formik.setFieldValue('imgUrl', fileNames)
     }
-    // const handleChooseSize = (selectedOptions: any) => {
-    //     const sizes = selectedOptions.map((option: any) => option.value)
-    //     setSize((prevSize) => [...prevSize, ...sizes])
-    //     console.log('Cac size da chon === ', sizes)
-    // }
+
+    const handleChooseSize = (selectedOptions: any) => {
+        const sizes = selectedOptions.map((option: any) => option.value)
+        setSize((prevSize) => [...prevSize, ...sizes])
+        console.log('Cac size da chon === ', sizes)
+    }
+
+    console.log(size)
+
     const handleSubmit = async (values: any) => {
         console.log(values)
         const formData = new FormData()
@@ -402,12 +414,12 @@ const ManageProductPage = () => {
                                                 }}
                                                 multiple
                                             />
-                                            <button
+                                            {/* <button
                                                 className='w-[4.6rem] h-[1.8rem] bg-blue-600 text-white rounded-md'
                                                 onClick={() => uploadImage(formik)}
                                             >
                                                 Upload
-                                            </button>
+                                            </button> */}
                                             <ErrorMessage className={`${styles.error}`} name='imgUrl' component='div' />
                                         </div>
                                         <div>

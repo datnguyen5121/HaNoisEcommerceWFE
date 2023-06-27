@@ -9,5 +9,5 @@ export const initialValues: ProductValues = {
     category: [],
     size: [],
     imgUrl: null,
-    price: 0
+    price: 123
 }

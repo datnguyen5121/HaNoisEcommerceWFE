@@ -1,5 +1,7 @@
 import { FC } from 'react'
 import styles from './HomeSlide.module.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 
 interface Props {
     heading: string
@@ -13,16 +15,19 @@ interface Props {
 
 const HomeSlide: FC<Props> = ({ data, heading }) => {
     function scrollLeft() {
-        const container = document.getElementById('homeSlideContainer')
+        const container = document.getElementById('homeSlideContainer')!
+        container.style.scrollBehavior = 'smooth'
 
         if (container) {
             container.style.scrollBehavior = 'smooth'
             container.scrollLeft -= 300
         }
     }
+    console.log('homeslide')
 
     function scrollRight() {
-        const container = document.getElementById('homeSlideContainer')
+        const container = document.getElementById('homeSlideContainer')!
+        container.style.scrollBehavior = 'smooth'
 
         if (container) {
             container.style.scrollBehavior = 'smooth'
@@ -34,13 +39,17 @@ const HomeSlide: FC<Props> = ({ data, heading }) => {
             <div className={`${styles.slideHeading} w-11/12 mx-auto`}>
                 <h2 className={styles.heading}>{heading}</h2>
                 <div className={styles.btnGrp}>
-                    <p>Shop</p>
-                    <button onClick={scrollLeft}>&lt;</button>
-                    <button onClick={scrollRight}>&gt;</button>
+                    <p className='text-lg font-medium'>Shop</p>
+                    <button onClick={scrollLeft}>
+                        <FontAwesomeIcon icon={faChevronLeft} />
+                    </button>
+                    <button onClick={scrollRight}>
+                        <FontAwesomeIcon icon={faChevronRight} />
+                    </button>
                 </div>
             </div>
 
-            <div className={`${styles.slide} w-11/12 mx-auto`} id='homeSlideContainer'>
+            <div className={`${styles.slide} w-11/12 mx-auto no-scrollbar`} id='homeSlideContainer'>
                 <div className={styles.slideItems}>
                     {data.map((item, index) => (
                         <div key={index} className={styles.slideItem}>

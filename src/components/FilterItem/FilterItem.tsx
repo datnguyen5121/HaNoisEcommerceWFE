@@ -3,13 +3,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
 
 interface IProps {
+    onChange: (size: string, isChecked: boolean) => void
     text: string
     type: string
     filterArray: string[]
+    state: string[]
 }
 
 function FilterItem(props: IProps) {
-    const { text, filterArray, type } = props
+    const { text, filterArray, type, onChange, state } = props
     const [show, setShow] = useState(false)
     const [iconRotation, setIconRotation] = useState(false)
     const handleShow = () => {
@@ -34,7 +36,14 @@ function FilterItem(props: IProps) {
                         return (
                             <div key={item}>
                                 <label htmlFor={item}>
-                                    <input type={type} value={item} id={item} className='w-4 h-4 checked:bg-black' />{' '}
+                                    <input
+                                        type={type}
+                                        value={item}
+                                        id={item}
+                                        checked={state.includes(item)}
+                                        onChange={(e) => onChange(item, e.target.checked)}
+                                        className='w-4 h-4 checked:bg-black'
+                                    />{' '}
                                     <span className='capitalize'>{item}</span>
                                 </label>
                             </div>
