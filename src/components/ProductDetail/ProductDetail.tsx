@@ -1,12 +1,62 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import styles from './ProductDetail.module.css'
 import img from '../../assets/imgEXP/Untitled.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faChevronRight, faChevronUp } from '@fortawesome/free-solid-svg-icons'
+import { useLocation } from 'react-router-dom'
+import { getProductByCategory, getProductByGenderCategory, getProductById } from '../../services/productService'
+import ProductItem from '../ProductItem'
+export interface IProductData {
+    _id?: string
+    gender: string
+    productName: string
+    title: string
+    description: string
+    datePublish: string
+    category: string[]
+    size: string[]
+    imgUrl: string[]
+    price: number
+}
+
 function ProductDetail() {
-    let [indexImg, setIndexImg] = useState(0)
-    let [rectDom, setRectDom] = useState(0)
-    let listImgArray = [
+    const location = useLocation()
+    const productId = location.pathname.split('/')[2]
+    const [productData, setProductData] = useState<IProductData>()
+    const [productByGenderCategory, setProductByGenderCategory] = useState<IProductData[]>([])
+    const fetchProductById = async () => {
+        const res = await getProductById(productId)
+        if (res.data) {
+            setProductData(res.data)
+        }
+    }
+    console.log('product detail called')
+
+    const fetchProductByGenderCategory = async () => {
+        const gender = productData?.gender
+        const category = productData?.productName
+        const subCategory = productData?.category[0]
+
+        const res = await getProductByGenderCategory(gender!, category!, subCategory!)
+
+        setProductByGenderCategory(res.data)
+    }
+
+    useEffect(() => {
+        fetchProductById()
+    }, [location])
+
+    useEffect(() => {
+        if (productData) {
+            fetchProductByGenderCategory()
+        }
+    }, [productData])
+    console.log('productData', productData)
+    console.log('productByGenderCategory', productByGenderCategory)
+
+    const [indexImg, setIndexImg] = useState(0)
+    const [rectDom, setRectDom] = useState(0)
+    const listImgArray = [
         {
             imgUrl: img
         },
@@ -35,9 +85,10 @@ function ProductDetail() {
             imgUrl: img
         }
     ]
+
     console.log('product detail')
 
-    let listCategoryProduct = [
+    const listCategoryProduct = [
         {
             imgUrl: img,
             cost: '200000đ',
@@ -74,26 +125,26 @@ function ProductDetail() {
             gender: 'Nam'
         }
     ]
-    let handleChangeImgProductDetail = (index: number) => {
+    const handleChangeImgProductDetail = (index: number) => {
         setIndexImg(index)
     }
-    let handleLeftImgProduct = () => {
+    const handleLeftImgProduct = () => {
         if (indexImg > 0) {
             console.log('dat')
 
             setIndexImg(indexImg - 1)
         } else {
-            setIndexImg(listImgArray.length - 1)
+            if (productData?.imgUrl) setIndexImg(productData?.imgUrl.length - 1)
         }
     }
-    let handleNextImgProduct = () => {
-        console.log(listImgArray.length)
-
-        if (indexImg < listImgArray.length - 1) {
-            console.log('dat')
-            setIndexImg(indexImg + 1)
-        } else {
-            setIndexImg(0)
+    const handleNextImgProduct = () => {
+        if (productData?.imgUrl) {
+            if (indexImg < productData?.imgUrl.length - 1) {
+                console.log('dat')
+                setIndexImg(indexImg + 1)
+            } else {
+                setIndexImg(0)
+            }
         }
     }
     function scrollLeft() {
@@ -119,17 +170,20 @@ function ProductDetail() {
                         <div
                             className={`${styles['no-scrollbar']} product-list-img gap-[10px] flex lg:flex-col col:mx-[20px] max-w-screen flex-row lg:overflow-y-auto  overflow-x-scroll no-scrollbar lg:h-[450px] w-[100%]  lg:w-[10%] `}
                         >
-                            {listImgArray &&
-                                listImgArray.map((item, index) => {
+                            {productData?.imgUrl &&
+                                productData?.imgUrl.length > 0 &&
+                                productData?.imgUrl.map((item, index) => {
                                     return (
                                         <button
-                                            className={` ${index == indexImg && `active:bg-violet-700`}  lg:w-[100%] `}
+                                            className={` ${
+                                                index == indexImg && `active:bg-vioconst-700`
+                                            }  lg:w-[100%] `}
                                             key={`img-detail${index}`}
                                             onClick={() => handleChangeImgProductDetail(index)}
                                         >
                                             <img
                                                 className='hover:bg-gradient-to-t lg:w-[100%] w-[150px] max-w-none lg:mx-auto rounded-md h-[100%]'
-                                                src={item.imgUrl}
+                                                src={item}
                                             ></img>
                                         </button>
                                     )
@@ -138,7 +192,7 @@ function ProductDetail() {
                         <div className='product-img relative w-[100%] max-h-[700px] '>
                             <img
                                 className=' max-h-[700px] relative w-[100%] object-cover m-auto rounded-sm'
-                                src={listImgArray[indexImg].imgUrl}
+                                src={productData?.imgUrl ? productData?.imgUrl[indexImg] : ''}
                             ></img>
                             <div className='absolute flex flex-row gap-[10px] right-[10px] bottom-[20px]'>
                                 <button
@@ -158,16 +212,18 @@ function ProductDetail() {
                     </section>
 
                     <div className='product-info lg:w-[40%] lg-px-[0] px-[50px] justify-center flex flex-col lg:items-start items-center '>
-                        <div className='mt-[10px] product-title font-semibold  text-2xl'>Jordan 1 Mid</div>
-                        <div className='product-price font-semibold mt-[10px] text-base'>1909000đ</div>
+                        <div className='mt-[10px] product-title font-semibold  text-2xl'>{productData?.title}</div>
+                        <div className='product-price font-semibold mt-[10px] text-base'>
+                            {Intl.NumberFormat('en-US').format(productData?.price)}
+                            <sup>₫</sup>
+                        </div>
 
                         <div className='mt-[10px] lg:w-[80%] w-[100%] category-product flex  flex-wrap gap-[10px]'>
-                            <img className='w-[70px] h-[70px]' src={img}></img>
-                            <img className='w-[70px] h-[70px]' src={img}></img>
-                            <img className='w-[70px] h-[70px]' src={img}></img>
-                            <img className='w-[70px] h-[70px]' src={img}></img>
-                            <img className='w-[70px] h-[70px]' src={img}></img>
-                            <img className='w-[70px] h-[70px]' src={img}></img>
+                            {productData?.imgUrl &&
+                                productData.imgUrl.length > 0 &&
+                                productData.imgUrl.map((item: string) => (
+                                    <img key={item} className='w-[70px] h-[70px]' src={item} />
+                                ))}
                         </div>
                         <div className='mt-[10px] lg:w-[80%] w-[100%] product-size-container '>
                             <div className='product-size-title flex justify-between flex-row pr-[20px]'>
@@ -175,21 +231,16 @@ function ProductDetail() {
                                 <div className='product-size-title2 text-gray-500 font-medium'>Size Guide</div>
                             </div>
                             <div className='mt-[10px] product-size-select flex flex-wrap justify-left gap-[10px] '>
-                                <button className='focus:border-[black] product-size-button border-[1px] w-[70px] h-[50px] rounded-md border-gray hover:border-black'>
-                                    EU 27.5
-                                </button>
-                                <button className='focus:border-[black] product-size-button border-[1px] w-[70px] h-[50px] rounded-md border-gray hover:border-black'>
-                                    EU 27.5
-                                </button>
-                                <button className='focus:border-[black] product-size-button border-[1px] w-[70px] h-[50px] rounded-md border-gray hover:border-black'>
-                                    EU 27.5
-                                </button>
-                                <button className='focus:border-[black] product-size-button border-[1px] w-[70px] h-[50px] rounded-md border-gray hover:border-black'>
-                                    EU 27.5
-                                </button>
-                                <button className='focus:border-[black] product-size-button border-[1px] w-[70px] h-[50px] rounded-md border-gray hover:border-black'>
-                                    EU 27.5
-                                </button>
+                                {productData?.size &&
+                                    productData?.size.length > 0 &&
+                                    productData?.size.map((item) => (
+                                        <button
+                                            key={item}
+                                            className='focus:border-[black] product-size-button border-[1px] w-[70px] h-[50px] rounded-md border-gray hover:border-black'
+                                        >
+                                            {item}
+                                        </button>
+                                    ))}
                             </div>
                         </div>
                         <div className='mt-[20px] lg:w-[80%] w-[100%] add-product flex flex-col gap-[10px]'>
@@ -201,10 +252,7 @@ function ProductDetail() {
                             </button>
                         </div>
                         <div className='py-[30px] product-detail-description font-medium '>
-                            These shorts are the ones that are down for everything you do—from long walks to HIIT to
-                            running errands. Their silky-smooth, ultra-soft woven fabric is balanced with sweat-wicking
-                            tech so you have ultimate comfort while feeling dry as you work out. The snug inner layer
-                            helps prevent chafing so you can push yourself with uncompromising coverage.
+                            {productData?.description}
                         </div>
                         <div className='border-t-[1px] product-delivery-rule font-medium'>
                             <div className='py-[30px]  flex justify-between cursor-pointer'>
@@ -248,7 +296,7 @@ function ProductDetail() {
                         className={` flex flex-row ${styles['no-scrollbar']}   gap-[10px] overflow-x-auto `}
                         id='carousel-product'
                     >
-                        {listCategoryProduct &&
+                        {/*{listCategoryProduct &&
                             listCategoryProduct.map((item, index) => {
                                 return (
                                     <div className={`product${index} flex-col`} key={`listImg-${index}`}>
@@ -262,7 +310,13 @@ function ProductDetail() {
                                         <article>{item.cost}</article>
                                     </div>
                                 )
-                            })}
+                            })}*/}
+
+                        {productByGenderCategory &&
+                            productByGenderCategory.length > 0 &&
+                            productByGenderCategory.map((product) => (
+                                <ProductItem key={product._id} isSearch={false} data={product} />
+                            ))}
                     </section>
                 </section>
             </section>

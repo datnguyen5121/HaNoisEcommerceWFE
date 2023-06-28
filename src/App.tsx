@@ -1,6 +1,7 @@
 import React, { lazy, Suspense } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
+import Loading from './components/Loading'
 
 const RootLayout = lazy(() => import('./pages/RootLayout'))
 const Home = lazy(() => import('./pages/FrontEnd/Home'))
@@ -36,7 +37,7 @@ function App() {
                     theme='light'
                 />
                 <ToastContainer />
-                <Suspense fallback={<div>Loading...</div>}>
+                <Suspense fallback={<Loading />}>
                     <Routes>
                         <Route path='/' element={<RootLayout />}>
                             <Route path='/' element={<Home />} />

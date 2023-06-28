@@ -1,27 +1,36 @@
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useState } from 'react'
+import { memo, useState } from 'react'
+import { ProductValues } from '../../type/ProductValues'
 interface IProps {
-    onChange: (size: string, isChecked: boolean) => void
-    text: string
-    type: string
-    filterArray: string[]
-    state: string[]
+    selectedPriceRange: string
+    setSelectedPriceRange: (value: string) => void
+    productList: ProductValues[]
+    filteredProducts: ProductValues[]
+    setFilteredProducts: (value: ProductValues[]) => void
 }
 
-function FilterItem(props: IProps) {
-    const { text, filterArray, type, onChange, state } = props
+function FilterByPrice(props: IProps) {
+    const { productList, setFilteredProducts, filteredProducts, selectedPriceRange, setSelectedPriceRange } = props
+
     const [show, setShow] = useState(false)
     const [iconRotation, setIconRotation] = useState(false)
+    const filterArray = ['Under 1,000,000₫', '1,000,000₫ - 2,000,000₫', '2,000,000₫ - 5,000,000₫', 'Over 5,000,000₫']
+
     const handleShow = () => {
         setShow(!show)
         setIconRotation(!iconRotation)
     }
+
+    const handlePriceFilter = (priceRange: string) => {
+        setSelectedPriceRange(priceRange)
+    }
+
     return (
         <div className='text-lg border-t relative mr-2'>
             <div className='flex items-center justify-between'>
                 <button onClick={handleShow} className='w-full py-3  capitalize text-start mb-2 '>
-                    {text}
+                    Price
                 </button>
                 <FontAwesomeIcon
                     icon={faChevronDown}
@@ -36,12 +45,13 @@ function FilterItem(props: IProps) {
                             <div key={item}>
                                 <label htmlFor={item}>
                                     <input
-                                        type={type}
+                                        type='radio'
                                         value={item}
                                         id={item}
-                                        checked={state.includes(item)}
-                                        onChange={(e) => onChange(item, e.target.checked)}
-                                        className='w-4 h-4 checked:bg-black'
+                                        name='price'
+                                        checked={selectedPriceRange === item}
+                                        onChange={(e) => handlePriceFilter(e.target.value)}
+                                        className='w-4 h-4 '
                                     />{' '}
                                     <span className='capitalize'>{item}</span>
                                 </label>
@@ -54,4 +64,4 @@ function FilterItem(props: IProps) {
     )
 }
 
-export default FilterItem
+export default memo(FilterByPrice)

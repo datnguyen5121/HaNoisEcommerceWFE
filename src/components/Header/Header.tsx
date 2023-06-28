@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faCartShopping, faUser } from '@fortawesome/free-solid-svg-icons'
-import { Link } from 'react-router-dom'
+import { Link, redirect, useNavigate } from 'react-router-dom'
 import Navbar from '../Navbar/Navbar'
 import Logo from '../../assets/Logo.svg'
 import style from './Header.module.css'
@@ -14,7 +14,7 @@ import { RootState } from '../../redux/store'
 function Header() {
     const user = useSelector((state: RootState) => state?.auth?.login?.currentUser)
     const dispatch = useDispatch()
-
+    const navigate = useNavigate()
     const renderUserMenu = () => {
         if (user === null) {
             return (
@@ -38,10 +38,21 @@ function Header() {
                 <ul
                     className={`absolute z-[999] border  right-0 top-7 min-w-[150px]  bg-white hidden shadow-md ${style.user}`}
                 >
+                    <li className='px-3 py-2  hover:bg-gray-200 cursor-pointer'>
+                        <Link to={'/account'} className='block w-full text-start'>
+                            My Account
+                        </Link>
+                    </li>
                     <li className='px-3 py-2 hover:bg-gray-200 cursor-pointer'>
-                        <div className='block' onClick={() => logoutUser(dispatch)}>
+                        <button
+                            className='block w-full text-start'
+                            onClick={() => {
+                                logoutUser(dispatch)
+                                navigate('/')
+                            }}
+                        >
                             Logout
-                        </div>
+                        </button>
                     </li>
                 </ul>
             )

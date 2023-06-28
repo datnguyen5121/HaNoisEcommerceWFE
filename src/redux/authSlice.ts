@@ -31,10 +31,14 @@ const authSlice = createSlice({
         logoutFailed: (state) => {
             state.logout.isProcessing = false
             state.logout.error = true
+        },
+        updateUser: (state, action) => {
+            state.login.currentUser = action.payload
         }
     }
 })
 
-export const { loginStart, loginFailed, loginSuccess, logoutStart, logoutFailed, logoutSuccess } = authSlice.actions
+export const { loginStart, loginFailed, updateUser, loginSuccess, logoutStart, logoutFailed, logoutSuccess } =
+    authSlice.actions
 
 export default authSlice.reducer

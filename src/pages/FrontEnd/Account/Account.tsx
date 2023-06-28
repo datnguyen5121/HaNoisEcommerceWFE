@@ -1,22 +1,45 @@
 import { Field, Formik, Form, ErrorMessage } from 'formik'
+import { useDispatch, useSelector } from 'react-redux'
 import * as Yup from 'yup'
-
+import { RootState, useAppDispatch } from '../../../redux/store'
+import { updateUserById } from '../../../services/userService'
+import { updateUser } from '../../../redux/authSlice'
+interface IUserInfo {
+    address: string
+    createAt: string
+    email: string
+    firstName: string
+    gender: string
+    lastName: string
+    password: string
+    phone: string
+    roleId: string
+    updateAt: string
+    __v: number
+    _id: string
+}
 function Account() {
-    const genderArray = ['male', 'female', 'other']
+    const user = useSelector((state: RootState) => state?.auth?.login?.currentUser)
+    const dispatch = useDispatch()
+    const userInfo: IUserInfo = user.infoUser
+    console.log(user)
+
     const initialValues = {
-        email: 'phucdz@gmail.com',
-        firstName: 'Nguyen',
-        lastName: 'Phuc',
-        address: 'Hà nội',
-        gender: 'male',
-        phone: '0989642699'
+        email: userInfo.email,
+        firstName: userInfo.firstName,
+        lastName: userInfo.lastName,
+        address: userInfo.address,
+        gender: userInfo.gender,
+        phone: userInfo.phone
     }
     console.log('account component')
 
+    const genderArray = ['male', 'female', 'other']
     const phoneRegExp = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/
+
     return (
         <div className='w-11/12 mx-auto shadow-md p-2'>
-            <p className='text-2xl'>Hi, Nguyen Phuc</p>
+            <p className='text-2xl'>Hi, {userInfo.firstName + ' ' + userInfo.lastName}</p>
 
             <Formik
                 initialValues={initialValues}
@@ -26,11 +49,32 @@ function Account() {
                     lastName: Yup.string().required('Last name is required'),
                     gender: Yup.string().required('Gender is required'),
                     address: Yup.string().required('Address is required'),
-                    phone: Yup.string().matches(phoneRegExp, 'Mobile is invalid').required('Mobile is required')
+                    phone: Yup.number()
+                        .min(0, 'Invalid PhoneNumber')
+                        .max(999999999, 'Invalid PhoneNumber')
+                        .required('Mobile is required')
                 })}
                 onSubmit={(values) => {
-                    // update form data
                     console.log(values)
+
+                    const accessToken = user.access_token
+                    const refreshToken = user.refresh_token
+                    console.log(accessToken, refreshToken)
+
+                    const _id = userInfo._id
+
+                    updateUserById(_id, values)
+
+                    dispatch(
+                        updateUser({
+                            access_token: accessToken,
+                            refresh_token: refreshToken,
+                            infoUser: {
+                                userInfo,
+                                ...values
+                            }
+                        })
+                    )
                 }}
             >
                 {({ errors, touched, dirty, handleSubmit }) => (
@@ -123,19 +167,21 @@ function Account() {
                                 className={`w-full border px-3 py-2 rounded-md mt-1 ${
                                     errors.phone ? 'border-red-500' : 'border-gray-300'
                                 } `}
-                                type='text'
+                                type='number'
                                 name='phone'
                             />
                             {errors.phone && touched.phone ? <p className='text-red-500'>{errors.phone}</p> : null}
                         </div>
 
                         <div>
-                            <button
-                                type='submit'
-                                className='bg-black s text-white px-5 py-2 rounded-lg hover:bg-gray-800 col-span-2'
-                            >
-                                Save
-                            </button>
+                            {dirty && (
+                                <button
+                                    type='submit'
+                                    className='bg-black s text-white px-5 py-2 rounded-lg hover:bg-gray-800 col-span-2'
+                                >
+                                    Save
+                                </button>
+                            )}
                         </div>
                     </Form>
                 )}

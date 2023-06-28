@@ -1,19 +1,26 @@
 import { Link } from 'react-router-dom'
 import productImage from '../../assets/productItem.webp'
 import { ProductValues } from '../../type/ProductValues'
+import { IProductData } from '../ProductDetail/ProductDetail'
 interface IProps {
     isSearch?: boolean
     isCheckout?: boolean
-    data: ProductValues
+    data: IProductData
 }
 function ProductItem(props: IProps) {
     const { isSearch, isCheckout, data } = props
 
+    console.log(data)
+
     if (isSearch) {
         return (
-            <Link to={'/product/2'}>
+            <Link to={`/product/${data._id}`}>
                 <div className='flex gap-4'>
-                    <img src={productImage} alt='image' className='max-w-[120px]' />
+                    <img
+                        src={data.imgUrl.length > 0 ? data.imgUrl[0] : productImage}
+                        alt='image'
+                        className='max-w-[120px]'
+                    />
                     <div className='py-3 flex-1'>
                         <p className='capitalize line-clamp-1'>Air Jordan 1 Mid</p>
                         <p className='text-gray-500'>Women's shoes</p>
@@ -27,7 +34,7 @@ function ProductItem(props: IProps) {
         )
     } else if (isCheckout) {
         return (
-            <Link to={'/product/2'}>
+            <Link to={`/product/${data._id}`}>
                 <div className='flex items-center gap-4 my-1'>
                     <img src={productImage} alt='image' className='max-w-[120px] max-h-[120px]' />
                     <div className='py-3 flex-1'>
@@ -45,14 +52,14 @@ function ProductItem(props: IProps) {
     } else {
         //default
         return (
-            <Link to={'/product/2'}>
+            <Link to={`/product/${data._id}`}>
                 <div>
                     <img src={productImage} alt='image' />
                     <div className='py-3'>
                         <p className='capitalize'>{data.title}</p>
                         <p className='text-gray-500'>{data.gender}</p>
                         <p className='mt-2'>
-                            {data.price}
+                            {Intl.NumberFormat('en-US').format(data.price)}
                             <sup>₫</sup>
                         </p>
                     </div>

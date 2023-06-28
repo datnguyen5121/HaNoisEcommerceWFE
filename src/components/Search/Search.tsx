@@ -5,9 +5,11 @@ import { useState, useEffect, useRef } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass, faSpinner, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { useDebounce } from '../../customhooks/useDebounce'
+import { ProductValues } from '../../type/ProductValues'
+import { IProductData } from '../ProductDetail/ProductDetail'
 function Search() {
     const [searchValue, setSearchValue] = useState<string>('')
-    const [searchResult, setSearchResult] = useState<number[]>([])
+    const [searchResult, setSearchResult] = useState<IProductData[]>([])
     const [showResult, setShowResult] = useState(true)
     const [loading, setLoading] = useState(false)
     const inputRef = useRef<HTMLInputElement>(null)
@@ -30,7 +32,7 @@ function Search() {
             return
         }
         setLoading(true)
-        fetch(`https://tiktok.fullstack.edu.vn/api/users/search?q=${encodeURIComponent(debounceValue)}&type=less`)
+        fetch(`http://localhost:8080/api/get-search-value?q=${encodeURIComponent(debounceValue)}`)
             .then((res) => res.json())
             .then((res) => {
                 console.log('call api =>', res.data)
@@ -56,21 +58,8 @@ function Search() {
                         {...attrs}
                     >
                         {searchResult.map((item) => (
-                            <p key={item.id} className='text-red-500'>
-                                {item.full_name}
-                            </p>
+                            <ProductItem isSearch={true} key={item._id} data={item} />
                         ))}
-                        {/*<ProductItem isSearch={true} />
-                        <ProductItem isSearch={true} />
-                        <ProductItem isSearch={true} />
-                        <ProductItem isSearch={true} />
-                        <ProductItem isSearch={true} />
-                        <ProductItem isSearch={true} />
-                        <ProductItem isSearch={true} />
-                        <ProductItem isSearch={true} />
-                        <ProductItem isSearch={true} />
-                        <ProductItem isSearch={true} />
-                        <ProductItem isSearch={true} />*/}
                     </div>
                 )}
             >
