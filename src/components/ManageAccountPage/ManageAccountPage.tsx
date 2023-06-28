@@ -11,10 +11,18 @@ import axios from '../../utils/axiosCustomize.tsx'
 
 const ManageAccountPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
+    const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false)
     const [accounts, setAccounts] = useState<any[]>([])
     const { state } = useLocation()
+    let [accountId, setAccountId] = useState('')
     const showModal = () => {
         setIsModalOpen(true)
+    }
+    const showModalUpdate = () => {
+        setIsModalUpdateOpen(true)
+    }
+    const handleCancelUpdate = () => {
+        setIsModalUpdateOpen(false)
     }
     // const handleOk = () => {
     //     setIsModalOpen(false)
@@ -44,6 +52,26 @@ const ManageAccountPage = () => {
             console.log(error)
         }
     }
+    const handleUpdate = async (accountId: string, values: any) => {
+        console.log(values)
+        let data = {
+            email: values.email,
+            password: values.password,
+            firstName: values.firstName,
+            lastName: values.lastName,
+            address: values.address,
+            gender: values.gender,
+            phone: values.phone,
+            roleId: values.roleId
+        }
+        try {
+            await axios.put('/api/update-user-by-id', { _id: accountId, ...data })
+            const response = await axios.get('/api/get-all-user')
+            setAccounts(response.data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
     const accountsData = async () => {
         try {
             const response = await axios.get('/api/get-all-user')
@@ -68,6 +96,10 @@ const ManageAccountPage = () => {
         } catch (error) {
             console.log(error)
         }
+    }
+    const updateAccount = (id: string) => {
+        setAccountId(id)
+        showModalUpdate()
     }
     return (
         <div className={`productPageContainer px-[20px] py-[10px]`}>
@@ -201,6 +233,120 @@ const ManageAccountPage = () => {
                             )}
                         </Formik>
                     </Modal>
+                    <Modal
+                        className='text-center'
+                        title='Update Account'
+                        open={isModalUpdateOpen}
+                        onCancel={handleCancelUpdate}
+                        footer={null}
+                    >
+                        <Formik<AccountValues>
+                            onSubmit={(values) => handleUpdate(accountId, values)}
+                            validationSchema={validationSchemaAccount}
+                            initialValues={state == null ? initialAccountValues : state}
+                        >
+                            {(formik) => (
+                                <Form>
+                                    <div className={`my-2 grid`}>
+                                        <label htmlFor='email' className='me-[10px] font-[700]'>
+                                            Email
+                                        </label>
+                                        <Field
+                                            as='input'
+                                            name='email'
+                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-full px-[10px] py-[5px]`}
+                                        />
+                                        <ErrorMessage className={`${styles.error}`} name='email' component='div' />
+                                    </div>
+                                    <div className={`my-2 grid`}>
+                                        <label htmlFor='password' className='me-[10px] font-[700]'>
+                                            Password
+                                        </label>
+                                        <Field
+                                            as='input'
+                                            name='password'
+                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-full px-[10px] py-[5px]`}
+                                        />
+                                        <ErrorMessage className={`${styles.error}`} name='password' component='div' />
+                                    </div>
+                                    <div className={`my-2 grid`}>
+                                        <label htmlFor='firstName' className='me-[10px] font-[700]'>
+                                            First Name
+                                        </label>
+                                        <Field
+                                            as='input'
+                                            name='firstName'
+                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-full px-[10px] py-[5px]`}
+                                        />
+                                        <ErrorMessage className={`${styles.error}`} name='firstName' component='div' />
+                                    </div>
+                                    <div className={`my-2 grid`}>
+                                        <label htmlFor='lastName' className='me-[10px] font-[700]'>
+                                            Last Name
+                                        </label>
+                                        <Field
+                                            as='input'
+                                            name='lastName'
+                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-full px-[10px] py-[5px]`}
+                                        />
+                                        <ErrorMessage className={`${styles.error}`} name='lastName' component='div' />
+                                    </div>
+                                    <div className={`my-2 grid`}>
+                                        <label htmlFor='address' className='me-[10px] font-[700]'>
+                                            Address
+                                        </label>
+                                        <Field
+                                            as='input'
+                                            name='address'
+                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-full px-[10px] py-[5px]`}
+                                        />
+                                        <ErrorMessage className={`${styles.error}`} name='address' component='div' />
+                                    </div>
+                                    <div className={`my-2 grid`}>
+                                        <label htmlFor='gender' className='me-[10px] font-[700]'>
+                                            Gender
+                                        </label>
+                                        <Field
+                                            as='input'
+                                            name='gender'
+                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-full px-[10px] py-[5px]`}
+                                        />
+                                        <ErrorMessage className={`${styles.error}`} name='gender' component='div' />
+                                    </div>
+                                    <div className={`my-2 grid`}>
+                                        <label htmlFor='phone' className='me-[10px] font-[700]'>
+                                            Phone
+                                        </label>
+                                        <Field
+                                            as='input'
+                                            name='phone'
+                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-full px-[10px] py-[5px]`}
+                                        />
+                                        <ErrorMessage className={`${styles.error}`} name='phone' component='div' />
+                                    </div>
+                                    <div className={`my-2 grid`}>
+                                        <label htmlFor='roleId' className='me-[10px] font-[700]'>
+                                            Role
+                                        </label>
+                                        <Field
+                                            as='input'
+                                            name='roleId'
+                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-full px-[10px] py-[5px]`}
+                                        />
+                                        <ErrorMessage className={`${styles.error}`} name='roleId' component='div' />
+                                    </div>
+                                    <div>
+                                        <button
+                                            type='submit'
+                                            className='bg-blue-500 text-white px-[0.8rem] py-[0.4rem] rounded-md hover:bg-sky-600'
+                                        >
+                                            Submit
+                                        </button>
+                                    </div>
+                                </Form>
+                            )}
+                        </Formik>
+                    </Modal>
                 </div>
                 <table className='w-full'>
                     <thead>
@@ -231,7 +377,14 @@ const ManageAccountPage = () => {
                                 <td className='w-16'>{account.roleId}</td>
                                 <td className='w-28'>
                                     <div>
-                                        <button className={`${styles.editBtn}`}>Edit</button>
+                                        <button
+                                            className={`${styles.editBtn}`}
+                                            onClick={() => {
+                                                updateAccount(account._id)
+                                            }}
+                                        >
+                                            Edit
+                                        </button>
                                         <button
                                             className={`${styles.deleteBtn}`}
                                             onClick={() => {
