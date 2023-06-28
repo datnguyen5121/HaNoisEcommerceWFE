@@ -4,6 +4,7 @@ import { Formik, Field, Form, ErrorMessage } from 'formik'
 import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 import { registerUser } from '../../../redux/authRequest'
+import { toast } from 'react-toastify'
 
 const Register: FC = () => {
     const navigate = useNavigate()
@@ -37,6 +38,7 @@ const Register: FC = () => {
         phone: string
     }) => {
         registerUser(values, navigate)
+        toast('Register Success')
     }
 
     return (
