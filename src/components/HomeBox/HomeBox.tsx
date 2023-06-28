@@ -12,8 +12,6 @@ interface Props {
 }
 
 const HomeBox: FC<Props> = ({ image, topText, title, text, btn1, btn2 }) => {
-    console.log('homebox')
-
     return (
         <div className={`${styles.homeBox} w-full text-center`}>
             <img src={image} alt='noImg' className='w-11/12 mx-auto mb-10' />

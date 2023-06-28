@@ -23,45 +23,45 @@ function Home() {
             imgUrl: [
                 'https://media.istockphoto.com/id/1335247217/vector/loading-icon-vector-illustration.jpg?s=612x612&w=0&k=20&c=jARr4Alv-d5U3bCa8eixuX2593e1rDiiWnvJLgHCkQM='
             ],
-            title: 'Nike Yoga Dri-FIT Luxe',
-            description: 'Women Cropped Tank',
-            price: '$49.99'
+            title: 'Loading',
+            description: 'Loading',
+            price: 'Loading'
         },
         {
             _id: '2',
             imgUrl: [
                 'https://media.istockphoto.com/id/1335247217/vector/loading-icon-vector-illustration.jpg?s=612x612&w=0&k=20&c=jARr4Alv-d5U3bCa8eixuX2593e1rDiiWnvJLgHCkQM='
             ],
-            title: 'Nike Yoga Dri-FIT Luxe 2',
-            description: 'Women Cropped Tank',
-            price: '$49.99'
+            title: 'Loading',
+            description: 'Loading',
+            price: 'Loading'
         },
         {
             _id: '3',
             imgUrl: [
                 'https://media.istockphoto.com/id/1335247217/vector/loading-icon-vector-illustration.jpg?s=612x612&w=0&k=20&c=jARr4Alv-d5U3bCa8eixuX2593e1rDiiWnvJLgHCkQM='
             ],
-            title: 'Nike Yoga Dri-FIT Luxe 3',
-            description: 'Women Cropped Tank',
-            price: '$49.99'
+            title: 'Loading',
+            description: 'Loading',
+            price: 'Loading'
         },
         {
             _id: '4',
             imgUrl: [
                 'https://media.istockphoto.com/id/1335247217/vector/loading-icon-vector-illustration.jpg?s=612x612&w=0&k=20&c=jARr4Alv-d5U3bCa8eixuX2593e1rDiiWnvJLgHCkQM='
             ],
-            title: 'Nike Yoga Dri-FIT Luxe 4',
-            description: 'Women Cropped Tank',
-            price: '$49.99'
+            title: 'Loading',
+            description: 'Loading',
+            price: 'Loading'
         },
         {
             _id: '5',
             imgUrl: [
                 'https://media.istockphoto.com/id/1335247217/vector/loading-icon-vector-illustration.jpg?s=612x612&w=0&k=20&c=jARr4Alv-d5U3bCa8eixuX2593e1rDiiWnvJLgHCkQM='
             ],
-            title: 'Nike Yoga Dri-FIT Luxe 5',
-            description: 'Women Cropped Tank',
-            price: '$49.99'
+            title: 'Loading',
+            description: 'Loading',
+            price: 'Loading'
         }
     ]
 
@@ -80,7 +80,6 @@ function Home() {
                 const response = await axios.get('/get-all-product')
                 const fetchedProducts = response.data.data.slice(0, 10)
                 setProducts(fetchedProducts)
-                console.log(fetchedProducts)
             } catch (error) {
                 console.error('Error fetching products:', error)
             }
