@@ -3,61 +3,26 @@ import styles from './ManageProductPage.module.css'
 import { useEffect, useState } from 'react'
 import { Button, Modal } from 'antd'
 import { ProductValues } from '../../type/ProductValues'
-import { ErrorMessage, Field, Formik, Form, FormikProps } from 'formik'
+import { ErrorMessage, Field, Formik, Form } from 'formik'
 import { useLocation } from 'react-router-dom'
 import { initialValues } from '../../type/initialValues'
 import { validationSchemaProduct } from '../../type/validationSchemaProduct'
-// import makeAnimated from 'react-select/animated'
+
 import axios from 'axios'
 
-// const animatedComponents = makeAnimated()
-
-// const multipleSize = [
-//     { value: '37', label: '37' },
-//     { value: '38', label: '38' },
-//     { value: '39', label: '39' },
-//     { value: '40', label: '40' },
-//     { value: '41', label: '41' },
-//     { value: '42', label: '42' },
-//     { value: '43', label: '43' },
-//     { value: '44', label: '44' }
-// ]
 const ManageProductPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [productsNike, setProductsNike] = useState<any[]>([])
-    const [size, setSize] = useState<string[]>([])
-    const [selectedImages, setSelectedImages] = useState<File[]>([])
     const { state } = useLocation()
     const showModal = () => {
         setIsModalOpen(true)
     }
-    // const handleOk = () => {
-    //     setIsModalOpen(false)
-    // }
+    const handleOk = () => {
+        setIsModalOpen(false)
+    }
     const handleCancel = () => {
         setIsModalOpen(false)
     }
-
-    // const handleImageChange = (e: ChangeEvent<HTMLInputElement>, formik: FormikProps<ProductValues>) => {
-    //     const files = Array.from(e.target.files || [])
-    //     setSelectedImages((prevSelectedImages) => [...prevSelectedImages, ...files])
-    //     const fileNames = files.map((file) => file.name)
-    //     formik.setFieldValue('imgUrl', fileNames)
-    // }
-
-    const uploadImage = (formik: FormikProps<ProductValues>) => {
-        const fileNames = selectedImages.map((file) => file.name)
-        console.log(fileNames)
-        formik.setFieldValue('imgUrl', fileNames)
-    }
-
-    const handleChooseSize = (selectedOptions: any) => {
-        const sizes = selectedOptions.map((option: any) => option.value)
-        setSize((prevSize) => [...prevSize, ...sizes])
-        console.log('Cac size da chon === ', sizes)
-    }
-
-    console.log(size)
 
     const handleSubmit = async (values: any) => {
         console.log(values)
@@ -114,7 +79,7 @@ const ManageProductPage = () => {
                     <Button className='bg-blue-500' type='primary' onClick={showModal}>
                         Create a new Product
                     </Button>
-                    <Modal title='Create A New Product' open={isModalOpen} onCancel={handleCancel}>
+                    <Modal title='Create A New Product' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
                         <Formik<ProductValues>
                             onSubmit={handleSubmit}
                             validationSchema={validationSchemaProduct}
@@ -424,7 +389,7 @@ const ManageProductPage = () => {
                                         </div>
                                         <div>
                                             <button
-                                                className='bg-blue-600 w-[4.6rem] h-[1.8rem] text-white rounded-md'
+                                                className='bg-blue-600 px-[0.8rem] py-[0.4rem] text-white rounded-md hover:bg-sky-600'
                                                 type='submit'
                                             >
                                                 Submit

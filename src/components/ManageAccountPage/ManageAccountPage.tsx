@@ -7,7 +7,7 @@ import { useLocation } from 'react-router-dom'
 import { AccountValues } from '../../type/AccountValues'
 import { validationSchemaAccount } from '../../type/validationSchemaAccount'
 import { initialAccountValues } from '../../type/initialAccountValues'
-import axios from 'axios'
+import axios from '../../utils/axiosCustomize.tsx'
 
 const ManageAccountPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -16,19 +16,39 @@ const ManageAccountPage = () => {
     const showModal = () => {
         setIsModalOpen(true)
     }
-    const handleOk = () => {
-        setIsModalOpen(false)
-    }
+    // const handleOk = () => {
+    //     setIsModalOpen(false)
+    // }
     const handleCancel = () => {
         setIsModalOpen(false)
     }
-    const handleSubmit = (values: AccountValues) => {
+    const handleSubmit = async (values: any) => {
         console.log(values)
+        let data = {
+            email: values.email,
+            password: values.password,
+            firstName: values.firstName,
+            lastName: values.lastName,
+            address: values.address,
+            gender: values.gender,
+            phone: values.phone,
+            roleId: values.roleId
+        }
+        try {
+            console.log('form data === ', data)
+            const response = await axios.post('/api/create-new-user', data)
+            const getAccount = await axios.get('/api/get-all-user')
+            console.log(response.data)
+            setAccounts(getAccount.data)
+        } catch (error) {
+            console.log(error)
+        }
     }
     const accountsData = async () => {
         try {
-            const response = await axios.get('/get-all-user')
-            setAccounts(response.data.data)
+            const response = await axios.get('/api/get-all-user')
+            console.log(response)
+            setAccounts(response.data)
             return response.data
         } catch (error) {
             console.log(error)
@@ -37,7 +57,18 @@ const ManageAccountPage = () => {
     useEffect(() => {
         accountsData()
     }, [])
-    console.log('accounts === ', accounts)
+    const deleteAccount = async (accountId: string) => {
+        try {
+            console.log('account ID === ', accountId)
+            if (confirm('Do you want to delete account')) {
+                await axios.delete(`/api/delete-user-by-id/?_id=${accountId}`)
+            }
+            const response = await axios.get('/api/get-all-user')
+            setAccounts(response.data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
     return (
         <div className={`productPageContainer px-[20px] py-[10px]`}>
             <HeaderManageProduct />
@@ -46,13 +77,13 @@ const ManageAccountPage = () => {
             </div>
             <div className={`h-[50px] flex items-center justify-center`}>
                 <input
-                    className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
+                    className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-full px-[10px] py-[5px]`}
                     type='text'
                     placeholder='Search Account'
                 />
             </div>
             <div className={`mt-[30px] flex flex-col justify-center items-center`}>
-                <div className='flex justify-start w-full mb-6'>
+                <div className='flex justify-start w-full gap-3 mb-6'>
                     <Button className='bg-blue-500' type='primary' onClick={showModal}>
                         Create a New Account
                     </Button>
@@ -60,114 +91,115 @@ const ManageAccountPage = () => {
                         className='text-center'
                         title='Create A New Account'
                         open={isModalOpen}
-                        onOk={handleOk}
                         onCancel={handleCancel}
+                        footer={null}
                     >
-                        <div className='flex justify-center items-center'>
-                            <Formik<AccountValues>
-                                onSubmit={handleSubmit}
-                                validationSchema={validationSchemaAccount}
-                                initialValues={state == null ? initialAccountValues : state}
-                            >
-                                {(formik) => (
-                                    <Form onSubmit={formik.handleSubmit}>
-                                        <div className={`my-2 grid`}>
-                                            <label htmlFor='email' className='me-[10px] font-[700]'>
-                                                Email
-                                            </label>
-                                            <Field
-                                                as='input'
-                                                name='email'
-                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
-                                            />
-                                            <ErrorMessage className={`${styles.error}`} name='email' component='div' />
-                                        </div>
-                                        <div className={`my-2 grid`}>
-                                            <label htmlFor='password' className='me-[10px] font-[700]'>
-                                                Password
-                                            </label>
-                                            <Field
-                                                as='input'
-                                                name='password'
-                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
-                                            />
-                                            <ErrorMessage
-                                                className={`${styles.error}`}
-                                                name='password'
-                                                component='div'
-                                            />
-                                        </div>
-                                        <div className={`my-2 grid`}>
-                                            <label htmlFor='firstName' className='me-[10px] font-[700]'>
-                                                First Name
-                                            </label>
-                                            <Field
-                                                as='input'
-                                                name='firstName'
-                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
-                                            />
-                                            <ErrorMessage
-                                                className={`${styles.error}`}
-                                                name='firstName'
-                                                component='div'
-                                            />
-                                        </div>
-                                        <div className={`my-2 grid`}>
-                                            <label htmlFor='lastName' className='me-[10px] font-[700]'>
-                                                Last Name
-                                            </label>
-                                            <Field
-                                                as='input'
-                                                name='lastName'
-                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
-                                            />
-                                            <ErrorMessage
-                                                className={`${styles.error}`}
-                                                name='lastName'
-                                                component='div'
-                                            />
-                                        </div>
-                                        <div className={`my-2 grid`}>
-                                            <label htmlFor='address' className='me-[10px] font-[700]'>
-                                                Address
-                                            </label>
-                                            <Field
-                                                as='input'
-                                                name='address'
-                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
-                                            />
-                                            <ErrorMessage
-                                                className={`${styles.error}`}
-                                                name='address'
-                                                component='div'
-                                            />
-                                        </div>
-                                        <div className={`my-2 grid`}>
-                                            <label htmlFor='gender' className='me-[10px] font-[700]'>
-                                                Gender
-                                            </label>
-                                            <Field
-                                                as='input'
-                                                name='gender'
-                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
-                                            />
-                                            <ErrorMessage className={`${styles.error}`} name='gender' component='div' />
-                                        </div>
-                                        <div className={`my-2 grid`}>
-                                            <label htmlFor='roleId' className='me-[10px] font-[700]'>
-                                                Role
-                                            </label>
-                                            <Field
-                                                as='input'
-                                                name='roleId'
-                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
-                                            />
-                                            <ErrorMessage className={`${styles.error}`} name='roleId' component='div' />
-                                        </div>
-                                    </Form>
-                                )}
-                            </Formik>
-                        </div>
+                        <Formik<AccountValues>
+                            onSubmit={handleSubmit}
+                            validationSchema={validationSchemaAccount}
+                            initialValues={state == null ? initialAccountValues : state}
+                        >
+                            {(formik) => (
+                                <Form onSubmit={formik.handleSubmit}>
+                                    <div className={`my-2 grid`}>
+                                        <label htmlFor='email' className='me-[10px] font-[700]'>
+                                            Email
+                                        </label>
+                                        <Field
+                                            as='input'
+                                            name='email'
+                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-full px-[10px] py-[5px]`}
+                                        />
+                                        <ErrorMessage className={`${styles.error}`} name='email' component='div' />
+                                    </div>
+                                    <div className={`my-2 grid`}>
+                                        <label htmlFor='password' className='me-[10px] font-[700]'>
+                                            Password
+                                        </label>
+                                        <Field
+                                            as='input'
+                                            name='password'
+                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-full px-[10px] py-[5px]`}
+                                        />
+                                        <ErrorMessage className={`${styles.error}`} name='password' component='div' />
+                                    </div>
+                                    <div className={`my-2 grid`}>
+                                        <label htmlFor='firstName' className='me-[10px] font-[700]'>
+                                            First Name
+                                        </label>
+                                        <Field
+                                            as='input'
+                                            name='firstName'
+                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-full px-[10px] py-[5px]`}
+                                        />
+                                        <ErrorMessage className={`${styles.error}`} name='firstName' component='div' />
+                                    </div>
+                                    <div className={`my-2 grid`}>
+                                        <label htmlFor='lastName' className='me-[10px] font-[700]'>
+                                            Last Name
+                                        </label>
+                                        <Field
+                                            as='input'
+                                            name='lastName'
+                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-full px-[10px] py-[5px]`}
+                                        />
+                                        <ErrorMessage className={`${styles.error}`} name='lastName' component='div' />
+                                    </div>
+                                    <div className={`my-2 grid`}>
+                                        <label htmlFor='address' className='me-[10px] font-[700]'>
+                                            Address
+                                        </label>
+                                        <Field
+                                            as='input'
+                                            name='address'
+                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-full px-[10px] py-[5px]`}
+                                        />
+                                        <ErrorMessage className={`${styles.error}`} name='address' component='div' />
+                                    </div>
+                                    <div className={`my-2 grid`}>
+                                        <label htmlFor='gender' className='me-[10px] font-[700]'>
+                                            Gender
+                                        </label>
+                                        <Field
+                                            as='input'
+                                            name='gender'
+                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-full px-[10px] py-[5px]`}
+                                        />
+                                        <ErrorMessage className={`${styles.error}`} name='gender' component='div' />
+                                    </div>
+                                    <div className={`my-2 grid`}>
+                                        <label htmlFor='phone' className='me-[10px] font-[700]'>
+                                            Phone
+                                        </label>
+                                        <Field
+                                            as='input'
+                                            name='phone'
+                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-full px-[10px] py-[5px]`}
+                                        />
+                                        <ErrorMessage className={`${styles.error}`} name='phone' component='div' />
+                                    </div>
+                                    <div className={`my-2 grid`}>
+                                        <label htmlFor='roleId' className='me-[10px] font-[700]'>
+                                            Role
+                                        </label>
+                                        <Field
+                                            as='input'
+                                            name='roleId'
+                                            className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-full px-[10px] py-[5px]`}
+                                        />
+                                        <ErrorMessage className={`${styles.error}`} name='roleId' component='div' />
+                                    </div>
+                                    <div>
+                                        <button
+                                            type='submit'
+                                            className='bg-blue-500 text-white px-[0.8rem] py-[0.4rem] rounded-md hover:bg-sky-600'
+                                        >
+                                            Submit
+                                        </button>
+                                    </div>
+                                </Form>
+                            )}
+                        </Formik>
                     </Modal>
                 </div>
                 <table className='w-full'>
@@ -180,6 +212,7 @@ const ManageAccountPage = () => {
                             <th>Last Name</th>
                             <th>Address</th>
                             <th>Gender</th>
+                            <th>Phone</th>
                             <th>Role ID</th>
                             <th>Feature</th>
                         </tr>
@@ -194,6 +227,7 @@ const ManageAccountPage = () => {
                                 <td className='w-20'>{account.lastName}</td>
                                 <td className='w-28'>{account.address}</td>
                                 <td className='w-16'>{account.gender}</td>
+                                <td className='w-16'>{account.phone}</td>
                                 <td className='w-16'>{account.roleId}</td>
                                 <td className='w-28'>
                                     <div>
@@ -201,10 +235,7 @@ const ManageAccountPage = () => {
                                         <button
                                             className={`${styles.deleteBtn}`}
                                             onClick={() => {
-                                                const deleteAccounts = accounts.filter(
-                                                    (value: any) => value._id !== account._id
-                                                )
-                                                setAccounts(deleteAccounts)
+                                                deleteAccount(account._id)
                                             }}
                                         >
                                             Delete

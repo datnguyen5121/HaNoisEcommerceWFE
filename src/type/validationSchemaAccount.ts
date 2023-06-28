@@ -6,7 +6,6 @@ export const validationSchemaAccount = Yup.object({
     lastName: Yup.string().required('Last Name is required'),
     address: Yup.string().required('Address is required'),
     gender: Yup.string().required('Gender is required'),
-    roleId: Yup.string().required('Role is required'),
-    createdAt: Yup.string().required('Created at is required'),
-    updatedAt: Yup.string().required('Updated at is required')
+    phone: Yup.string().required('Mobile is required'),
+    roleId: Yup.string().required('Role is required')
 })
