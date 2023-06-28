@@ -1,6 +1,6 @@
 import HeaderManageProduct from '../HeaderManageProduct/HeaderManageProduct'
 import styles from './ManageAccountPage.module.css'
-import { useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { Button, Modal } from 'antd'
 import { ErrorMessage, Field, Form, Formik } from 'formik'
 import { useLocation } from 'react-router-dom'
@@ -14,6 +14,7 @@ const ManageAccountPage = () => {
     const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false)
     const [accounts, setAccounts] = useState<any[]>([])
     const { state } = useLocation()
+    const [autoFieldAccount, setAutoFieldAccount] = useState<AccountValues>({} as AccountValues)
     let [accountId, setAccountId] = useState('')
     const showModal = () => {
         setIsModalOpen(true)
@@ -24,9 +25,6 @@ const ManageAccountPage = () => {
     const handleCancelUpdate = () => {
         setIsModalUpdateOpen(false)
     }
-    // const handleOk = () => {
-    //     setIsModalOpen(false)
-    // }
     const handleCancel = () => {
         setIsModalOpen(false)
     }
@@ -97,10 +95,24 @@ const ManageAccountPage = () => {
             console.log(error)
         }
     }
-    const updateAccount = (id: string) => {
+    const updateAccount = (id: string, values: any) => {
         setAccountId(id)
+        console.log(values)
+
+        let data = {
+            email: values.email,
+            password: values.password,
+            firstName: values.firstName,
+            lastName: values.lastName,
+            address: values.address,
+            gender: values.gender,
+            phone: values.phone,
+            roleId: values.roleId
+        }
+        setAutoFieldAccount(data)
         showModalUpdate()
     }
+
     return (
         <div className={`productPageContainer px-[20px] py-[10px]`}>
             <HeaderManageProduct />
@@ -120,7 +132,7 @@ const ManageAccountPage = () => {
                         Create a New Account
                     </Button>
                     <Modal
-                        className='text-center'
+                        className=''
                         title='Create A New Account'
                         open={isModalOpen}
                         onCancel={handleCancel}
@@ -133,8 +145,8 @@ const ManageAccountPage = () => {
                         >
                             {(formik) => (
                                 <Form onSubmit={formik.handleSubmit}>
-                                    <div className={`my-2 grid`}>
-                                        <label htmlFor='email' className='me-[10px] font-[700]'>
+                                    <div className={`my-[0.8rem] grid`}>
+                                        <label htmlFor='email' className='mb-[0.2rem] font-[700]'>
                                             Email
                                         </label>
                                         <Field
@@ -144,8 +156,8 @@ const ManageAccountPage = () => {
                                         />
                                         <ErrorMessage className={`${styles.error}`} name='email' component='div' />
                                     </div>
-                                    <div className={`my-2 grid`}>
-                                        <label htmlFor='password' className='me-[10px] font-[700]'>
+                                    <div className={`my-[0.8rem] grid`}>
+                                        <label htmlFor='password' className='mb-[0.2rem] font-[700]'>
                                             Password
                                         </label>
                                         <Field
@@ -155,8 +167,8 @@ const ManageAccountPage = () => {
                                         />
                                         <ErrorMessage className={`${styles.error}`} name='password' component='div' />
                                     </div>
-                                    <div className={`my-2 grid`}>
-                                        <label htmlFor='firstName' className='me-[10px] font-[700]'>
+                                    <div className={`my-[0.8rem] grid`}>
+                                        <label htmlFor='firstName' className='mb-[0.2rem] font-[700]'>
                                             First Name
                                         </label>
                                         <Field
@@ -166,8 +178,8 @@ const ManageAccountPage = () => {
                                         />
                                         <ErrorMessage className={`${styles.error}`} name='firstName' component='div' />
                                     </div>
-                                    <div className={`my-2 grid`}>
-                                        <label htmlFor='lastName' className='me-[10px] font-[700]'>
+                                    <div className={`my-[0.8rem] grid`}>
+                                        <label htmlFor='lastName' className='mb-[0.2rem] font-[700]'>
                                             Last Name
                                         </label>
                                         <Field
@@ -177,8 +189,8 @@ const ManageAccountPage = () => {
                                         />
                                         <ErrorMessage className={`${styles.error}`} name='lastName' component='div' />
                                     </div>
-                                    <div className={`my-2 grid`}>
-                                        <label htmlFor='address' className='me-[10px] font-[700]'>
+                                    <div className={`my-[0.8rem] grid`}>
+                                        <label htmlFor='address' className='mb-[0.2rem] font-[700]'>
                                             Address
                                         </label>
                                         <Field
@@ -188,8 +200,8 @@ const ManageAccountPage = () => {
                                         />
                                         <ErrorMessage className={`${styles.error}`} name='address' component='div' />
                                     </div>
-                                    <div className={`my-2 grid`}>
-                                        <label htmlFor='gender' className='me-[10px] font-[700]'>
+                                    <div className={`my-[0.8rem] grid`}>
+                                        <label htmlFor='gender' className='mb-[0.2rem] font-[700]'>
                                             Gender
                                         </label>
                                         <Field
@@ -199,8 +211,8 @@ const ManageAccountPage = () => {
                                         />
                                         <ErrorMessage className={`${styles.error}`} name='gender' component='div' />
                                     </div>
-                                    <div className={`my-2 grid`}>
-                                        <label htmlFor='phone' className='me-[10px] font-[700]'>
+                                    <div className={`my-[0.8rem] grid`}>
+                                        <label htmlFor='phone' className='mb-[0.2rem] font-[700]'>
                                             Phone
                                         </label>
                                         <Field
@@ -210,8 +222,8 @@ const ManageAccountPage = () => {
                                         />
                                         <ErrorMessage className={`${styles.error}`} name='phone' component='div' />
                                     </div>
-                                    <div className={`my-2 grid`}>
-                                        <label htmlFor='roleId' className='me-[10px] font-[700]'>
+                                    <div className={`my-[0.8rem] grid`}>
+                                        <label htmlFor='roleId' className='mb-[0.2rem] font-[700]'>
                                             Role
                                         </label>
                                         <Field
@@ -243,22 +255,27 @@ const ManageAccountPage = () => {
                         <Formik<AccountValues>
                             onSubmit={(values) => handleUpdate(accountId, values)}
                             validationSchema={validationSchemaAccount}
-                            initialValues={state == null ? initialAccountValues : state}
+                            initialValues={autoFieldAccount}
+                            enableReinitialize={true}
                         >
-                            {(formik) => (
+                            {({ values, setFieldValue }) => (
                                 <Form>
-                                    <div className={`my-2 grid`}>
+                                    <div className={`my-[0.6rem] grid`}>
                                         <label htmlFor='email' className='me-[10px] font-[700]'>
                                             Email
                                         </label>
                                         <Field
                                             as='input'
                                             name='email'
+                                            value={values.email}
+                                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                                                setFieldValue('email', e.target.value)
+                                            }
                                             className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-full px-[10px] py-[5px]`}
                                         />
                                         <ErrorMessage className={`${styles.error}`} name='email' component='div' />
                                     </div>
-                                    <div className={`my-2 grid`}>
+                                    <div className={`my-[0.6rem] grid`}>
                                         <label htmlFor='password' className='me-[10px] font-[700]'>
                                             Password
                                         </label>
@@ -269,7 +286,7 @@ const ManageAccountPage = () => {
                                         />
                                         <ErrorMessage className={`${styles.error}`} name='password' component='div' />
                                     </div>
-                                    <div className={`my-2 grid`}>
+                                    <div className={`my-[0.6rem] grid`}>
                                         <label htmlFor='firstName' className='me-[10px] font-[700]'>
                                             First Name
                                         </label>
@@ -280,7 +297,7 @@ const ManageAccountPage = () => {
                                         />
                                         <ErrorMessage className={`${styles.error}`} name='firstName' component='div' />
                                     </div>
-                                    <div className={`my-2 grid`}>
+                                    <div className={`my-[0.6rem] grid`}>
                                         <label htmlFor='lastName' className='me-[10px] font-[700]'>
                                             Last Name
                                         </label>
@@ -291,7 +308,7 @@ const ManageAccountPage = () => {
                                         />
                                         <ErrorMessage className={`${styles.error}`} name='lastName' component='div' />
                                     </div>
-                                    <div className={`my-2 grid`}>
+                                    <div className={`my-[0.6rem] grid`}>
                                         <label htmlFor='address' className='me-[10px] font-[700]'>
                                             Address
                                         </label>
@@ -302,7 +319,7 @@ const ManageAccountPage = () => {
                                         />
                                         <ErrorMessage className={`${styles.error}`} name='address' component='div' />
                                     </div>
-                                    <div className={`my-2 grid`}>
+                                    <div className={`my-[0.6rem] grid`}>
                                         <label htmlFor='gender' className='me-[10px] font-[700]'>
                                             Gender
                                         </label>
@@ -313,7 +330,7 @@ const ManageAccountPage = () => {
                                         />
                                         <ErrorMessage className={`${styles.error}`} name='gender' component='div' />
                                     </div>
-                                    <div className={`my-2 grid`}>
+                                    <div className={`my-[0.6rem] grid`}>
                                         <label htmlFor='phone' className='me-[10px] font-[700]'>
                                             Phone
                                         </label>
@@ -324,7 +341,7 @@ const ManageAccountPage = () => {
                                         />
                                         <ErrorMessage className={`${styles.error}`} name='phone' component='div' />
                                     </div>
-                                    <div className={`my-2 grid`}>
+                                    <div className={`my-[0.6rem] grid`}>
                                         <label htmlFor='roleId' className='me-[10px] font-[700]'>
                                             Role
                                         </label>
@@ -380,7 +397,7 @@ const ManageAccountPage = () => {
                                         <button
                                             className={`${styles.editBtn}`}
                                             onClick={() => {
-                                                updateAccount(account._id)
+                                                updateAccount(account._id, account)
                                             }}
                                         >
                                             Edit
