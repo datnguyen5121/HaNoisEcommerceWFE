@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faCartShopping, faUser, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Navbar from '../Navbar/Navbar'
-import Logo from '../../assets/Logo.svg'
+import Logo from '../../assets/hanois.png'
 import style from './Header.module.css'
 import Search from '../Search'
 
@@ -82,7 +82,7 @@ function Header() {
                 <div className='w-11/12 mx-auto'>
                     <div className='flex items-center justify-between'>
                         <Link to={'/'}>
-                            <img src={Logo} alt='nike' />
+                            <img src={Logo} alt='hanois' className='w-[100px] h-[70px]' />
                         </Link>
 
                         <Search />
