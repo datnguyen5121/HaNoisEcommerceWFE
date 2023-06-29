@@ -2,11 +2,12 @@ import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
 import { ProductValues } from '../../type/ProductValues'
+import { IProductData } from '../ProductDetail/ProductDetail'
 
 interface IProps {
-    productList: ProductValues[]
-    filteredProducts: ProductValues[]
-    setFilteredProducts: (value: ProductValues[]) => void
+    productList: IProductData[]
+    filteredProducts: IProductData[]
+    setFilteredProducts: (value: IProductData[]) => void
     selectedSize: string[]
     setSelectedSize: (value: string[]) => void
 }

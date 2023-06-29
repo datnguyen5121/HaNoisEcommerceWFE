@@ -8,15 +8,17 @@ import { getProductByCategory, getProductByGenderCategory, getProductById } from
 import ProductItem from '../ProductItem'
 export interface IProductData {
     _id?: string
-    gender: string
-    productName: string
-    title: string
-    description: string
-    datePublish: string
     category: string[]
-    size: string[]
-    imgUrl: string[]
+    createdAt?: string
+    updatedAt?: string
+    description: string
+    gender: string
+    imgUrl: string[] | null
     price: number
+    productName: string
+    size: string[]
+    title: string
+    __v?: number
 }
 
 function ProductDetail() {
