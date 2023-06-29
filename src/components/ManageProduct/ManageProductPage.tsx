@@ -11,6 +11,7 @@ import { validationSchemaProduct } from '../../type/validationSchemaProduct'
 import makeAnimated from 'react-select/animated'
 import { getAllProductTag, getAllTag, getAllTagAdmin, getProductTag } from '../../services/apiService'
 import { getAllSize } from '../../services/sizeService'
+import { getProducts } from '../../redux/features/manageProductSlice'
 const animatedComponents = makeAnimated()
 interface IProductTag {
     _id: string
@@ -58,13 +59,15 @@ const ManageProductPage = () => {
         category: [],
         size: [],
         imgUrl: null,
-        price: null
+        price: 0
     }
     interface ITagList {
         _id: string
         navName: string
     }
     const [isModalOpen, setIsModalOpen] = useState(false)
+    const [isModalEditOpen, setIsModalEditOpen] = useState(false)
+
     const [tagList, setTagList] = useState<ITagList[]>([])
     const [productTagDataList, setProductTagDataList] = useState<ProductTagState[]>([])
     const [productTagList, setProductTagList] = useState<SubNavName[]>([])
@@ -74,13 +77,29 @@ const ManageProductPage = () => {
     const [productSelect, setProductSelect] = useState<string>('')
     const [sizeList, setSizeList] = useState<string[]>([])
     const [productAll, setProductAll] = useState<any>([])
-
+    const [productId, setProductId] = useState<string>('')
+    const [product, setProduct] = useState<ProductValues>({
+        _id: '',
+        gender: '',
+        productName: '',
+        title: '',
+        description: '',
+        category: [],
+        size: [],
+        imgUrl: null,
+        price: null
+    })
     const showModal = () => {
         setIsModalOpen(true)
     }
-
+    const showModalEdit = () => {
+        setIsModalEditOpen(true)
+    }
     const handleCancel = () => {
         setIsModalOpen(false)
+    }
+    const handleCancelEdit = () => {
+        setIsModalEditOpen(false)
     }
 
     const fileInputRef = useRef<HTMLInputElement>(null) // Tham chiếu đến phần tử input
@@ -164,10 +183,8 @@ const ManageProductPage = () => {
 
     const handleSubmit = async (values: any, setFieldValue: any) => {
         console.log(values)
-        console.log('dat')
 
         const formData = new FormData()
-
         if (values.imgUrl !== null) {
             for (let i = 0; i < values.imgUrl.length; i++) {
                 formData.append(`imgUrl${i}`, values.imgUrl[i])
@@ -181,8 +198,48 @@ const ManageProductPage = () => {
         formData.append('size', values.size)
         formData.append('imgUrl', values.imgUrl)
         formData.append('price', values.price)
+        console.log('form', formData)
+
         try {
-            const response = await axios.post('/create-new-product', formData)
+            const response = await axios.post('/api/create-new-product', formData)
+            console.log(response)
+
+            fetchAllProduct()
+        } catch (error) {
+            console.log(error)
+        }
+        setIsModalOpen(false)
+    }
+    const handleSubmitEdit = async (values: any, e: any) => {
+        e.preventDefault()
+        const formData = new FormData()
+
+        if (values.imgUrl !== null) {
+            for (let i = 0; i < values.imgUrl.length; i++) {
+                formData.append(`imgUrl${i}`, values.imgUrl[i])
+            }
+        }
+        formData.append('_id', productId)
+        formData.append('gender', values.gender)
+        formData.append('productName', values.productName)
+        formData.append('title', values.title)
+        formData.append('description', values.description)
+        formData.append('category', values.category)
+        formData.append('size', values.size)
+        formData.append('imgUrl', values.imgUrl)
+        formData.append('price', values.price)
+        let data = {
+            gender: values.gender,
+            productName: values.productName,
+            title: values.title,
+            description: values.description,
+            category: values.category,
+            size: values.size,
+            imgUrl: values.imgUrl,
+            price: values.price
+        }
+        try {
+            const response = await axios.post('/update-product-by-id', formData)
             fetchAllProduct()
         } catch (error) {
             console.log(error)
@@ -277,6 +334,65 @@ const ManageProductPage = () => {
             fetchAllProduct()
         }
     }
+    let handleEditId = async (id: string, item: any) => {
+        let res = await axios.get(`/api/get-product-by-id?_id=${id}`)
+        console.log('item', item)
+
+        let data = {
+            gender: res.data.gender,
+            productName: res.data.productName,
+            title: res.data.title,
+            description: res.data.description,
+            category: res.data.category,
+            size: res.data.size,
+            imgUrl: res.data.imgUrl,
+            price: res.data.price
+        }
+
+        setProductId(id)
+        setProduct(data)
+        setProductSelect(data.productName)
+        const res1 = await getAllProductTag()
+
+        if (res1) {
+            const data = handleBuildCategoryData(res1.data)
+
+            let data1 = data.filter((item1: any) => item1.navName == item.gender)
+            let cloneProductTagList = [...data1[0].list]
+
+            let data2 = cloneProductTagList.filter((item1) => item1.subnavName == item.productName)
+
+            setProductTagList(data1[0].list)
+            setCategory(data2[0].list)
+        }
+        setIsModalEditOpen(true)
+    }
+    // async function convertToBlob(url: string): Promise<Blob> {
+    //     try {
+    //         // Gọi máy chủ proxy thay vì trực tiếp gọi URL của ảnh từ Firebase Storage
+    //         // const proxyUrl = 'http://localhost:5173/image?url=' + encodeURIComponent(url)
+    //         const response = await axios.get(`/image?url=${url}`, { responseType: 'arraybuffer' })
+    //         console.log(response)
+
+    //         const blob = new Blob([response.data], { type: 'image/png' })
+    //         return blob
+    //     } catch (error) {
+    //         console.log(error)
+    //         throw new Error('Error converting to blob')
+    //     }
+    // }
+
+    // async function convertToImageFiles(imageUrls: string[]): Promise<File[]> {
+    //     const filePromises = imageUrls.map(async (url: string) => {
+    //         const blob = await convertToBlob(url)
+    //         const fileName = url.substring(url.lastIndexOf('/') + 1)
+    //         const file = new File([blob], fileName, { type: blob.type })
+    //         return file
+    //     })
+
+    //     const imageFiles = await Promise.all(filePromises)
+    //     return imageFiles
+    // }
     return (
         <div className={`productPageContainer px-[20px] py-[10px]`}>
             <HeaderManageProduct />
@@ -405,16 +521,7 @@ const ManageProductPage = () => {
                                             <label htmlFor='size' className='mb-[0.2rem] font-[700]'>
                                                 Size
                                             </label>
-                                            {/* <Field
-                                                name='size'
-                                                as='select'
-                                                closeMenuOnSelect={false}
-                                                components={animatedComponents}
-                                                isMulti
-                                                value={size}
-                                                onChange={handleChooseSize}
-                                                options={multipleSize}
-                                            /> */}
+
                                             <div role='group' aria-labelledby='checkbox-group'>
                                                 {sizeList.length > 0 &&
                                                     sizeList.map((option, index) => (
@@ -475,12 +582,200 @@ const ManageProductPage = () => {
                                                         </div>
                                                     ))}
                                             </div>
-                                            {/* <button
-                                                className='w-[4.6rem] h-[1.8rem] bg-blue-600 text-white rounded-md'
-                                                onClick={() => uploadImage(formik)}
+
+                                            <ErrorMessage className={`${styles.error}`} name='imgUrl' component='div' />
+                                        </div>
+                                        <div>
+                                            <button
+                                                className='bg-blue-600 w-[4.6rem] hover:opacity-50 h-[1.8rem] text-white rounded-md'
+                                                type='submit'
                                             >
-                                                Upload
-                                            </button> */}
+                                                Submit
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            )}
+                        </Formik>
+                    </Modal>
+                    <Modal
+                        title='Update A New Product'
+                        open={isModalEditOpen}
+                        footer={null}
+                        onCancel={handleCancelEdit}
+                    >
+                        <Formik<ProductValues>
+                            onSubmit={handleSubmitEdit}
+                            validationSchema={validationSchemaProduct}
+                            initialValues={product}
+                            enableReinitialize={true}
+                        >
+                            {(formik) => (
+                                <form>
+                                    <div>
+                                        <div className={`my-[0.8rem] grid`}>
+                                            <label htmlFor='gender' className='mb-[0.2rem] font-[700]'>
+                                                Main Tag
+                                            </label>
+                                            <Field
+                                                onChange={(e: any) => handleChangeGender(e, formik.setFieldValue)}
+                                                as='select'
+                                                id='gender'
+                                                name='gender'
+                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px]  px-[10px] py-[5px] rounded-md`}
+                                            >
+                                                <option value=''>--Choose tag--</option>
+                                                {tagList.map((option, index) => (
+                                                    <option key={index} value={option.navName}>
+                                                        {option.navName}
+                                                    </option>
+                                                ))}
+                                            </Field>
+                                            <ErrorMessage className={`${styles.error}`} name='gender' component='div' />
+                                        </div>
+                                        <div className={`my-[0.8rem] grid`}>
+                                            <label htmlFor='productName' className='mb-[0.2rem] font-[700]'>
+                                                Product Type
+                                            </label>
+                                            <Field
+                                                as='select'
+                                                name='productName'
+                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px]  px-[10px] py-[5px] rounded-md`}
+                                                onChange={(e: any) => handleChangeProductType(e, formik.setFieldValue)}
+                                            >
+                                                <option value=''>--Choose tag--</option>
+                                                {productTagList.map((option, index) => (
+                                                    <option key={index} value={option.subnavName}>
+                                                        {option.subnavName}
+                                                    </option>
+                                                ))}
+                                            </Field>
+                                            <ErrorMessage
+                                                className={`${styles.error}`}
+                                                name='productName'
+                                                component='div'
+                                            />
+                                        </div>
+                                        <div className={`my-[0.8rem] grid`}>
+                                            <label htmlFor='title' className='mb-[0.2rem] font-[700]'>
+                                                Product Name
+                                            </label>
+                                            <Field
+                                                as='input'
+                                                name='title'
+                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px]  px-[10px] py-[5px] rounded-md`}
+                                            />
+                                            <ErrorMessage className={`${styles.error}`} name='title' component='div' />
+                                        </div>
+                                        <div className={`my-[0.8rem] grid`}>
+                                            <label htmlFor='description' className='mb-[0.2rem] font-[700]'>
+                                                Product Info
+                                            </label>
+                                            <Field
+                                                as='input'
+                                                name='description'
+                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px]  px-[10px] py-[5px] rounded-md`}
+                                            />
+                                            <ErrorMessage
+                                                className={`${styles.error}`}
+                                                name='description'
+                                                component='div'
+                                            />
+                                        </div>
+
+                                        <ErrorMessage name='inputValue' component='div' />
+
+                                        <div className={`my-[0.8rem] grid`}>
+                                            <label htmlFor='category' className='mb-[0.2rem] font-[700]'>
+                                                Category
+                                            </label>
+
+                                            <>
+                                                <div role='group' aria-labelledby='checkbox-group'>
+                                                    {category.map((option, index) => (
+                                                        <label>
+                                                            <Field
+                                                                type='checkbox'
+                                                                name='category'
+                                                                value={`${option}`}
+                                                            />
+                                                            {option}
+                                                        </label>
+                                                    ))}
+                                                </div>
+                                            </>
+                                            <ErrorMessage
+                                                className={`${styles.error}`}
+                                                name='category'
+                                                component='div'
+                                            />
+                                        </div>
+
+                                        <div className={`my-[0.8rem] grid`}>
+                                            <label htmlFor='size' className='mb-[0.2rem] font-[700]'>
+                                                Size
+                                            </label>
+
+                                            <div role='group' aria-labelledby='checkbox-group'>
+                                                {sizeList.length > 0 &&
+                                                    sizeList.map((option, index) => (
+                                                        <label>
+                                                            <Field type='checkbox' name='size' value={`${option}`} />
+                                                            {option}
+                                                        </label>
+                                                    ))}
+                                            </div>
+                                            <ErrorMessage className={`${styles.error}`} name='size' component='div' />
+                                        </div>
+                                        <div className={`my-[0.8rem] grid`}>
+                                            <label htmlFor='price' className='mb-[0.2rem] font-[700]'>
+                                                Price
+                                            </label>
+                                            <Field
+                                                as='input'
+                                                name='price'
+                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px]  px-[10px] py-[5px] rounded-md`}
+                                            />
+                                            <ErrorMessage className={`${styles.error}`} name='price' component='div' />
+                                        </div>
+                                        <div className={`my-[0.8rem] grid`}>
+                                            <label htmlFor='imgUrl' className='mb-[0.2rem] font-[700]'>
+                                                Image Url
+                                            </label>
+                                            <input
+                                                className='mb-[0.6rem] '
+                                                type='file'
+                                                id='imageInput'
+                                                name='imgUrl'
+                                                accept='image/png, image/jpg, image/jpeg'
+                                                onChange={(event) => {
+                                                    handleChangeFile(event, formik.setFieldValue)
+                                                }}
+                                                multiple
+                                                ref={fileInputRef}
+                                            />
+                                            <div className='flex flex-wrap'>
+                                                {selectedImages &&
+                                                    Array.from(selectedImages).map((file, index) => (
+                                                        <div className='relative'>
+                                                            <img
+                                                                key={`img-${index}`}
+                                                                src={URL.createObjectURL(file)}
+                                                                alt={`Image ${index + 1}`}
+                                                                className='w-32 h-32 object-contain'
+                                                            ></img>
+                                                            <div
+                                                                className='absolute top-[1%] left-[110px]'
+                                                                onClick={(e: any) =>
+                                                                    handleDeleteImg(e, index, formik.setFieldValue)
+                                                                }
+                                                            >
+                                                                {' '}
+                                                                <i className='fa-solid fa-trash  hover:text-red-500'></i>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                            </div>
                                             <ErrorMessage className={`${styles.error}`} name='imgUrl' component='div' />
                                         </div>
                                         <div>
@@ -501,7 +796,9 @@ const ManageProductPage = () => {
                     <thead>
                         <tr>
                             <th>STT</th>
-                            <th>title</th>
+                            <th>Product Name</th>
+                            <th>Product Type</th>
+                            <th>Product Gender</th>
                             <th>Description</th>
                             <th>Category</th>
                             <th>Size</th>
@@ -515,6 +812,8 @@ const ManageProductPage = () => {
                             <tr key={index}>
                                 <td className='w-11'>{index + 1}</td>
                                 <td className='w-36'>{product.title}</td>
+                                <td className='w-36'>{product.productName}</td>
+                                <td className='w-36'>{product.gender}</td>
                                 <td className='w-40'>{product.description}</td>
                                 <td className='w-32'>{product.category}</td>
                                 <td className='w-32'>{product.size}</td>
@@ -523,7 +822,12 @@ const ManageProductPage = () => {
 
                                 <td className='w-36'>
                                     <div>
-                                        <button className={`${styles.editBtn}`}>Edit</button>
+                                        <button
+                                            className={`${styles.editBtn}`}
+                                            onClick={() => handleEditId(product._id, product)}
+                                        >
+                                            Edit
+                                        </button>
                                         <button
                                             className={`${styles.deleteBtn}`}
                                             onClick={() => handleDeleteProduct(product._id)}
