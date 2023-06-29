@@ -2,7 +2,8 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 
 const instance = axios.create({
-    baseURL: 'http://localhost:8080/'
+    // baseURL: 'http://localhost:8080/'
+    baseURL: 'https://hanoisecommercewbe.onrender.com/'
 })
 
 instance.defaults.withCredentials = true

@@ -32,7 +32,8 @@ function Search() {
             return
         }
         setLoading(true)
-        fetch(`http://localhost:8080/api/get-search-value?q=${encodeURIComponent(debounceValue)}`)
+        fetch(`https://hanoisecommercewbe.onrender.com/api/get-search-value?q=${encodeURIComponent(debounceValue)}`)
+            // fetch(`http://localhost:8080/api/get-search-value?q=${encodeURIComponent(debounceValue)}`)
             .then((res) => res.json())
             .then((res) => {
                 setSearchResult(res.data)

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../redux/store'
 import { loadStripe } from '@stripe/stripe-js'
 import { removeTocart, increaseQuantity, decreaseQuantity, setQuantity } from '../../../redux/features/cartSlice'
-import axios from '../../../utils/axiosCustomize'
+import axios from 'axios'
 function Cart() {
     const cart = useSelector((state: RootState) => state.cart)
     const dispatch = useDispatch()
@@ -14,6 +14,7 @@ function Cart() {
     const handleCheckout = async () => {
         try {
             const stripe = await stripePromise
+            console.log(cart.items)
             const res = await axios.post('/stripe-payment', cart.items)
             await stripe?.redirectToCheckout({
                 sessionId: res.data.stripeSession.id
