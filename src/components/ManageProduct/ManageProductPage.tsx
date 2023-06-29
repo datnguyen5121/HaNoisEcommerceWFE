@@ -6,6 +6,7 @@ import { ProductValues } from '../../type/ProductValues'
 import { ErrorMessage, Field, Formik, Form, FormikProps, useFormikContext, FieldArray } from 'formik'
 import { useLocation } from 'react-router-dom'
 import axios from '../../utils/axiosCustomize'
+import { toast } from 'react-toastify'
 
 import { validationSchemaProduct } from '../../type/validationSchemaProduct'
 import makeAnimated from 'react-select/animated'
@@ -198,9 +199,7 @@ const ManageProductPage = () => {
         formData.append('productName', values.productName)
         formData.append('title', values.title)
         formData.append('description', values.description)
-        // formData.append('category', values.category)
-        // formData.append('size', values.size)
-        // formData.append('imgUrl', values.imgUrl)
+
         formData.append('price', values.price)
 
         try {
@@ -258,9 +257,7 @@ const ManageProductPage = () => {
 
         let data = productTagDataList.filter((item) => item.navName == selectedOption)
         setProductTagList(data[0].list)
-        // Cập nhật giá trị của trường select và array trong state của Formik
         setFieldValue('gender', selectedOption)
-        // setFieldValue('options', newArray); // Cập nhật giá trị của array nếu cần
     }
     let handleChangeProductType = (e: any, setFieldValue: any) => {
         const selectedOption = e.target.value
@@ -335,7 +332,11 @@ const ManageProductPage = () => {
         }
         if (confirm('Do you want to delete this product ?')) {
             let res = await axios.delete('/api/delete-product-by-id', { data })
-
+            if (res && res.data.EC == 0) {
+                toast.success('Delete success!')
+            } else {
+                toast.error('Delete fail!')
+            }
             fetchAllProduct()
         }
     }
@@ -404,13 +405,7 @@ const ManageProductPage = () => {
             <div className={`h-[50px] flex items-center justify-center`}>
                 <h2 className={`text-[25px]`}>Product Page</h2>
             </div>
-            <div className={`h-[50px] flex items-center justify-center`}>
-                <input
-                    className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
-                    type='text'
-                    placeholder='Search Product'
-                />
-            </div>
+
             <div className={`mt-[30px] flex flex-col justify-center items-center`}>
                 <div className='flex justify-start w-full gap-3 mb-6'>
                     <Button className='bg-blue-500' type='primary' onClick={showModal}>
@@ -808,7 +803,6 @@ const ManageProductPage = () => {
                             <th>Description</th>
                             <th>Category</th>
                             <th>Size</th>
-                            <th>imgUrl</th>
                             <th>Price</th>
                             <th>Feature</th>
                         </tr>
@@ -820,25 +814,32 @@ const ManageProductPage = () => {
                                 <td className='w-36'>{product.title}</td>
                                 <td className='w-36'>{product.productName}</td>
                                 <td className='w-36'>{product.gender}</td>
-                                <td className='w-40'>{product.description}</td>
-                                <td className='w-32'>{product.category}</td>
-                                <td className='w-32'>{product.size}</td>
-                                <td className='w-32'>{product.imgUrl}</td>
+                                <td className='w-[40%] '>{product.description}</td>
+                                <td className='w-32 list-none'>
+                                    {product.category.map((item: string, index: number) => {
+                                        return <li key={`category${index}`}>{item}</li>
+                                    })}
+                                </td>
+                                <td className='w-32 list-none'>
+                                    {product.size.map((item: string, index: number) => {
+                                        return <li key={`category${index}`}>{item}</li>
+                                    })}
+                                </td>
                                 <td className='w-40'>{product.price}</td>
 
                                 <td className='w-36'>
-                                    <div>
+                                    <div className='flex gap-2 justify-center'>
                                         <button
-                                            className={`${styles.editBtn}`}
+                                            className='border-[1px] w-[50px] hover:opacity-30 p-[10px] text-blue-500 rounded-lg'
                                             onClick={() => handleEditId(product._id, product)}
                                         >
-                                            Edit
+                                            <i className='fa-solid fa-pen-to-square'></i>
                                         </button>
                                         <button
-                                            className={`${styles.deleteBtn}`}
+                                            className='border-[1px] w-[50px] hover:opacity-30 p-[10px] text-red-500 rounded-lg'
                                             onClick={() => handleDeleteProduct(product._id)}
                                         >
-                                            Delete
+                                            <i className='fa-solid fa-trash'></i>
                                         </button>
                                     </div>
                                 </td>

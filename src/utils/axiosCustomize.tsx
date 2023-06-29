@@ -1,8 +1,10 @@
 import axios from 'axios'
+import { toast } from 'react-toastify'
 
 const instance = axios.create({
     baseURL: 'http://localhost:8080/'
 })
+
 instance.defaults.withCredentials = true
 // Add a request interceptor
 instance.interceptors.request.use(
@@ -39,78 +41,50 @@ instance.interceptors.response.use(
         const status = error
 
         console.log(status)
-        // switch (status) {
-        // authentication (token related issues)
-        //   case 401: {
-        //     // window.location.href = "/login";
-        //     notification.error({
-        //       message: "Error",
-        //       placement: "bottomRight",
-        //       description: "401",
-        //     });
-        //     return Promise.reject(error);
-        //   }
+        switch (status) {
+            case 401: {
+                // window.location.href = "/login";
+                toast.error('Error status 401')
+                return Promise.reject(error)
+            }
 
-        //   // forbidden (permission related issues)
-        //   case 403: {
-        //     notification.error({
-        //       message: "Error",
-        //       placement: "bottomRight",
-        //       description: `${error}`,
-        //     });
-        //     return Promise.reject(error);
-        //   }
+            // forbidden (permission related issues)
+            case 403: {
+                toast.error('Error status 403')
+                return Promise.reject(error)
+            }
 
-        //   // bad request
-        //   case 400: {
-        //     notification.error({
-        //       message: "Error",
-        //       placement: "bottomRight",
-        //       description: "400",
-        //     });
-        //     return Promise.reject(error);
-        //   }
+            // bad request
+            case 400: {
+                toast.error('Error status 400')
+                return Promise.reject(error)
+            }
 
-        //   // not found
-        //   case 404: {
-        //     notification.error({
-        //       message: "Error",
-        //       placement: "bottomRight",
-        //       description: "404",
-        //     });
-        //     return Promise.reject(error);
-        //   }
+            // not found
+            case 404: {
+                toast.error('Error status 404')
+                return Promise.reject(error)
+            }
 
-        //   // conflict
-        //   case 409: {
-        //     notification.error({
-        //       message: "Error",
-        //       placement: "bottomRight",
-        //       description: "409",
-        //     });
-        //     return Promise.reject(error);
-        //   }
+            // conflict
+            case 409: {
+                toast.error('Error status 409')
+                return Promise.reject(error)
+            }
 
-        //   // unprocessable
-        //   case 422: {
-        //     notification.error({
-        //       message: "Error",
-        //       placement: "bottomRight",
-        //       description: "422",
-        //     });
-        //     return Promise.reject(error);
-        //   }
+            // unprocessable
+            case 422: {
+                toast.error('Error status 422')
+                return Promise.reject(error)
+            }
 
-        //   // generic api error (server related) unexpected
-        //   default: {
-        //     notification.error({
-        //       message: "Error",
-        //       placement: "bottomRight",
-        //       description: `${error.response.data.EM}`,
-        //     });
-        //     return Promise.reject(error);
-        //   }
-        // }
+            // generic api error (server related) unexpected
+            default: {
+                toast.error(`Error status ${error.response.data.EM}`)
+
+                return Promise.reject(error)
+            }
+        }
     }
 )
 export default instance
