@@ -4,6 +4,7 @@ import cartSlice from './features/cartSlice'
 import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import { useDispatch } from 'react-redux'
+import manageProductSlice from './features/manageProductSlice'
 
 const persistConfig = {
     key: 'root',
@@ -13,7 +14,8 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
     auth: authSlice,
-    cart: cartSlice
+    cart: cartSlice,
+    products: manageProductSlice
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
@@ -34,5 +36,5 @@ export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
 
 export const useAppDispatch = () => useDispatch<AppDispatch>()
-
+export const useAppSelector: () => AppDispatch = useDispatch
 export const persistor = persistStore(store)

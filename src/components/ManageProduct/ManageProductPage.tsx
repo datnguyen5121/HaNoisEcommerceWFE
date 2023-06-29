@@ -182,8 +182,6 @@ const ManageProductPage = () => {
     }
 
     const handleSubmit = async (values: any, setFieldValue: any) => {
-        console.log(values)
-
         const formData = new FormData()
         if (values.imgUrl !== null) {
             for (let i = 0; i < values.imgUrl.length; i++) {
@@ -198,12 +196,8 @@ const ManageProductPage = () => {
         formData.append('size', values.size)
         formData.append('imgUrl', values.imgUrl)
         formData.append('price', values.price)
-        console.log('form', formData)
-
         try {
             const response = await axios.post('/api/create-new-product', formData)
-            console.log(response)
-
             fetchAllProduct()
         } catch (error) {
             console.log(error)
@@ -249,9 +243,7 @@ const ManageProductPage = () => {
     const handleChangeGender = (e: any, setFieldValue: any) => {
         const selectedOption = e.target.value
 
-        console.log(selectedOption)
         let data = productTagDataList.filter((item) => item.navName == selectedOption)
-        console.log(data[0].list)
         setProductTagList(data[0].list)
         // Cập nhật giá trị của trường select và array trong state của Formik
         setFieldValue('gender', selectedOption)
@@ -336,8 +328,6 @@ const ManageProductPage = () => {
     }
     let handleEditId = async (id: string, item: any) => {
         let res = await axios.get(`/api/get-product-by-id?_id=${id}`)
-        console.log('item', item)
-
         let data = {
             gender: res.data.gender,
             productName: res.data.productName,
@@ -499,7 +489,7 @@ const ManageProductPage = () => {
                                             <>
                                                 <div role='group' aria-labelledby='checkbox-group'>
                                                     {category.map((option, index) => (
-                                                        <label>
+                                                        <label key={index}>
                                                             <Field
                                                                 type='checkbox'
                                                                 name='category'
@@ -692,7 +682,7 @@ const ManageProductPage = () => {
 
                                             <>
                                                 <div role='group' aria-labelledby='checkbox-group'>
-                                                    {category.map((option, index) => (
+                                                    {category.map((option, _) => (
                                                         <label>
                                                             <Field
                                                                 type='checkbox'
@@ -718,7 +708,7 @@ const ManageProductPage = () => {
 
                                             <div role='group' aria-labelledby='checkbox-group'>
                                                 {sizeList.length > 0 &&
-                                                    sizeList.map((option, index) => (
+                                                    sizeList.map((option, _) => (
                                                         <label>
                                                             <Field type='checkbox' name='size' value={`${option}`} />
                                                             {option}
@@ -817,7 +807,7 @@ const ManageProductPage = () => {
                                 <td className='w-40'>{product.description}</td>
                                 <td className='w-32'>{product.category}</td>
                                 <td className='w-32'>{product.size}</td>
-                                <td className='w-32'>{product.imgUrl}</td>
+                                <td className='w-32 '>{product.imgUrl}</td>
                                 <td className='w-40'>{product.price}</td>
 
                                 <td className='w-36'>

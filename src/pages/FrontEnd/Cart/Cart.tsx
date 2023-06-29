@@ -1,20 +1,16 @@
 import styles from './Cart.module.css'
-import { useSelector } from 'react-redux'
-import { RootState, useAppDispatch } from '../../../redux/store'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '../../../redux/store'
 import { loadStripe } from '@stripe/stripe-js'
-
-import { removeTocart, increaseQuantity, decreaseQuantity } from '../../../redux/features/cartSlice'
-import axios from 'axios'
+import { removeTocart, increaseQuantity, decreaseQuantity, setQuantity } from '../../../redux/features/cartSlice'
+import axios from '../../../utils/axiosCustomize'
 function Cart() {
     const cart = useSelector((state: RootState) => state.cart)
-    console.log('cart items == ', cart.items)
-    const dispatch = useAppDispatch()
+    const dispatch = useDispatch()
     let totalPrice = 0
-    console.log('cart component')
     const stripePromise = loadStripe(
         'pk_test_51MPBnMA7RMr6zSBYIaJZtoEMq5lT7sXtymAUexPc0v4OBZwVh6LdZHCuhKpd2ypYnXkAdYlybbe1gTJxmwhBU5pC00ObP5I2Ro'
     )
-
     const handleCheckout = async () => {
         try {
             const stripe = await stripePromise
@@ -33,21 +29,21 @@ function Cart() {
           }, 0))
         : 0
     return (
-        <div className='flex justify-center my-[1.2rem]'>
+        <div className='flex justify-center my-[1.2rem] cart-checkout-container'>
             {cart.items.length > 0 ? (
                 <>
-                    <div className='mx-[1.6rem]'>
+                    <div className='ms-[1.2rem]'>
                         <h2 className={`${styles.h2Heading} mb-[1.4rem]`}>Bag</h2>
-                        {cart.items.map((item, index) => (
+                        {cart.items.map((item: any, index: number) => (
                             <div className={`flex mb-[1.8rem]`} key={index}>
-                                <div className='w-[200px]'>
-                                    <img className='w-full object-cover' src={item.imageUrl} alt='' />
+                                <div className='img-container'>
+                                    <img className='object-cover' src={item.imgUrl[0]} alt='' />
                                 </div>
                                 <div className='mx-[1.4rem] flex w-full justify-between'>
-                                    <div>
+                                    <div className='text-container'>
                                         <h3 className={`mb-[0.4rem] ${styles.h3Heading}`}>{item.title}</h3>
                                         <p className='mb-[0.4rem]'>{item.category}</p>
-                                        <p className='mb-[0.4rem]'>{item.color}</p>
+                                        <p className='mb-[0.4rem]'>{item.productName}</p>
                                         <div className='flex'>
                                             <label htmlFor='' className='me-[5px]'>
                                                 Size
@@ -86,7 +82,15 @@ function Cart() {
                                                         <path d='M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z' />
                                                     </svg>
                                                 </button>
-                                                <p> {item.quantity}</p>
+                                                <input
+                                                    type='number'
+                                                    className={'px-[0.4rem] w-[60px]'}
+                                                    value={item.quantity === 0 ? '' : item.quantity}
+                                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                        const value = parseInt(e.target.value, 10) || 0 // Convert the input value to an integer (or 0 if not a valid number)
+                                                        dispatch(setQuantity({ index, value }))
+                                                    }}
+                                                />
                                                 <button
                                                     className={`cursor-pointer text-[16px] text-orange-500 px-[1rem] flex items-center`}
                                                     onClick={() => dispatch(increaseQuantity(index))}
@@ -106,7 +110,7 @@ function Cart() {
                                         <div className='mt-[0.6rem]'>
                                             <button
                                                 className={`text-red-500`}
-                                                onClick={() => dispatch(removeTocart(item.productId))}
+                                                onClick={() => dispatch(removeTocart(item._id))}
                                             >
                                                 <svg
                                                     xmlns='http://www.w3.org/2000/svg'
@@ -119,26 +123,26 @@ function Cart() {
                                             </button>
                                         </div>
                                     </div>
-                                    <div>
-                                        <p>${item.price}</p>
+                                    <div className='price-container'>
+                                        <p>{item.price} VND</p>
                                     </div>
                                 </div>
                             </div>
                         ))}
                     </div>
-                    <div className='w-[26rem]'>
+                    <div className='mx-[1.2rem] summary-container'>
                         <h2 className={`${styles.h2Heading} mb-[1.4rem]`}>Summary</h2>
                         <div className='flex mb-[1.2rem] justify-between'>
                             <p>SubTotal</p>
-                            <p>${totalPrice}</p>
+                            <p>{totalPrice} VND</p>
                         </div>
                         <div className='flex mb-[1.2rem] justify-between'>
-                            <p>Estimated Delivery & Handling</p>
-                            <p>Free</p>
+                            <p className='me-[0.8rem]'>Estimated Delivery & Handling</p>
+                            <p className='ms-[0.8rem]'>Free</p>
                         </div>
                         <div className='flex mb-[1.2rem] justify-between'>
                             <p>Total</p>
-                            <p>${totalPrice}</p>
+                            <p>{totalPrice > 0 ? totalPrice : 0} VND</p>
                         </div>
                         <div
                             onClick={() => handleCheckout()}

@@ -15,3 +15,54 @@
 ::-webkit-scrollbar-button {
     display: none;
 }
+.img-container {
+    width: 240px;
+}
+@media (max-width: 1120px) {
+    .img-container {
+        width: 180px;
+    }
+}
+@media (max-width: 992px) {
+    .cart-checkout-container {
+        display: block;
+        padding: 0 30px;
+    }
+}
+@media (max-width: 768px) {
+    .cart-checkout-container {
+        padding: 0 10px;
+    }
+    .img-container {
+        width: 90px;
+    }
+    .text-container h3 {
+        font-size: 16px;
+    }
+    .text-container p {
+        font-size: 12px;
+    }
+    .text-container label {
+        font-size: 12px;
+    }
+    .text-container select {
+        font-size: 12px;
+    }
+    .text-container input {
+        font-size: 12px;
+    }
+    .price-container p {
+        font-size: 12px;
+    }
+    .summary-container h2 {
+        font-size: 14px;
+    }
+    .summary-container p {
+        font-size: 14px;
+    }
+}
+@media (max-width: 650px) {
+    .img-container {
+        width: 60px;
+    }
+}

@@ -4,20 +4,20 @@ import axios from 'axios'
 interface ProductSliceState {
     products: Product[]
     loading: boolean
-    selectedIndex: number
+    selectedIndex: string
 }
 
 const initialState: ProductSliceState = {
     products: [],
     loading: false,
-    selectedIndex: 0
+    selectedIndex: ''
 }
 
 const manageProductSlice = createSlice({
     name: 'products',
     initialState,
     reducers: {
-        setSelectedIndex: (state, action: PayloadAction<number>) => {
+        setSelectedIndex: (state, action: PayloadAction<string>) => {
             state.selectedIndex = action.payload
         },
         removeToManageProduct: (state, action: PayloadAction<string>) => {

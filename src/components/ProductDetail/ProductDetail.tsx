@@ -4,19 +4,23 @@ import img from '../../assets/imgEXP/Untitled.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faChevronRight, faChevronUp } from '@fortawesome/free-solid-svg-icons'
 import { useLocation } from 'react-router-dom'
-import { getProductByCategory, getProductByGenderCategory, getProductById } from '../../services/productService'
+import { getProductByGenderCategory, getProductById } from '../../services/productService'
 import ProductItem from '../ProductItem'
+import { setSelectedIndex } from '../../redux/features/manageProductSlice'
+import { addToCart } from '../../redux/features/cartSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { cartItem } from '../../type/cartItem'
 export interface IProductData {
     _id?: string
     gender: string
     productName: string
     title: string
     description: string
-    datePublish: string
     category: string[]
     size: string[]
     imgUrl: string[]
     price: number
+    quantity: number
 }
 
 function ProductDetail() {
@@ -24,6 +28,11 @@ function ProductDetail() {
     const productId = location.pathname.split('/')[2]
     const [productData, setProductData] = useState<IProductData>()
     const [productByGenderCategory, setProductByGenderCategory] = useState<IProductData[]>([])
+    const [quantity, setQuantity] = useState(1)
+    const dispatch = useDispatch()
+    const productItems = useSelector((state: any) => state.products.products)
+    console.log('productItems === ', productItems)
+    console.log('quantity === ', quantity)
     const fetchProductById = async () => {
         const res = await getProductById(productId)
         if (res.data) {
@@ -32,6 +41,25 @@ function ProductDetail() {
     }
     console.log('productData', productData)
     console.log('productByGenderCategory', productByGenderCategory)
+
+    const handleAddToCart = () => {
+        if (productData) {
+            const cartItem = {
+                _id: productData._id || '',
+                gender: productData.gender,
+                productName: productData.productName,
+                title: productData.title,
+                description: productData.description,
+                category: productData.category,
+                size: productData.size,
+                imgUrl: productData.imgUrl,
+                price: productData.price,
+                quantity: 1
+            }
+            dispatch(addToCart(cartItem))
+            setQuantity(1)
+        }
+    }
 
     const fetchProductByGenderCategory = async () => {
         const gender = productData?.gender
@@ -208,7 +236,8 @@ function ProductDetail() {
                     <div className='product-info lg:w-[40%] lg-px-[0] px-[50px] justify-center flex flex-col lg:items-start items-center '>
                         <div className='mt-[10px] product-title font-semibold  text-2xl'>{productData?.title}</div>
                         <div className='product-price font-semibold mt-[10px] text-base'>
-                            {Intl.NumberFormat('en-US').format(productData?.price)}
+                            {Intl.NumberFormat('en-US').format(productData?.price ?? 0)}
+
                             <sup>₫</sup>
                         </div>
 
@@ -238,7 +267,10 @@ function ProductDetail() {
                             </div>
                         </div>
                         <div className='mt-[20px] lg:w-[80%] w-[100%] add-product flex flex-col gap-[10px]'>
-                            <button className='bg-black text-white px-[24px] py-[18px] rounded-full hover:opacity-70'>
+                            <button
+                                onClick={() => handleAddToCart()}
+                                className='bg-black text-white px-[24px] py-[18px] rounded-full hover:opacity-70'
+                            >
                                 Add to Bag
                             </button>
                             <button className='bg-white text-black px-[24px] py-[18px] border-gray-500 border-[1px] rounded-full hover:border-black'>
