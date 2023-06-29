@@ -182,8 +182,6 @@ const ManageProductPage = () => {
     }
 
     const handleSubmit = async (values: any, setFieldValue: any) => {
-        console.log(values)
-
         const formData = new FormData()
         if (values.imgUrl !== null) {
             for (let i = 0; i < values.imgUrl.length; i++) {
@@ -204,11 +202,9 @@ const ManageProductPage = () => {
         // formData.append('size', values.size)
         // formData.append('imgUrl', values.imgUrl)
         formData.append('price', values.price)
-        console.log('form', formData)
 
         try {
             const response = await axios.post('/api/create-new-product', formData)
-            console.log(response)
 
             fetchAllProduct()
         } catch (error) {
@@ -218,7 +214,6 @@ const ManageProductPage = () => {
     }
     const handleSubmitEdit = async (values: any, e: any) => {
         e.preventDefault()
-        console.log('dat', values.imgUrl)
 
         const formData = new FormData()
 
@@ -227,14 +222,17 @@ const ManageProductPage = () => {
                 formData.append(`imgUrl${i}`, values.imgUrl[i])
             }
         }
+        for (let i = 0; i < values.category.length; i++) {
+            formData.append('category[]', values.category[i])
+        }
+        for (let i = 0; i < values.size.length; i++) {
+            formData.append('size[]', values.size[i])
+        }
         formData.append('_id', productId)
         formData.append('gender', values.gender)
         formData.append('productName', values.productName)
         formData.append('title', values.title)
         formData.append('description', values.description)
-        formData.append('category', values.category)
-        formData.append('size', values.size)
-        formData.append('imgUrl', values.imgUrl)
         formData.append('price', values.price)
         let data = {
             gender: values.gender,
@@ -247,10 +245,9 @@ const ManageProductPage = () => {
             price: values.price
         }
         try {
-            console.log('data', formData)
-
             const response = await axios.put('/api/update-product-by-id', formData)
             fetchAllProduct()
+            handleCancelEdit()
         } catch (error) {
             console.log(error)
         }
@@ -259,9 +256,7 @@ const ManageProductPage = () => {
     const handleChangeGender = (e: any, setFieldValue: any) => {
         const selectedOption = e.target.value
 
-        console.log(selectedOption)
         let data = productTagDataList.filter((item) => item.navName == selectedOption)
-        console.log(data[0].list)
         setProductTagList(data[0].list)
         // Cập nhật giá trị của trường select và array trong state của Formik
         setFieldValue('gender', selectedOption)
