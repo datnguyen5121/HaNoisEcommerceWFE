@@ -6,6 +6,7 @@ import { ProductValues } from '../../type/ProductValues'
 import { ErrorMessage, Field, Formik, Form } from 'formik'
 import { useLocation } from 'react-router-dom'
 import axios from '../../utils/axiosCustomize'
+import { toast } from 'react-toastify'
 
 import { validationSchemaProduct } from '../../type/validationSchemaProduct'
 import makeAnimated from 'react-select/animated'
@@ -188,16 +189,25 @@ const ManageProductPage = () => {
                 formData.append(`imgUrl${i}`, values.imgUrl[i])
             }
         }
+        for (let i = 0; i < values.category.length; i++) {
+            formData.append('category[]', values.category[i])
+        }
+        for (let i = 0; i < values.size.length; i++) {
+            formData.append('size[]', values.size[i])
+        }
         formData.append('gender', values.gender)
         formData.append('productName', values.productName)
         formData.append('title', values.title)
         formData.append('description', values.description)
-        formData.append('category', values.category)
-        formData.append('size', values.size)
-        formData.append('imgUrl', values.imgUrl)
+
         formData.append('price', values.price)
         try {
             const response = await axios.post('/api/create-new-product', formData)
+            if (response.data && response) {
+                toast.success('Create New Product Success !')
+            } else {
+                toast.error('Create failed !')
+            }
             fetchAllProduct()
         } catch (error) {
             console.log(error)
@@ -206,6 +216,7 @@ const ManageProductPage = () => {
     }
     const handleSubmitEdit = async (values: any, e: any) => {
         e.preventDefault()
+
         const formData = new FormData()
 
         if (values.imgUrl !== null) {
@@ -213,28 +224,29 @@ const ManageProductPage = () => {
                 formData.append(`imgUrl${i}`, values.imgUrl[i])
             }
         }
+        for (let i = 0; i < values.category.length; i++) {
+            formData.append('category[]', values.category[i])
+        }
+        for (let i = 0; i < values.size.length; i++) {
+            formData.append('size[]', values.size[i])
+        }
         formData.append('_id', productId)
         formData.append('gender', values.gender)
         formData.append('productName', values.productName)
         formData.append('title', values.title)
         formData.append('description', values.description)
-        formData.append('category', values.category)
-        formData.append('size', values.size)
-        formData.append('imgUrl', values.imgUrl)
         formData.append('price', values.price)
-        let data = {
-            gender: values.gender,
-            productName: values.productName,
-            title: values.title,
-            description: values.description,
-            category: values.category,
-            size: values.size,
-            imgUrl: values.imgUrl,
-            price: values.price
-        }
+
         try {
-            const response = await axios.post('/update-product-by-id', formData)
+            const response = await axios.put('/api/update-product-by-id', formData)
+            if (response.data && response) {
+                toast.success('Update New Product Success !')
+            } else {
+                toast.error('Update failed !')
+            }
             fetchAllProduct()
+            fetchAllProduct()
+            handleCancelEdit()
         } catch (error) {
             console.log(error)
         }
@@ -245,9 +257,7 @@ const ManageProductPage = () => {
 
         let data = productTagDataList.filter((item) => item.navName == selectedOption)
         setProductTagList(data[0].list)
-        // Cập nhật giá trị của trường select và array trong state của Formik
         setFieldValue('gender', selectedOption)
-        // setFieldValue('options', newArray); // Cập nhật giá trị của array nếu cần
     }
     let handleChangeProductType = (e: any, setFieldValue: any) => {
         const selectedOption = e.target.value
@@ -322,7 +332,11 @@ const ManageProductPage = () => {
         }
         if (confirm('Do you want to delete this product ?')) {
             let res = await axios.delete('/api/delete-product-by-id', { data })
-
+            if (res) {
+                toast.success('Delete success!')
+            } else {
+                toast.error('Delete fail!')
+            }
             fetchAllProduct()
         }
     }
@@ -389,13 +403,7 @@ const ManageProductPage = () => {
             <div className={`h-[50px] flex items-center justify-center`}>
                 <h2 className={`text-[25px]`}>Product Page</h2>
             </div>
-            <div className={`h-[50px] flex items-center justify-center`}>
-                <input
-                    className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-[360px] px-[10px] py-[5px]`}
-                    type='text'
-                    placeholder='Search Product'
-                />
-            </div>
+
             <div className={`mt-[30px] flex flex-col justify-center items-center`}>
                 <div className='flex justify-start w-full gap-3 mb-6'>
                     <Button className='bg-blue-500' type='primary' onClick={showModal}>
@@ -601,7 +609,7 @@ const ManageProductPage = () => {
                             enableReinitialize={true}
                         >
                             {(formik) => (
-                                <form>
+                                <form onSubmit={(e: any) => handleSubmitEdit(formik.values, e)}>
                                     <div>
                                         <div className={`my-[0.8rem] grid`}>
                                             <label htmlFor='gender' className='mb-[0.2rem] font-[700]'>
@@ -710,7 +718,7 @@ const ManageProductPage = () => {
                                                 {sizeList.length > 0 &&
                                                     sizeList.map((option, _) => (
                                                         <label>
-                                                            <Field type='checkbox' name='size' value={`${option}`} />
+                                                            <Field type='checkbox' name={`size`} value={`${option}`} />
                                                             {option}
                                                         </label>
                                                     ))}
@@ -792,7 +800,6 @@ const ManageProductPage = () => {
                             <th>Description</th>
                             <th>Category</th>
                             <th>Size</th>
-                            <th>imgUrl</th>
                             <th>Price</th>
                             <th>Feature</th>
                         </tr>
@@ -804,25 +811,32 @@ const ManageProductPage = () => {
                                 <td className='w-36'>{product.title}</td>
                                 <td className='w-36'>{product.productName}</td>
                                 <td className='w-36'>{product.gender}</td>
-                                <td className='w-40'>{product.description}</td>
-                                <td className='w-32'>{product.category}</td>
-                                <td className='w-32'>{product.size}</td>
-                                <td className='w-32 '>{product.imgUrl}</td>
+                                <td className='w-[40%] '>{product.description}</td>
+                                <td className='w-32 list-none'>
+                                    {product.category.map((item: string, index: number) => {
+                                        return <li key={`category${index}`}>{item}</li>
+                                    })}
+                                </td>
+                                <td className='w-32 list-none'>
+                                    {product.size.map((item: string, index: number) => {
+                                        return <li key={`category${index}`}>{item}</li>
+                                    })}
+                                </td>
                                 <td className='w-40'>{product.price}</td>
 
                                 <td className='w-36'>
-                                    <div>
+                                    <div className='flex gap-2 justify-center'>
                                         <button
-                                            className={`${styles.editBtn}`}
+                                            className='border-[1px] w-[50px] hover:opacity-30 p-[10px] text-blue-500 rounded-lg'
                                             onClick={() => handleEditId(product._id, product)}
                                         >
-                                            Edit
+                                            <i className='fa-solid fa-pen-to-square'></i>
                                         </button>
                                         <button
-                                            className={`${styles.deleteBtn}`}
+                                            className='border-[1px] w-[50px] hover:opacity-30 p-[10px] text-red-500 rounded-lg'
                                             onClick={() => handleDeleteProduct(product._id)}
                                         >
-                                            Delete
+                                            <i className='fa-solid fa-trash'></i>
                                         </button>
                                     </div>
                                 </td>

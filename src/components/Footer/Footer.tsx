@@ -5,7 +5,7 @@ function Footer() {
     const findAStore = ['BECOME A MEMBER', 'Send us Feedback']
     const getHelp = ['Order Status', 'Delivery', 'Returns', 'Payment Options', 'Contact Us']
     const aboutNike = ['News', 'Careers', 'Investors', 'Sustainability']
-    const policy = ['Guides', 'Terms of Sale', 'Terms of Use', 'Nike Privacy Policy']
+    const policy = ['Guides', 'Terms of Sale', 'Terms of Use', 'HANOIS Privacy Policy']
     return (
         <div className='bg-black '>
             <div className=' w-11/12 mx-auto'>
@@ -32,7 +32,7 @@ function Footer() {
                             </ul>
                         </div>
                         <div className='text-gray-500 md:border-none md:pt-0 border-b-[1px] pb-3  border-gray-700'>
-                            <p className='font-medium   text-white'>ABOUT NIKE</p>
+                            <p className='font-medium   text-white'>ABOUT HANOIS</p>
                             <ul>
                                 {aboutNike.map((item) => (
                                     <li key={item} className='hover:text-white cursor-pointer py-2'>
@@ -55,7 +55,7 @@ function Footer() {
                             <FontAwesomeIcon icon={faLocationDot} className='pr-2 pt-[2px]' /> Vietnam
                         </span>
                         <span className='text-gray-500'>
-                            <FontAwesomeIcon icon={faCopyright} /> 2023 Nike, Inc. All Rights Reserved
+                            <FontAwesomeIcon icon={faCopyright} /> 2023 HANOIS, Inc. All Rights Reserved
                         </span>
                     </div>
 

@@ -16,13 +16,14 @@ import { getProductByGenderCategory } from '../../../services/productService'
 import FilterByPrice from '../../../components/FilterItem/FilterByPrice'
 import FilterBySize from '../../../components/FilterItem/FilterBySize'
 import FilterItem from '../../../components/FilterItem'
+import { IProductData } from '../../../components/ProductDetail/ProductDetail'
 
 function ProductByCategory() {
     const location = useLocation()
     const [showFilter, setShowFilter] = useState(true)
     const [showSort, setShowSort] = useState(false)
-    const [productList, setProductList] = useState<ProductValues[]>([])
-    const [filteredProducts, setFilteredProducts] = useState<ProductValues[]>([])
+    const [productList, setProductList] = useState<IProductData[]>([])
+    const [filteredProducts, setFilteredProducts] = useState<IProductData[]>([])
     const [sortBy, setSortBy] = useState('')
     const [gender, category, subCategory] = location.pathname.split('/').filter((item) => item !== '')
     const [showFilterOnMobile, setShowFilterOnMobile] = useState(false)
@@ -44,7 +45,7 @@ function ProductByCategory() {
     }
 
     const handleFilter = () => {
-        let newFilteredProducts: ProductValues[] = [...productList]
+        let newFilteredProducts: IProductData[] = [...productList]
         if (selectedSize.length > 0) {
             newFilteredProducts = handleSizeFilter(newFilteredProducts)
         }
@@ -81,7 +82,7 @@ function ProductByCategory() {
     }, [selectedSize, selectedPriceRange, productList, sortBy])
 
     const handleSizeFilter = (array: any) => {
-        let newFilteredProducts: ProductValues[] = [...array]
+        let newFilteredProducts: IProductData[] = [...array]
         if (selectedSize.length > 0) {
             newFilteredProducts = newFilteredProducts.filter((product) =>
                 product.size.some((value) => selectedSize.includes(value))

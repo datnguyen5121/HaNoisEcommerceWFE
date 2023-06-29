@@ -41,37 +41,42 @@ const ManageCreateSize: React.FC<ISize> = ({ productList, isModalOpen, setIsModa
     }
     return (
         <>
-            <Modal title='Create Size' open={isModalOpen} onOk={handleCreate} onCancel={handleCancel}>
-                <select onChange={handleProduct}>
+            <Modal title='Create Size' footer={null} open={isModalOpen} onCancel={handleCancel}>
+                <label className='text-xl'>The size of product: </label>
+                <select className='text-2xl' onChange={handleProduct}>
                     <option value=''>---Choose product</option>
                     {productList.length > 0 &&
-                        productList.map((item: any) => {
-                            return <option value={item.subnavName}>{item.subnavName}</option>
+                        productList.map((item: any, index: number) => {
+                            return (
+                                <option key={index} value={item.subnavName}>
+                                    {item.subnavName}
+                                </option>
+                            )
                         })}
                 </select>
-                <section className='flex flex-col'>
-                    <label>List Category</label>
+                <section className='flex flex-col text-md py-[10px]'>
+                    <label>Please add size for product:</label>
                 </section>
-
-                <section className='flex justify-between'>
-                    <input
-                        className='border-[black] w-[80%] p-[10px] border-[1px] rounded-md'
-                        type='text'
-                        placeholder='Please enter category...'
-                        name=''
-                        id=''
-                        value={sizeInput}
-                        onChange={handleChangeSizeInput}
-                    ></input>
-                    <button
-                        className=' border-[1px] text-white p-[10px] hover:opacity-25 rounded-md bg-black'
-                        onClick={() => {
-                            handleAddList(sizeInput)
-                        }}
-                    >
-                        Add
-                    </button>
-
+                <section>
+                    <section className='flex justify-between'>
+                        <input
+                            className='border-[black] p-[10px] w-[80%] border-[1px] rounded-md'
+                            type='text'
+                            placeholder='Please enter category...'
+                            name=''
+                            id=''
+                            value={sizeInput}
+                            onChange={handleChangeSizeInput}
+                        ></input>
+                        <button
+                            className=' border-[1px] text-white p-[10px] hover:opacity-25 rounded-md bg-black'
+                            onClick={() => {
+                                handleAddList(sizeInput)
+                            }}
+                        >
+                            Add
+                        </button>
+                    </section>
                     <section className=' py-[10px] gap-[10px] flex flex-col'>
                         {sizeList.length >= 0 &&
                             sizeList.map((item, index) => {
@@ -88,6 +93,12 @@ const ManageCreateSize: React.FC<ISize> = ({ productList, isModalOpen, setIsModa
                                 )
                             })}
                     </section>
+                    <button
+                        className='bg-blue-600 w-[4.6rem] hover:opacity-50 h-[1.8rem] text-white rounded-md'
+                        onClick={handleCreate}
+                    >
+                        Submit
+                    </button>
                 </section>
             </Modal>
         </>

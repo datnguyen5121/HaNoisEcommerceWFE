@@ -9,8 +9,6 @@ interface IProps {
 function ProductItem(props: IProps) {
     const { isSearch, isCheckout, data } = props
 
-    console.log(data)
-
     if (isSearch) {
         return (
             <Link to={`/product/${data._id}`}>
@@ -18,7 +16,7 @@ function ProductItem(props: IProps) {
                     <img
                         src={data.imgUrl && data.imgUrl.length > 0 && data.imgUrl[0]}
                         alt='image'
-                        className='max-w-[120px]'
+                        className='max-w-[120px] '
                     />
                     <div className='py-3 flex-1'>
                         <p className='capitalize line-clamp-1'>{data.title}</p>

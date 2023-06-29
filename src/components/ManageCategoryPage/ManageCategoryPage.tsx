@@ -165,7 +165,7 @@ const ManageCategoryPage = () => {
     const handDeleteProductTag = async (productTagId: string) => {
         if (confirm(`Are you sure delete the product tag ${productTagId}`)) {
             const res = await deleteProductTag({ _id: productTagId })
-            if (res.EC == 0) {
+            if (res) {
                 FetchAllTag()
                 FetchAllProductTag()
             }
@@ -174,7 +174,7 @@ const ManageCategoryPage = () => {
     const handleDeleteTag = async (tagId: string) => {
         if (confirm(`Are you sure delete the tag ${tagId}`)) {
             const res = await deleteTag({ _id: tagId })
-            if (res.EC == 0) {
+            if (res) {
                 FetchAllTag()
                 FetchAllProductTag()
             }

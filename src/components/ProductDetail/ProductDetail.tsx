@@ -12,15 +12,17 @@ import { useDispatch, useSelector } from 'react-redux'
 import { cartItem } from '../../type/cartItem'
 export interface IProductData {
     _id?: string
-    gender: string
-    productName: string
-    title: string
-    description: string
     category: string[]
-    size: string[]
-    imgUrl: string[]
+    createdAt?: string
+    updatedAt?: string
+    description: string
+    gender: string
+    imgUrl: string[] | null
     price: number
-    quantity: number
+    productName: string
+    size: string[]
+    title: string
+    __v?: number
 }
 
 function ProductDetail() {
@@ -39,8 +41,6 @@ function ProductDetail() {
             setProductData(res.data)
         }
     }
-    console.log('productData', productData)
-    console.log('productByGenderCategory', productByGenderCategory)
 
     const handleAddToCart = () => {
         if (productData) {
@@ -113,43 +113,6 @@ function ProductDetail() {
         }
     ]
 
-    const listCategoryProduct = [
-        {
-            imgUrl: img,
-            cost: '200000đ',
-            gender: 'Nam'
-        },
-        {
-            imgUrl: img,
-            cost: '200000đ',
-            gender: 'Nam'
-        },
-        {
-            imgUrl: img,
-            cost: '200000đ',
-            gender: 'Nam'
-        },
-        {
-            imgUrl: img,
-            cost: '200000đ',
-            gender: 'Nam'
-        },
-        {
-            imgUrl: img,
-            cost: '200000đ',
-            gender: 'Nam'
-        },
-        {
-            imgUrl: img,
-            cost: '200000đ',
-            gender: 'Nam'
-        },
-        {
-            imgUrl: img,
-            cost: '200000đ',
-            gender: 'Nam'
-        }
-    ]
     const handleChangeImgProductDetail = (index: number) => {
         setIndexImg(index)
     }

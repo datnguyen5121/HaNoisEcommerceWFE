@@ -1,6 +1,8 @@
 import Modal from 'antd/es/modal/Modal'
 import { ProductForm } from './ManageCategoryPage'
 import React from 'react'
+import { toast } from 'react-toastify'
+
 import { createNewTag, updateTagById } from '../../services/apiService'
 interface IProps {
     isModalCreateTagOpen: boolean
@@ -23,6 +25,11 @@ const ModalCreateTag: React.FC<IProps> = ({
             const res = await createNewTag({
                 navName: navNameInput
             })
+            if (res) {
+                toast.success('Update New Product Success !')
+            } else {
+                toast.error('Update failed !')
+            }
             if (res.EC == 0) {
                 FetchAllTag()
                 FetchAllProductTag()
@@ -40,12 +47,7 @@ const ModalCreateTag: React.FC<IProps> = ({
     }
     return (
         <>
-            <Modal
-                title='Create New Tag'
-                open={isModalCreateTagOpen}
-                onOk={handleCreateTagOk}
-                onCancel={handleCancelEditTag}
-            >
+            <Modal title='Create New Tag' open={isModalCreateTagOpen} footer={true} onCancel={handleCancelEditTag}>
                 <section className='flex flex-col gap-[10px]'>
                     <label className='text-lg font-semibold'>Tag Name:</label>
                     <input
@@ -55,6 +57,15 @@ const ModalCreateTag: React.FC<IProps> = ({
                         onChange={handleOnChangeNavName}
                     ></input>
                 </section>
+
+                <div className='flex justify-end'>
+                    <button
+                        className=' bg-blue-600 w-[4.6rem]  mt-5 hover:opacity-50 h-[1.8rem] text-white rounded-md'
+                        onClick={handleCreateTagOk}
+                    >
+                        Submit
+                    </button>
+                </div>
             </Modal>
         </>
     )
