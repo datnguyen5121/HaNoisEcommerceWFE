@@ -212,6 +212,8 @@ const ManageProductPage = () => {
     }
     const handleSubmitEdit = async (values: any, e: any) => {
         e.preventDefault()
+        console.log('dat', values.imgUrl)
+
         const formData = new FormData()
 
         if (values.imgUrl !== null) {
@@ -239,7 +241,9 @@ const ManageProductPage = () => {
             price: values.price
         }
         try {
-            const response = await axios.post('/update-product-by-id', formData)
+            console.log('data', formData)
+
+            const response = await axios.put('/api/update-product-by-id', formData)
             fetchAllProduct()
         } catch (error) {
             console.log(error)
@@ -612,7 +616,7 @@ const ManageProductPage = () => {
                             enableReinitialize={true}
                         >
                             {(formik) => (
-                                <form>
+                                <form onSubmit={(e: any) => handleSubmitEdit(formik.values, e)}>
                                     <div>
                                         <div className={`my-[0.8rem] grid`}>
                                             <label htmlFor='gender' className='mb-[0.2rem] font-[700]'>
@@ -721,7 +725,7 @@ const ManageProductPage = () => {
                                                 {sizeList.length > 0 &&
                                                     sizeList.map((option, index) => (
                                                         <label>
-                                                            <Field type='checkbox' name='size' value={`${option}`} />
+                                                            <Field type='checkbox' name={`size`} value={`${option}`} />
                                                             {option}
                                                         </label>
                                                     ))}
