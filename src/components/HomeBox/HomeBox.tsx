@@ -1,5 +1,6 @@
 import { FC } from 'react'
 import styles from './HomeBox.module.css'
+import { Link } from 'react-router-dom'
 
 interface Props {
     image: string
@@ -11,8 +12,6 @@ interface Props {
 }
 
 const HomeBox: FC<Props> = ({ image, topText, title, text, btn1, btn2 }) => {
-    console.log('homebox')
-
     return (
         <div className={`${styles.homeBox} w-full text-center`}>
             <img src={image} alt='noImg' className='w-11/12 mx-auto mb-10' />
@@ -20,8 +19,15 @@ const HomeBox: FC<Props> = ({ image, topText, title, text, btn1, btn2 }) => {
             <h1 className={styles.title}>{title}</h1>
             <p className='mt-5'>{text}</p>
             <div className={`${styles.btnBox}`}>
-                <button className={styles.btn}>{btn1}</button>
-                {btn2 !== '' && <button className={styles.btn}>{btn2}</button>}
+                <Link to={btn1 == 'Running' ? '/Men/Shoes/Running' : '/Kid/Shoes'}>
+                    <button className={styles.btn}>{btn1}</button>
+                </Link>
+
+                {btn2 !== '' && (
+                    <Link to={btn2 == 'Jordan' ? '/Men/Shoes/Jordan' : '/Kid/Shoes'}>
+                        <button className={styles.btn}>{btn2}</button>
+                    </Link>
+                )}
             </div>
         </div>
     )

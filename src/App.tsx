@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from 'react'
+import { lazy, Suspense } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import ManageSizePage from './components/ManageCategoryPage/ManageSizePage'
@@ -36,7 +36,6 @@ function App() {
                     pauseOnHover
                     theme='light'
                 />
-                <ToastContainer />
                 <Suspense fallback={<div>Loading...</div>}>
                     <Routes>
                         <Route path='/' element={<RootLayout />}>
