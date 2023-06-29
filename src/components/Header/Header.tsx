@@ -63,7 +63,7 @@ function Header() {
                             }}
                         >
                             Logout
-                        </div>
+                        </button>
                     </li>
                 </ul>
             )

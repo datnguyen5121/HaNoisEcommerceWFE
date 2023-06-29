@@ -190,13 +190,19 @@ const ManageProductPage = () => {
                 formData.append(`imgUrl${i}`, values.imgUrl[i])
             }
         }
+        for (let i = 0; i < values.category.length; i++) {
+            formData.append('category[]', values.category[i])
+        }
+        for (let i = 0; i < values.size.length; i++) {
+            formData.append('size[]', values.size[i])
+        }
         formData.append('gender', values.gender)
         formData.append('productName', values.productName)
         formData.append('title', values.title)
         formData.append('description', values.description)
-        formData.append('category', values.category)
-        formData.append('size', values.size)
-        formData.append('imgUrl', values.imgUrl)
+        // formData.append('category', values.category)
+        // formData.append('size', values.size)
+        // formData.append('imgUrl', values.imgUrl)
         formData.append('price', values.price)
         console.log('form', formData)
 
