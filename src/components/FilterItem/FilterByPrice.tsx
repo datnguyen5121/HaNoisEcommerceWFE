@@ -43,7 +43,7 @@ function FilterByPrice(props: IProps) {
                     {filterArray.map((item) => {
                         return (
                             <div key={item}>
-                                <label htmlFor={item}>
+                                <label htmlFor={item} className='block cursor-pointer'>
                                     <input
                                         type='radio'
                                         value={item}

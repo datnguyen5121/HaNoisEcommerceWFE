@@ -4,6 +4,7 @@ import * as Yup from 'yup'
 import { RootState, useAppDispatch } from '../../../redux/store'
 import { updateUserById } from '../../../services/userService'
 import { updateUser } from '../../../redux/authSlice'
+import { toast } from 'react-toastify'
 interface IUserInfo {
     address: string
     createAt: string
@@ -75,6 +76,8 @@ function Account() {
                             }
                         })
                     )
+
+                    toast('Update success!')
                 }}
             >
                 {({ errors, touched, dirty, handleSubmit }) => (

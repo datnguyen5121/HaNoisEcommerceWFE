@@ -1,6 +1,6 @@
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { ProductValues } from '../../type/ProductValues'
 
 interface IProps {
@@ -9,18 +9,14 @@ interface IProps {
     setFilteredProducts: (value: ProductValues[]) => void
     selectedSize: string[]
     setSelectedSize: (value: string[]) => void
-    //setProductList: (value: ProductValues[]) => void
-    //filter: string[]
-    //setFilter: (value: string[]) => void
 }
 
 function FilterBySize(props: IProps) {
-    const { productList, setFilteredProducts, filteredProducts, selectedSize, setSelectedSize } = props
+    const { selectedSize, setSelectedSize } = props
 
     const [show, setShow] = useState(false)
     const [iconRotation, setIconRotation] = useState(false)
     const filterArray = ['36', '37', '38', '39', '40', '41', '42']
-    //const [selectedSize, setSelectedSize] = useState<string[]>([])
     const handleShow = () => {
         setShow(!show)
         setIconRotation(!iconRotation)
@@ -49,17 +45,17 @@ function FilterBySize(props: IProps) {
                 />
             </div>
             {show && (
-                <div className='pb-3'>
+                <div className='grid grid-cols-2 gap-4 pb-3'>
                     {filterArray.map((item) => {
                         return (
                             <div key={item}>
-                                <label htmlFor={item}>
+                                <label htmlFor={item} className='block cursor-pointer'>
                                     <input
                                         type='checkbox'
                                         value={item}
                                         id={item}
                                         checked={selectedSize.includes(item)}
-                                        onChange={(e) => {
+                                        onChange={() => {
                                             handleChange(item)
                                         }}
                                         className='w-4 h-4 '

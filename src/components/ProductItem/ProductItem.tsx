@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
 import productImage from '../../assets/productItem.webp'
-import { ProductValues } from '../../type/ProductValues'
 import { IProductData } from '../ProductDetail/ProductDetail'
 interface IProps {
     isSearch?: boolean
@@ -17,7 +16,7 @@ function ProductItem(props: IProps) {
             <Link to={`/product/${data._id}`}>
                 <div className='flex gap-4'>
                     <img
-                        src={data.imgUrl.length > 0 ? data.imgUrl[0] : productImage}
+                        src={data.imgUrl && data.imgUrl.length > 0 && data.imgUrl[0]}
                         alt='image'
                         className='max-w-[120px]'
                     />
@@ -54,7 +53,11 @@ function ProductItem(props: IProps) {
         return (
             <Link to={`/product/${data._id}`}>
                 <div>
-                    <img src={productImage} alt='image' />
+                    <img
+                        src={data.imgUrl && data.imgUrl.length > 0 && data.imgUrl[0]}
+                        alt='image'
+                        className='max-w-full'
+                    />
                     <div className='py-3'>
                         <p className='capitalize'>{data.title}</p>
                         <p className='text-gray-500'>{data.gender}</p>

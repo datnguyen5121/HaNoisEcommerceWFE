@@ -1,17 +1,21 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowsRotate, faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import {
+    faArrowDownWideShort,
+    faArrowUpShortWide,
+    faArrowsRotate,
+    faChevronDown
+} from '@fortawesome/free-solid-svg-icons'
 import ProductItem from '../../../components/ProductItem'
 import noProductImg from '../../../assets/no-product.png'
 import { useState, useEffect } from 'react'
-import useProductList from '../../../customhooks/useProductList'
 import Tippy from '@tippyjs/react/headless'
-//import { getProductByGenderCategory } from '../../../services/productService'
-//import { useLocation } from 'react-router-dom'
+
 import { ProductValues } from '../../../type/ProductValues'
 import { useLocation } from 'react-router-dom'
 import { getProductByGenderCategory } from '../../../services/productService'
 import FilterByPrice from '../../../components/FilterItem/FilterByPrice'
 import FilterBySize from '../../../components/FilterItem/FilterBySize'
+import FilterItem from '../../../components/FilterItem'
 
 function ProductByCategory() {
     const location = useLocation()
@@ -21,11 +25,10 @@ function ProductByCategory() {
     const [filteredProducts, setFilteredProducts] = useState<ProductValues[]>([])
     const [sortBy, setSortBy] = useState('')
     const [gender, category, subCategory] = location.pathname.split('/').filter((item) => item !== '')
-
+    const [showFilterOnMobile, setShowFilterOnMobile] = useState(false)
     //filter item
     const [selectedPriceRange, setSelectedPriceRange] = useState('')
     const [selectedSize, setSelectedSize] = useState<string[]>([])
-    console.log('sort by', sortBy)
     const handleFetchProduct = async () => {
         const res = await getProductByGenderCategory(gender, category, subCategory)
         setProductList(res.data)
@@ -36,8 +39,8 @@ function ProductByCategory() {
         setShowFilter(!showFilter)
     }
 
-    const handleHideSort = () => {
-        setShowSort(false)
+    const handleShowFilterOnMobile = () => {
+        setShowFilterOnMobile(!showFilterOnMobile)
     }
 
     const handleFilter = () => {
@@ -55,7 +58,6 @@ function ProductByCategory() {
                 return b.price - a.price
             })
         }
-        console.log('newFilteredProducts', newFilteredProducts)
 
         if (selectedPriceRange === 'Under 1,000,000₫') {
             newFilteredProducts = newFilteredProducts.filter((product) => product.price > 0 && product.price < 1000000)
@@ -97,29 +99,67 @@ function ProductByCategory() {
         <>
             <section className='w-11/12 mx-auto'>
                 <div className='sticky top-0 flex justify-between py-3 w-full bg-white z-10'>
-                    <h5 className='text-2xl'>{location.pathname.split('/').join(' ')}</h5>
+                    <h5 className='text-lg  sm:text-2xl'>{location.pathname.split('/').join(' ')}</h5>
                     <div className='flex gap-5 overflow-hidden '>
                         <button className='hidden md:block' onClick={handleShowFilter}>
                             {showFilter ? 'Hide Filters' : 'Show Filters'} <FontAwesomeIcon icon={faArrowsRotate} />
                         </button>
 
-                        {/*<Tippy
-                            //onClickOutside={handleHideSort}
+                        <Tippy
+                            onClickOutside={handleShowFilterOnMobile}
                             interactive={true}
-                            visible={true}
+                            visible={showFilterOnMobile}
                             placement='bottom'
                             render={(attrs) => (
-                                <div className={`w-[100vw] px-3 bg-white overflow-hidden`} tabIndex={-1} {...attrs}>
-                                    <FilterContainer />
+                                <div
+                                    className={`w-[70vw] px-3 bg-white shadow-md border-t border-gray-100 overflow-hidden`}
+                                    tabIndex={-1}
+                                    {...attrs}
+                                >
+                                    <FilterItem text='filter'>
+                                        <FilterByPrice
+                                            selectedPriceRange={selectedPriceRange}
+                                            setSelectedPriceRange={setSelectedPriceRange}
+                                            filteredProducts={filteredProducts}
+                                            productList={productList}
+                                            setFilteredProducts={setFilteredProducts}
+                                        />
+                                        <FilterBySize
+                                            selectedSize={selectedSize}
+                                            setSelectedSize={setSelectedSize}
+                                            filteredProducts={filteredProducts}
+                                            productList={productList}
+                                            setFilteredProducts={setFilteredProducts}
+                                        />
+                                    </FilterItem>
+                                    <FilterItem text='Sort By'>
+                                        <button
+                                            onClick={() => setSortBy('price-high-low')}
+                                            className='block w-full text-start hover:bg-gray-100 py-1'
+                                        >
+                                            <FontAwesomeIcon icon={faArrowDownWideShort} /> Price: High-Low
+                                        </button>
+                                        <button
+                                            onClick={() => setSortBy('price-low-high')}
+                                            className='block w-full text-start hover:bg-gray-100 py-1'
+                                        >
+                                            <FontAwesomeIcon icon={faArrowUpShortWide} /> Price: Low-High
+                                        </button>
+                                    </FilterItem>
                                 </div>
                             )}
                         >
-                            <button className='md:hidden border px-3 py-1 rounded-full border-[#cacacb] hover:border-black'>
+                            <button
+                                onClick={handleShowFilterOnMobile}
+                                className='md:hidden border px-3 py-1 rounded-full border-[#cacacb] hover:border-black'
+                            >
                                 Filter <FontAwesomeIcon icon={faArrowsRotate} />
                             </button>
-                        </Tippy>*/}
+                        </Tippy>
                         <Tippy
-                            onClickOutside={handleHideSort}
+                            onClickOutside={() => {
+                                setShowSort(!showSort)
+                            }}
                             interactive={true}
                             visible={showSort}
                             placement='bottom'

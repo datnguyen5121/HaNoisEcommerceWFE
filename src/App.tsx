@@ -36,7 +36,6 @@ function App() {
                     pauseOnHover
                     theme='light'
                 />
-                <ToastContainer />
                 <Suspense fallback={<Loading />}>
                     <Routes>
                         <Route path='/' element={<RootLayout />}>

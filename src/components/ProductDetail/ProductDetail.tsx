@@ -30,7 +30,8 @@ function ProductDetail() {
             setProductData(res.data)
         }
     }
-    console.log('product detail called')
+    console.log('productData', productData)
+    console.log('productByGenderCategory', productByGenderCategory)
 
     const fetchProductByGenderCategory = async () => {
         const gender = productData?.gender
@@ -51,8 +52,6 @@ function ProductDetail() {
             fetchProductByGenderCategory()
         }
     }, [productData])
-    console.log('productData', productData)
-    console.log('productByGenderCategory', productByGenderCategory)
 
     const [indexImg, setIndexImg] = useState(0)
     const [rectDom, setRectDom] = useState(0)
@@ -85,8 +84,6 @@ function ProductDetail() {
             imgUrl: img
         }
     ]
-
-    console.log('product detail')
 
     const listCategoryProduct = [
         {
@@ -130,8 +127,6 @@ function ProductDetail() {
     }
     const handleLeftImgProduct = () => {
         if (indexImg > 0) {
-            console.log('dat')
-
             setIndexImg(indexImg - 1)
         } else {
             if (productData?.imgUrl) setIndexImg(productData?.imgUrl.length - 1)
@@ -140,7 +135,6 @@ function ProductDetail() {
     const handleNextImgProduct = () => {
         if (productData?.imgUrl) {
             if (indexImg < productData?.imgUrl.length - 1) {
-                console.log('dat')
                 setIndexImg(indexImg + 1)
             } else {
                 setIndexImg(0)
@@ -274,7 +268,7 @@ function ProductDetail() {
                         </div>
                     </div>
                 </section>
-                <section className='pl-[48px] content-2 h-[700px]'>
+                <section className='w-11/12 mx-auto content-2 '>
                     <section className='relative'>
                         <article className='text-lg py-[20px] font-semibold'>You Might Also Like</article>
                         <div className='absolute flex flex-row gap-[10px] right-[10px] bottom-[20px]'>
@@ -293,29 +287,16 @@ function ProductDetail() {
                         </div>
                     </section>
                     <section
-                        className={` flex flex-row ${styles['no-scrollbar']}   gap-[10px] overflow-x-auto `}
+                        className={` flex flex-row ${styles['no-scrollbar']}  gap-[10px] overflow-x-auto `}
                         id='carousel-product'
                     >
-                        {/*{listCategoryProduct &&
-                            listCategoryProduct.map((item, index) => {
-                                return (
-                                    <div className={`product${index} flex-col`} key={`listImg-${index}`}>
-                                        <div className='lg:w-[400px] lg:h-[400px] w-[35vw]'>
-                                            <img
-                                                className='lg:w-[400px] lg:h-[400px] w-[35vw] '
-                                                src={item.imgUrl}
-                                            ></img>
-                                        </div>
-                                        <article>{item.gender}</article>
-                                        <article>{item.cost}</article>
-                                    </div>
-                                )
-                            })}*/}
-
                         {productByGenderCategory &&
                             productByGenderCategory.length > 0 &&
                             productByGenderCategory.map((product) => (
-                                <ProductItem key={product._id} isSearch={false} data={product} />
+                                <div className=' w-full sm:w-1/2 md:w-1/3'>
+                                    {' '}
+                                    <ProductItem key={product._id} isSearch={false} data={product} />
+                                </div>
                             ))}
                     </section>
                 </section>

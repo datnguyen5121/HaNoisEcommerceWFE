@@ -2,15 +2,12 @@ import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
 interface IProps {
-    onChange: (size: string, isChecked: boolean) => void
-    text: string
-    type: string
-    filterArray: string[]
-    state: string[]
+    text: string | React.ReactNode
+    children: React.ReactNode
 }
 
 function FilterItem(props: IProps) {
-    const { text, filterArray, type, onChange, state } = props
+    const { text, children } = props
     const [show, setShow] = useState(false)
     const [iconRotation, setIconRotation] = useState(false)
     const handleShow = () => {
@@ -18,7 +15,7 @@ function FilterItem(props: IProps) {
         setIconRotation(!iconRotation)
     }
     return (
-        <div className='text-lg border-t relative mr-2'>
+        <div className='text-lg relative mr-2'>
             <div className='flex items-center justify-between'>
                 <button onClick={handleShow} className='w-full py-3  capitalize text-start mb-2 '>
                     {text}
@@ -29,27 +26,7 @@ function FilterItem(props: IProps) {
                     rotation={iconRotation ? 180 : undefined}
                 />
             </div>
-            {show && (
-                <div className='pb-3'>
-                    {filterArray.map((item) => {
-                        return (
-                            <div key={item}>
-                                <label htmlFor={item}>
-                                    <input
-                                        type={type}
-                                        value={item}
-                                        id={item}
-                                        checked={state.includes(item)}
-                                        onChange={(e) => onChange(item, e.target.checked)}
-                                        className='w-4 h-4 checked:bg-black'
-                                    />{' '}
-                                    <span className='capitalize'>{item}</span>
-                                </label>
-                            </div>
-                        )
-                    })}
-                </div>
-            )}
+            {show && <div className='pb-3'>{children}</div>}
         </div>
     )
 }
