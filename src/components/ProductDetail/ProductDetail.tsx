@@ -293,9 +293,8 @@ function ProductDetail() {
                         {productByGenderCategory &&
                             productByGenderCategory.length > 0 &&
                             productByGenderCategory.map((product) => (
-                                <div className=' w-full sm:w-1/2 md:w-1/3'>
-                                    {' '}
-                                    <ProductItem key={product._id} isSearch={false} data={product} />
+                                <div className=' w-full sm:w-1/2 md:w-1/3' key={product._id}>
+                                    <ProductItem isSearch={false} data={product} />
                                 </div>
                             ))}
                     </section>

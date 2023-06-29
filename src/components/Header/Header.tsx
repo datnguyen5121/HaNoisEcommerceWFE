@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faCartShopping, faUser, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Navbar from '../Navbar/Navbar'
-import Logo from '../../assets/Logo.svg'
+import Logo from '../../assets/hanois.png'
 import style from './Header.module.css'
 import Search from '../Search'
 
@@ -47,11 +47,6 @@ function Header() {
                             My Account
                         </Link>
                     </li>
-                    <li className='px-3 py-2 hover:bg-gray-200 cursor-pointer'>
-                        <Link className='block' to='/account'>
-                            Account Info
-                        </Link>
-                    </li>
                     {user.infoUser.roleId == 'ADMIN' && (
                         <li className='px-3 py-2 hover:bg-gray-200 cursor-pointer'>
                             <Link className='block' to='/admin/product'>
@@ -60,7 +55,13 @@ function Header() {
                         </li>
                     )}
                     <li className='px-3 py-2 hover:bg-gray-200 cursor-pointer'>
-                        <div className='block' onClick={() => logoutUser(dispatch)}>
+                        <button
+                            className='block'
+                            onClick={() => {
+                                navigate('/')
+                                logoutUser(dispatch)
+                            }}
+                        >
                             Logout
                         </div>
                     </li>
@@ -81,7 +82,7 @@ function Header() {
                 <div className='w-11/12 mx-auto'>
                     <div className='flex items-center justify-between'>
                         <Link to={'/'}>
-                            <img src={Logo} alt='nike' />
+                            <img src={Logo} alt='hanois' className='w-[100px] h-[70px]' />
                         </Link>
 
                         <Search />
@@ -129,11 +130,19 @@ function Header() {
                                                             >
                                                                 My Account
                                                             </Link>
+                                                            {user.infoUser.roleId == 'ADMIN' && (
+                                                                <Link
+                                                                    to={'/admin'}
+                                                                    className='block p-2 hover:bg-gray-200  '
+                                                                >
+                                                                    Admin Page
+                                                                </Link>
+                                                            )}
                                                             <button
                                                                 className='block w-full text-start p-2 hover:bg-gray-200  '
                                                                 onClick={() => {
-                                                                    logoutUser(dispatch)
                                                                     navigate('/')
+                                                                    logoutUser(dispatch)
                                                                 }}
                                                             >
                                                                 Logout
