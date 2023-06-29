@@ -162,7 +162,7 @@ function ProductDetail() {
                 <section className='lg:py-[60px] product-container lg:flex-row flex-col flex justify-center gap-[100px] lg:mx-[100px]'>
                     <section className='lg:sticky top-0  max-h-[100vh] lg:w-[60%] w-[100%] gap-[10px] flex lg:flex-row flex-col'>
                         <div
-                            className={`${styles['no-scrollbar']} product-list-img gap-[10px] flex lg:flex-col col:mx-[20px] max-w-screen flex-row lg:overflow-y-auto  overflow-x-scroll no-scrollbar lg:h-[450px] w-[100%]  lg:w-[10%] `}
+                            className={`${styles['no-scrollbar']} product-list-img gap-[10px] flex lg:flex-col col:mx-[20px] max-w-screen flex-row lg:overflow-y-auto  overflow-x-scroll lg:h-[450px] w-[100%]  lg:w-[10%] `}
                         >
                             {productData?.imgUrl &&
                                 productData?.imgUrl.length > 0 &&

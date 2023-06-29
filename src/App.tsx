@@ -1,7 +1,8 @@
-import React, { lazy, Suspense } from 'react'
+import { lazy, Suspense } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import Loading from './components/Loading'
+import ManageSizePage from './components/ManageCategoryPage/ManageSizePage'
 
 const RootLayout = lazy(() => import('./pages/RootLayout'))
 const Home = lazy(() => import('./pages/FrontEnd/Home'))
@@ -57,6 +58,7 @@ function App() {
                             <Route path='product' index element={<ManageProductPage />} />
                             <Route path='account' element={<ManageAccountPage />} />
                             <Route path='category' element={<ManageCategoryPage />} />
+                            <Route path='size' element={<ManageSizePage />} />
                         </Route>
                         <Route path='*' element={<NotFound />} />
                     </Routes>

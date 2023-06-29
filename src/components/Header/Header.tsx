@@ -48,13 +48,19 @@ function Header() {
                         </Link>
                     </li>
                     <li className='px-3 py-2 hover:bg-gray-200 cursor-pointer'>
-                        <button
-                            className='block w-full text-start'
-                            onClick={() => {
-                                logoutUser(dispatch)
-                                navigate('/')
-                            }}
-                        >
+                        <Link className='block' to='/account'>
+                            Account Info
+                        </Link>
+                    </li>
+                    {user.infoUser.roleId == 'ADMIN' && (
+                        <li className='px-3 py-2 hover:bg-gray-200 cursor-pointer'>
+                            <Link className='block' to='/admin/product'>
+                                Admin Page
+                            </Link>
+                        </li>
+                    )}
+                    <li className='px-3 py-2 hover:bg-gray-200 cursor-pointer'>
+                        <div className='block' onClick={() => logoutUser(dispatch)}>
                             Logout
                         </button>
                     </li>

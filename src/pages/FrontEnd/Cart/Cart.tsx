@@ -1,18 +1,31 @@
 import styles from './Cart.module.css'
 import { useSelector } from 'react-redux'
 import { RootState, useAppDispatch } from '../../../redux/store'
+import { loadStripe } from '@stripe/stripe-js'
 
-import {
-    removeTocart,
-    increaseQuantity,
-    decreaseQuantity,
-    notifyCheckoutSuccess
-} from '../../../redux/features/cartSlice'
+import { removeTocart, increaseQuantity, decreaseQuantity } from '../../../redux/features/cartSlice'
+import axios from 'axios'
 function Cart() {
     const cart = useSelector((state: RootState) => state.cart)
+    console.log('cart items == ', cart.items)
     const dispatch = useAppDispatch()
     let totalPrice = 0
     console.log('cart component')
+    const stripePromise = loadStripe(
+        'pk_test_51MPBnMA7RMr6zSBYIaJZtoEMq5lT7sXtymAUexPc0v4OBZwVh6LdZHCuhKpd2ypYnXkAdYlybbe1gTJxmwhBU5pC00ObP5I2Ro'
+    )
+
+    const handleCheckout = async () => {
+        try {
+            const stripe = await stripePromise
+            const res = await axios.post('/stripe-payment', cart.items)
+            await stripe?.redirectToCheckout({
+                sessionId: res.data.stripeSession.id
+            })
+        } catch (err) {
+            console.log(err)
+        }
+    }
 
     cart.items.length > 0
         ? (totalPrice = cart.items.reduce((total, item) => {
@@ -128,7 +141,7 @@ function Cart() {
                             <p>${totalPrice}</p>
                         </div>
                         <div
-                            onClick={() => dispatch(notifyCheckoutSuccess())}
+                            onClick={() => handleCheckout()}
                             className='flex items-center justify-center w-full text-center h-[2.8rem] bg-black text-white rounded-[2rem] cursor-pointer hover:bg-gray-600'
                         >
                             Checkout

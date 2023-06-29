@@ -4,10 +4,9 @@ interface newProduct {
     productTag: string
     title: string
     description: string
-    datePublish: string
     category: string[]
     size: string[]
-    imgUrl: {}
+    imgUrl: FileList | null
     price: number
 }
 const createNewProduct = (product: newProduct) => axios.post('/api/create-new-product', product)

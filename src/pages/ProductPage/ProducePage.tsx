@@ -18,7 +18,6 @@ const ProducePage = () => {
                             <th>STT</th>
                             <th>productName</th>
                             <th>description</th>
-                            <th>datePublish</th>
                             <th>category</th>
                             <th>size</th>
                             <th>imgUrl</th>

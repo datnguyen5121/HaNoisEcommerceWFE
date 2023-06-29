@@ -1,70 +1,171 @@
 import HeaderManageProduct from '../HeaderManageProduct/HeaderManageProduct'
 import styles from './ManageProductPage.module.css'
-import { useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { Button, Modal } from 'antd'
 import { ProductValues } from '../../type/ProductValues'
-import { ErrorMessage, Field, Formik, Form, FormikProps } from 'formik'
+import { ErrorMessage, Field, Formik, Form, FormikProps, useFormikContext, FieldArray } from 'formik'
 import { useLocation } from 'react-router-dom'
-import { initialValues } from '../../type/initialValues'
+import axios from '../../utils/axiosCustomize'
+
 import { validationSchemaProduct } from '../../type/validationSchemaProduct'
-import Select from 'react-select'
 import makeAnimated from 'react-select/animated'
-import axios from 'axios'
-
+import { getAllProductTag, getAllTag, getAllTagAdmin, getProductTag } from '../../services/apiService'
+import { getAllSize } from '../../services/sizeService'
 const animatedComponents = makeAnimated()
+interface IProductTag {
+    _id: string
+    navName: { _id: string; navName: string }
+    list: string[]
+    subnavName: string
+}
+interface ITag {
+    _id: string
+    navName: string
+}
+interface IProductTag {
+    _id: string
+    navName: { _id: string; navName: string }
+    list: string[]
+    subnavName: string
+}
+interface SubNavName {
+    list: string[]
+    navName: string
+    subnavName: string
+    subnavNameId: string
+    navNameId: string
+}
+interface ProductTagState {
+    navName: string
+    list: SubNavName[]
+}
+interface ProductState {
+    navName: string
+    list: string[]
+}
+export interface ProductForm {
+    subnavName: string
+    subnavNameId: string
+    list: string[]
+}
 
-const multipleSize = [
-    { value: '37', label: '37' },
-    { value: '38', label: '38' },
-    { value: '39', label: '39' },
-    { value: '40', label: '40' },
-    { value: '41', label: '41' },
-    { value: '42', label: '42' },
-    { value: '43', label: '43' },
-    { value: '44', label: '44' }
-]
 const ManageProductPage = () => {
+    const initialValues: ProductValues = {
+        gender: '',
+        productName: '',
+        title: '',
+        description: '',
+        category: [],
+        size: [],
+        imgUrl: null,
+        price: null
+    }
+    interface ITagList {
+        _id: string
+        navName: string
+    }
     const [isModalOpen, setIsModalOpen] = useState(false)
-
+    const [tagList, setTagList] = useState<ITagList[]>([])
+    const [productTagDataList, setProductTagDataList] = useState<ProductTagState[]>([])
+    const [productTagList, setProductTagList] = useState<SubNavName[]>([])
+    const [category, setCategory] = useState<string[]>([])
+    const [selectedImages, setSelectedImages] = useState<FileList | null>(null)
     const { state } = useLocation()
+    const [productSelect, setProductSelect] = useState<string>('')
+    const [sizeList, setSizeList] = useState<string[]>([])
+    const [productAll, setProductAll] = useState<any>([])
+
     const showModal = () => {
         setIsModalOpen(true)
-    }
-
-    const handleOk = () => {
-        setIsModalOpen(false)
     }
 
     const handleCancel = () => {
         setIsModalOpen(false)
     }
 
-    const [size, setSize] = useState<string[]>([])
-    // const [selectedImages, setSelectedImages] = useState<File[]>([])
+    const fileInputRef = useRef<HTMLInputElement>(null) // Tham chiếu đến phần tử input
 
-    // const handleImageChange = (e: ChangeEvent<HTMLInputElement>, formik: FormikProps<ProductValues>) => {
-    //     const files = Array.from(e.target.files || [])
-    //     setSelectedImages((prevSelectedImages) => [...prevSelectedImages, ...files])
-    //     const fileNames = files.map((file) => file.name)
-    //     formik.setFieldValue('imgUrl', fileNames)
-    // }
+    const handleGetTagList = async () => {
+        let res = await getAllTagAdmin()
 
-    // const uploadImage = (formik: FormikProps<ProductValues>) => {
-    //     const fileNames = selectedImages.map((file) => file.name)
-    //     console.log(fileNames)
-    //     formik.setFieldValue('imgUrl', fileNames)
-    // }
+        setTagList(res.data)
+    }
+    useEffect(() => {
+        handleGetTagList()
+        fetchAllProductTag()
+        fetchAllProduct()
+    }, [])
 
-    const handleChooseSize = (selectedOptions: any) => {
-        const sizes = selectedOptions.map((option: any) => option.value)
-        setSize((prevSize) => [...prevSize, ...sizes])
-        console.log('Cac size da chon === ', sizes)
+    const fetchAllProduct = async () => {
+        let res = await axios.get('/api/get-all-product')
+        setProductAll(res.data)
+    }
+    const fetchAllProductTag = async () => {
+        const res = await getAllProductTag()
+        if (res) {
+            const data = handleBuildCategoryData(res.data)
+            setProductTagDataList(data)
+        }
+    }
+    useEffect(() => {
+        fetchSizeByProductName(productSelect)
+    }, [productSelect])
+    let fetchSizeByProductName = async (values: any) => {
+        let res = await getAllSize()
+        if (values) {
+            let sizeList = res.data.filter((item: any) => item.subnavName == values)
+
+            setSizeList(sizeList[0].size)
+        }
+    }
+    const handleBuildCategoryData = (data: IProductTag[]) => {
+        const newData = data.map((item) => {
+            return {
+                navName: item.navName.navName,
+                navNameId: item.navName._id,
+                subnavNameId: item._id,
+                subnavName: item.subnavName,
+                list: item.list
+            }
+        })
+
+        const newObj = newData.reduce((result: any, obj) => {
+            const navName = obj.navName
+            const navNameId = obj.navNameId
+            const subnavNameId = obj.subnavNameId
+            const indexNav = result.findIndex((item: any) => item.navName === navName)
+
+            if (indexNav !== -1) {
+                result[indexNav].list.push({
+                    navName: navName,
+                    navNameId: navNameId,
+                    subnavNameId: subnavNameId,
+                    subnavName: obj.subnavName,
+                    list: obj.list
+                })
+            } else {
+                result.push({
+                    navName: navName,
+                    list: [
+                        {
+                            navName: navName,
+                            navNameId: navNameId,
+                            subnavNameId: subnavNameId,
+                            subnavName: obj.subnavName,
+                            list: obj.list
+                        }
+                    ]
+                })
+            }
+            return result
+        }, [])
+        return newObj
     }
 
-    console.log(size)
-
-    const handleSubmit = async (values: any) => {
+    const handleSubmit = async (values: any, setFieldValue: any) => {
         console.log(values)
+        console.log('dat')
+
         const formData = new FormData()
 
         if (values.imgUrl !== null) {
@@ -76,19 +177,106 @@ const ManageProductPage = () => {
         formData.append('productName', values.productName)
         formData.append('title', values.title)
         formData.append('description', values.description)
-        formData.append('datePublish', values.datePublish)
         formData.append('category', values.category)
         formData.append('size', values.size)
         formData.append('imgUrl', values.imgUrl)
         formData.append('price', values.price)
         try {
             const response = await axios.post('/create-new-product', formData)
-            console.log(response.data)
+            fetchAllProduct()
         } catch (error) {
             console.log(error)
         }
+        setIsModalOpen(false)
+    }
+    const handleChangeGender = (e: any, setFieldValue: any) => {
+        const selectedOption = e.target.value
+
+        console.log(selectedOption)
+        let data = productTagDataList.filter((item) => item.navName == selectedOption)
+        console.log(data[0].list)
+        setProductTagList(data[0].list)
+        // Cập nhật giá trị của trường select và array trong state của Formik
+        setFieldValue('gender', selectedOption)
+        // setFieldValue('options', newArray); // Cập nhật giá trị của array nếu cần
+    }
+    let handleChangeProductType = (e: any, setFieldValue: any) => {
+        const selectedOption = e.target.value
+        let data = productTagList.filter((item) => item.subnavName == selectedOption)
+        setCategory(data[0].list)
+
+        setFieldValue('productName', selectedOption)
+        setProductSelect(selectedOption)
     }
 
+    const handleDeleteImg = (e: any, index: number, setFieldValue: any) => {
+        e.stopPropagation()
+        if (selectedImages) {
+            let arr = Array.from(selectedImages)
+            arr.splice(index, 1)
+            const dataTransfer = new DataTransfer()
+            arr.forEach((file) => {
+                dataTransfer.items.add(file)
+            })
+
+            const newFileList = dataTransfer.files
+            setSelectedImages(newFileList)
+            setFieldValue('imgUrl', newFileList)
+        }
+    }
+    const mergeFileLists = (fileList1: FileList, fileList2: any): FileList => {
+        const mergedFiles: File[] = Array.from(fileList1)
+
+        for (let i = 0; i < fileList2.length; i++) {
+            mergedFiles.push(fileList2[i])
+        }
+        const dataTransfer = new DataTransfer()
+
+        mergedFiles.forEach((file: any) => {
+            dataTransfer.items.add(file)
+        })
+        const newFileList = dataTransfer.files
+        return newFileList
+    }
+    const handleChangeFile = (event: any, setFieldValue: any) => {
+        const inputElement = event.currentTarget
+        const files: any = Array.from(inputElement.files || [])
+
+        if (files && files.length > 0) {
+            console.log('0', files)
+
+            const selectedFiles: any = Array.from(files)
+            const dataTransfer = new DataTransfer()
+
+            selectedFiles.forEach((file: any) => {
+                dataTransfer.items.add(file)
+            })
+            const newFileList = dataTransfer.files
+            let updatedFileList: any = newFileList
+            if (selectedImages) {
+                updatedFileList = mergeFileLists(selectedImages, selectedFiles)
+            }
+
+            setSelectedImages(updatedFileList)
+            setFieldValue('imgUrl', updatedFileList)
+        }
+    }
+
+    const handleUpload = () => {
+        if (fileInputRef) {
+            fileInputRef.current!.click() // Kích hoạt sự kiện chọn tệp
+        }
+    }
+    const handleDeleteProduct = async (id: string) => {
+        let data = {
+            id: id
+        }
+        if (confirm('Do you want to delete this product ?')) {
+            let res = await axios.delete('/api/delete-product-by-id', { data })
+
+            fetchAllProduct()
+        }
+    }
     return (
         <div className={`productPageContainer px-[20px] py-[10px]`}>
             <HeaderManageProduct />
@@ -107,35 +295,52 @@ const ManageProductPage = () => {
                     <Button className='bg-blue-500' type='primary' onClick={showModal}>
                         Create a new Product
                     </Button>
-                    <Modal title='Create A New Product' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+                    <Modal title='Create A New Product' open={isModalOpen} footer={null} onCancel={handleCancel}>
                         <Formik<ProductValues>
                             onSubmit={handleSubmit}
                             validationSchema={validationSchemaProduct}
                             initialValues={state == null ? initialValues : state}
                         >
                             {(formik) => (
-                                <div>
-                                    <Form onSubmit={formik.handleSubmit}>
+                                <form onSubmit={formik.handleSubmit}>
+                                    <div>
                                         <div className={`my-[0.8rem] grid`}>
                                             <label htmlFor='gender' className='mb-[0.2rem] font-[700]'>
-                                                Gender
+                                                Main Tag
                                             </label>
                                             <Field
-                                                as='input'
+                                                onChange={(e: any) => handleChangeGender(e, formik.setFieldValue)}
+                                                as='select'
+                                                id='gender'
                                                 name='gender'
                                                 className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px]  px-[10px] py-[5px] rounded-md`}
-                                            />
+                                            >
+                                                <option value=''>--Choose tag--</option>
+                                                {tagList.map((option, index) => (
+                                                    <option key={index} value={option.navName}>
+                                                        {option.navName}
+                                                    </option>
+                                                ))}
+                                            </Field>
                                             <ErrorMessage className={`${styles.error}`} name='gender' component='div' />
                                         </div>
                                         <div className={`my-[0.8rem] grid`}>
                                             <label htmlFor='productName' className='mb-[0.2rem] font-[700]'>
-                                                Product Name
+                                                Product Type
                                             </label>
                                             <Field
-                                                as='input'
+                                                as='select'
                                                 name='productName'
                                                 className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px]  px-[10px] py-[5px] rounded-md`}
-                                            />
+                                                onChange={(e: any) => handleChangeProductType(e, formik.setFieldValue)}
+                                            >
+                                                <option value=''>--Choose tag--</option>
+                                                {productTagList.map((option, index) => (
+                                                    <option key={index} value={option.subnavName}>
+                                                        {option.subnavName}
+                                                    </option>
+                                                ))}
+                                            </Field>
                                             <ErrorMessage
                                                 className={`${styles.error}`}
                                                 name='productName'
@@ -144,7 +349,7 @@ const ManageProductPage = () => {
                                         </div>
                                         <div className={`my-[0.8rem] grid`}>
                                             <label htmlFor='title' className='mb-[0.2rem] font-[700]'>
-                                                Title
+                                                Product Name
                                             </label>
                                             <Field
                                                 as='input'
@@ -155,7 +360,7 @@ const ManageProductPage = () => {
                                         </div>
                                         <div className={`my-[0.8rem] grid`}>
                                             <label htmlFor='description' className='mb-[0.2rem] font-[700]'>
-                                                Description
+                                                Product Info
                                             </label>
                                             <Field
                                                 as='input'
@@ -170,50 +375,56 @@ const ManageProductPage = () => {
                                         </div>
 
                                         <ErrorMessage name='inputValue' component='div' />
-                                        <div className={`my-[0.8rem] grid`}>
-                                            <label htmlFor='datePublish' className='mb-[0.2rem] font-[700]'>
-                                                Date Publish
-                                            </label>
-                                            <Field
-                                                as='input'
-                                                name='datePublish'
-                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px]  px-[10px] py-[5px] rounded-md   `}
-                                            />
-                                            <ErrorMessage
-                                                className={`${styles.error}`}
-                                                name='datePublish'
-                                                component='div'
-                                            />
-                                        </div>
+
                                         <div className={`my-[0.8rem] grid`}>
                                             <label htmlFor='category' className='mb-[0.2rem] font-[700]'>
                                                 Category
                                             </label>
-                                            <Field
-                                                as='input'
-                                                name='category'
-                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px]  px-[10px] py-[5px] rounded-md   `}
-                                            />
+
+                                            <>
+                                                <div role='group' aria-labelledby='checkbox-group'>
+                                                    {category.map((option, index) => (
+                                                        <label>
+                                                            <Field
+                                                                type='checkbox'
+                                                                name='category'
+                                                                value={`${option}`}
+                                                            />
+                                                            {option}
+                                                        </label>
+                                                    ))}
+                                                </div>
+                                            </>
                                             <ErrorMessage
                                                 className={`${styles.error}`}
                                                 name='category'
                                                 component='div'
                                             />
                                         </div>
+
                                         <div className={`my-[0.8rem] grid`}>
                                             <label htmlFor='size' className='mb-[0.2rem] font-[700]'>
                                                 Size
                                             </label>
-                                            <Field
+                                            {/* <Field
                                                 name='size'
-                                                as={Select}
+                                                as='select'
                                                 closeMenuOnSelect={false}
                                                 components={animatedComponents}
                                                 isMulti
                                                 value={size}
                                                 onChange={handleChooseSize}
                                                 options={multipleSize}
-                                            />
+                                            /> */}
+                                            <div role='group' aria-labelledby='checkbox-group'>
+                                                {sizeList.length > 0 &&
+                                                    sizeList.map((option, index) => (
+                                                        <label>
+                                                            <Field type='checkbox' name='size' value={`${option}`} />
+                                                            {option}
+                                                        </label>
+                                                    ))}
+                                            </div>
                                             <ErrorMessage className={`${styles.error}`} name='size' component='div' />
                                         </div>
                                         <div className={`my-[0.8rem] grid`}>
@@ -232,16 +443,39 @@ const ManageProductPage = () => {
                                                 Image Url
                                             </label>
                                             <input
-                                                className='mb-[0.6rem]'
+                                                className='mb-[0.6rem] '
                                                 type='file'
                                                 id='imageInput'
                                                 name='imgUrl'
                                                 accept='image/png, image/jpg, image/jpeg'
                                                 onChange={(event) => {
-                                                    formik.setFieldValue('imgUrl', event.currentTarget.files)
+                                                    handleChangeFile(event, formik.setFieldValue)
                                                 }}
                                                 multiple
+                                                ref={fileInputRef}
                                             />
+                                            <div className='flex flex-wrap'>
+                                                {selectedImages &&
+                                                    Array.from(selectedImages).map((file, index) => (
+                                                        <div className='relative'>
+                                                            <img
+                                                                key={`img-${index}`}
+                                                                src={URL.createObjectURL(file)}
+                                                                alt={`Image ${index + 1}`}
+                                                                className='w-32 h-32 object-contain'
+                                                            ></img>
+                                                            <div
+                                                                className='absolute top-[1%] left-[110px]'
+                                                                onClick={(e: any) =>
+                                                                    handleDeleteImg(e, index, formik.setFieldValue)
+                                                                }
+                                                            >
+                                                                {' '}
+                                                                <i className='fa-solid fa-trash  hover:text-red-500'></i>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                            </div>
                                             {/* <button
                                                 className='w-[4.6rem] h-[1.8rem] bg-blue-600 text-white rounded-md'
                                                 onClick={() => uploadImage(formik)}
@@ -252,14 +486,14 @@ const ManageProductPage = () => {
                                         </div>
                                         <div>
                                             <button
-                                                className='bg-blue-600 w-[4.6rem] h-[1.8rem] text-white rounded-md'
+                                                className='bg-blue-600 w-[4.6rem] hover:opacity-50 h-[1.8rem] text-white rounded-md'
                                                 type='submit'
                                             >
                                                 Submit
                                             </button>
                                         </div>
-                                    </Form>
-                                </div>
+                                    </div>
+                                </form>
                             )}
                         </Formik>
                     </Modal>
@@ -270,7 +504,6 @@ const ManageProductPage = () => {
                             <th>STT</th>
                             <th>title</th>
                             <th>Description</th>
-                            <th>DatePublish</th>
                             <th>Category</th>
                             <th>Size</th>
                             <th>imgUrl</th>
@@ -279,29 +512,29 @@ const ManageProductPage = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {/* {productItems.map((product, index) => (
+                        {productAll.map((product: any, index: any) => (
                             <tr key={index}>
                                 <td className='w-11'>{index + 1}</td>
                                 <td className='w-36'>{product.title}</td>
                                 <td className='w-40'>{product.description}</td>
-                                <td className='w-28'>{product.datePublish}</td>
                                 <td className='w-32'>{product.category}</td>
                                 <td className='w-32'>{product.size}</td>
-                                <td className='w-40'>asdfsafdsdf</td>
-                                
+                                <td className='w-32'>{product.imgUrl}</td>
+                                <td className='w-40'>{product.price}</td>
+
                                 <td className='w-36'>
                                     <div>
                                         <button className={`${styles.editBtn}`}>Edit</button>
                                         <button
                                             className={`${styles.deleteBtn}`}
-                                            onClick={() => dispatch(removeToManageProduct(product._id))}
+                                            onClick={() => handleDeleteProduct(product._id)}
                                         >
                                             Delete
                                         </button>
                                     </div>
                                 </td>
                             </tr>
-                        ))} */}
+                        ))}
                     </tbody>
                 </table>
             </div>

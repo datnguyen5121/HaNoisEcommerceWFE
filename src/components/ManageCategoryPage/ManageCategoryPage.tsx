@@ -47,7 +47,6 @@ export interface ProductForm {
     subnavNameId: string
     list: string[]
 }
-console.log('manageCategorypage')
 const ManageCategoryPage = () => {
     const [isModalCreateTagOpen, setModalCreateTagOpen] = useState(false)
     const [isModalEditOpen, setIsModalEditOpen] = useState(false)
