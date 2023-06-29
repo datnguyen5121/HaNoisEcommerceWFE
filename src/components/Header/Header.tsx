@@ -47,11 +47,6 @@ function Header() {
                             My Account
                         </Link>
                     </li>
-                    <li className='px-3 py-2 hover:bg-gray-200 cursor-pointer'>
-                        <Link className='block' to='/account'>
-                            Account Info
-                        </Link>
-                    </li>
                     {user.infoUser.roleId == 'ADMIN' && (
                         <li className='px-3 py-2 hover:bg-gray-200 cursor-pointer'>
                             <Link className='block' to='/admin/product'>
@@ -60,7 +55,13 @@ function Header() {
                         </li>
                     )}
                     <li className='px-3 py-2 hover:bg-gray-200 cursor-pointer'>
-                        <div className='block' onClick={() => logoutUser(dispatch)}>
+                        <button
+                            className='block'
+                            onClick={() => {
+                                navigate('/')
+                                logoutUser(dispatch)
+                            }}
+                        >
                             Logout
                         </button>
                     </li>
@@ -129,11 +130,19 @@ function Header() {
                                                             >
                                                                 My Account
                                                             </Link>
+                                                            {user.infoUser.roleId == 'ADMIN' && (
+                                                                <Link
+                                                                    to={'/admin'}
+                                                                    className='block p-2 hover:bg-gray-200  '
+                                                                >
+                                                                    Admin Page
+                                                                </Link>
+                                                            )}
                                                             <button
                                                                 className='block w-full text-start p-2 hover:bg-gray-200  '
                                                                 onClick={() => {
-                                                                    logoutUser(dispatch)
                                                                     navigate('/')
+                                                                    logoutUser(dispatch)
                                                                 }}
                                                             >
                                                                 Logout
