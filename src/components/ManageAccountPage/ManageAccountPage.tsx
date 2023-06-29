@@ -8,6 +8,7 @@ import { AccountValues } from '../../type/AccountValues'
 import { validationSchemaAccount } from '../../type/validationSchemaAccount'
 import { initialAccountValues } from '../../type/initialAccountValues'
 import axios from '../../utils/axiosCustomize.tsx'
+import { toast } from 'react-toastify'
 
 const ManageAccountPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -43,8 +44,13 @@ const ManageAccountPage = () => {
         try {
             console.log('form data === ', data)
             const response = await axios.post('/api/create-new-user', data)
+            if (response.data) {
+                handleCancel()
+                toast('Create account successfully')
+            }
+            setIsModalOpen(false)
             const getAccount = await axios.get('/api/get-all-user')
-            console.log(response.data)
+            console.log('response data === ', response.data)
             setAccounts(getAccount.data)
         } catch (error) {
             console.log(error)
@@ -65,6 +71,10 @@ const ManageAccountPage = () => {
         try {
             await axios.put('/api/update-user-by-id', { _id: accountId, ...data })
             const response = await axios.get('/api/get-all-user')
+            if (response.data) {
+                handleCancelUpdate()
+                toast('Update account successfully')
+            }
             setAccounts(response.data)
         } catch (error) {
             console.log(error)
@@ -142,6 +152,7 @@ const ManageAccountPage = () => {
                             onSubmit={handleSubmit}
                             validationSchema={validationSchemaAccount}
                             initialValues={state == null ? initialAccountValues : state}
+                            enableReinitialize={false}
                         >
                             {(formik) => (
                                 <Form onSubmit={formik.handleSubmit}>
