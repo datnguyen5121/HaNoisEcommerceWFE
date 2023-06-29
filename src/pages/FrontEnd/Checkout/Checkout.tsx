@@ -110,10 +110,10 @@ function Checkout() {
                             </div>
                             <hr />
                             <div className='product-list pt-3'>
+                                {/* <ProductItem isCheckout />
                                 <ProductItem isCheckout />
                                 <ProductItem isCheckout />
-                                <ProductItem isCheckout />
-                                <ProductItem isCheckout />
+                                <ProductItem isCheckout /> */}
                             </div>
                         </div>
                     </div>
