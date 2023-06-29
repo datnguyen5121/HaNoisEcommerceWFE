@@ -7,15 +7,15 @@ td {
     background-color: green;
     color: white;
     padding: 3px 10px;
-    margin-right: 10px;
     border-radius: 6px;
+    margin: 6px;
 }
 .deleteBtn {
     background-color: red;
     color: white;
     padding: 3px 10px;
-    margin-right: left;
     border-radius: 6px;
+    margin: 6px;
 }
 .error {
     color: red;

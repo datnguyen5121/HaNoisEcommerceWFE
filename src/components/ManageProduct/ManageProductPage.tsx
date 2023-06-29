@@ -1,9 +1,9 @@
 import HeaderManageProduct from '../HeaderManageProduct/HeaderManageProduct'
 import styles from './ManageProductPage.module.css'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Button, Modal } from 'antd'
 import { ProductValues } from '../../type/ProductValues'
-import { ErrorMessage, Field, Formik, Form, FormikProps, useFormikContext, FieldArray } from 'formik'
+import { ErrorMessage, Field, Formik, Form } from 'formik'
 import { useLocation } from 'react-router-dom'
 import axios from '../../utils/axiosCustomize'
 
@@ -375,7 +375,6 @@ const ManageProductPage = () => {
                                         </div>
 
                                         <ErrorMessage name='inputValue' component='div' />
-
                                         <div className={`my-[0.8rem] grid`}>
                                             <label htmlFor='category' className='mb-[0.2rem] font-[700]'>
                                                 Category
@@ -541,5 +540,4 @@ const ManageProductPage = () => {
         </div>
     )
 }
-
 export default ManageProductPage
