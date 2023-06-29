@@ -62,7 +62,7 @@ function Header() {
                     <li className='px-3 py-2 hover:bg-gray-200 cursor-pointer'>
                         <div className='block' onClick={() => logoutUser(dispatch)}>
                             Logout
-                        </button>
+                        </div>
                     </li>
                 </ul>
             )
