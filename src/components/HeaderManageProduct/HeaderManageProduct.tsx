@@ -13,6 +13,9 @@ const HeaderManageProduct = () => {
                 <NavLink className={`ms-[10px]`} to='/admin/category'>
                     Category
                 </NavLink>
+                <NavLink className={`ms-[10px]`} to='/admin/size'>
+                    Size
+                </NavLink>
             </div>
             <Link to='/'>
                 <i className='fa-solid fa-house'></i>

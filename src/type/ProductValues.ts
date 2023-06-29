@@ -7,5 +7,5 @@ export interface ProductValues {
     category: string[]
     size: string[]
     imgUrl: FileList | null
-    price: number
+    price: number | null
 }

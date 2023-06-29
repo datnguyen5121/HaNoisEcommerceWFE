@@ -5,15 +5,12 @@ import { Button, Modal } from 'antd'
 import { ProductValues } from '../../type/ProductValues'
 import { ErrorMessage, Field, Formik, Form, FormikProps, useFormikContext, FieldArray } from 'formik'
 import { useLocation } from 'react-router-dom'
-import { initialValues } from '../../type/initialValues'
-import { Form as FormikForm } from 'formik'
+import axios from '../../utils/axiosCustomize'
 
 import { validationSchemaProduct } from '../../type/validationSchemaProduct'
-import Select from 'react-select'
 import makeAnimated from 'react-select/animated'
-import axios from 'axios'
 import { getAllProductTag, getAllTag, getAllTagAdmin, getProductTag } from '../../services/apiService'
-
+import { getAllSize } from '../../services/sizeService'
 const animatedComponents = makeAnimated()
 interface IProductTag {
     _id: string
@@ -51,16 +48,7 @@ export interface ProductForm {
     subnavNameId: string
     list: string[]
 }
-const multipleSize = [
-    { value: '37', label: '37' },
-    { value: '38', label: '38' },
-    { value: '39', label: '39' },
-    { value: '40', label: '40' },
-    { value: '41', label: '41' },
-    { value: '42', label: '42' },
-    { value: '43', label: '43' },
-    { value: '44', label: '44' }
-]
+
 const ManageProductPage = () => {
     const initialValues: ProductValues = {
         gender: '',
@@ -68,9 +56,9 @@ const ManageProductPage = () => {
         title: '',
         description: '',
         category: [],
-        size: ['37', '38', '39', '40', '41', '42', '43', '44'],
+        size: [],
         imgUrl: null,
-        price: 123
+        price: null
     }
     interface ITagList {
         _id: string
@@ -81,10 +69,12 @@ const ManageProductPage = () => {
     const [productTagDataList, setProductTagDataList] = useState<ProductTagState[]>([])
     const [productTagList, setProductTagList] = useState<SubNavName[]>([])
     const [category, setCategory] = useState<string[]>([])
-    const [tagId, setTagId] = useState<string>('')
     const [selectedImages, setSelectedImages] = useState<FileList | null>(null)
-    const [tag, setTag] = useState<string>('')
     const { state } = useLocation()
+    const [productSelect, setProductSelect] = useState<string>('')
+    const [sizeList, setSizeList] = useState<string[]>([])
+    const [productAll, setProductAll] = useState<any>([])
+
     const showModal = () => {
         setIsModalOpen(true)
     }
@@ -93,18 +83,23 @@ const ManageProductPage = () => {
         setIsModalOpen(false)
     }
 
-    const [size, setSize] = useState<string[]>([])
     const fileInputRef = useRef<HTMLInputElement>(null) // Tham chiếu đến phần tử input
 
     const handleGetTagList = async () => {
         let res = await getAllTagAdmin()
+
         setTagList(res.data)
     }
     useEffect(() => {
         handleGetTagList()
         fetchAllProductTag()
+        fetchAllProduct()
     }, [])
 
+    const fetchAllProduct = async () => {
+        let res = await axios.get('/api/get-all-product')
+        setProductAll(res.data)
+    }
     const fetchAllProductTag = async () => {
         const res = await getAllProductTag()
         if (res) {
@@ -112,7 +107,17 @@ const ManageProductPage = () => {
             setProductTagDataList(data)
         }
     }
+    useEffect(() => {
+        fetchSizeByProductName(productSelect)
+    }, [productSelect])
+    let fetchSizeByProductName = async (values: any) => {
+        let res = await getAllSize()
+        if (values) {
+            let sizeList = res.data.filter((item: any) => item.subnavName == values)
 
+            setSizeList(sizeList[0].size)
+        }
+    }
     const handleBuildCategoryData = (data: IProductTag[]) => {
         const newData = data.map((item) => {
             return {
@@ -156,13 +161,8 @@ const ManageProductPage = () => {
         }, [])
         return newObj
     }
-    const handleChooseSize = (selectedOptions: any) => {
-        const sizes = selectedOptions.map((option: any) => option.value)
-        setSize((prevSize) => [...prevSize, ...sizes])
-        console.log('Cac size da chon === ', sizes)
-    }
 
-    const handleSubmit = async (values: any, e: any) => {
+    const handleSubmit = async (values: any, setFieldValue: any) => {
         console.log(values)
         console.log('dat')
 
@@ -183,7 +183,7 @@ const ManageProductPage = () => {
         formData.append('price', values.price)
         try {
             const response = await axios.post('/create-new-product', formData)
-            console.log(response.data)
+            fetchAllProduct()
         } catch (error) {
             console.log(error)
         }
@@ -202,23 +202,15 @@ const ManageProductPage = () => {
     }
     let handleChangeProductType = (e: any, setFieldValue: any) => {
         const selectedOption = e.target.value
-        // Thực hiện các thay đổi trong array tại đây, ví dụ:
-        // const newArray = [selectedOption, ...options] // Thêm giá trị mới vào đầu array
-        console.log(selectedOption)
         let data = productTagList.filter((item) => item.subnavName == selectedOption)
-        console.log(productTagList)
         setCategory(data[0].list)
-        // setFieldValue('category')
-        // setProductTagList(data[0].list)
-        // // Cập nhật giá trị của trường select và array trong state của Formik
+
         setFieldValue('productName', selectedOption)
-        // setFieldValue('options', newArray); // Cập nhật giá trị của array nếu cần
+        setProductSelect(selectedOption)
     }
 
     const handleDeleteImg = (e: any, index: number, setFieldValue: any) => {
         e.stopPropagation()
-        console.log('dat')
-        console.log(selectedImages)
         if (selectedImages) {
             let arr = Array.from(selectedImages)
             arr.splice(index, 1)
@@ -228,8 +220,6 @@ const ManageProductPage = () => {
             })
 
             const newFileList = dataTransfer.files
-            console.log(newFileList)
-
             setSelectedImages(newFileList)
             setFieldValue('imgUrl', newFileList)
         }
@@ -251,7 +241,6 @@ const ManageProductPage = () => {
     const handleChangeFile = (event: any, setFieldValue: any) => {
         const inputElement = event.currentTarget
         const files: any = Array.from(inputElement.files || [])
-        console.log('dat')
 
         if (files && files.length > 0) {
             console.log('0', files)
@@ -267,8 +256,6 @@ const ManageProductPage = () => {
             if (selectedImages) {
                 updatedFileList = mergeFileLists(selectedImages, selectedFiles)
             }
-            console.log('1', selectedImages)
-            console.log('2', selectedFiles)
 
             setSelectedImages(updatedFileList)
             setFieldValue('imgUrl', updatedFileList)
@@ -278,6 +265,16 @@ const ManageProductPage = () => {
     const handleUpload = () => {
         if (fileInputRef) {
             fileInputRef.current!.click() // Kích hoạt sự kiện chọn tệp
+        }
+    }
+    const handleDeleteProduct = async (id: string) => {
+        let data = {
+            id: id
+        }
+        if (confirm('Do you want to delete this product ?')) {
+            let res = await axios.delete('/api/delete-product-by-id', { data })
+
+            fetchAllProduct()
         }
     }
     return (
@@ -409,16 +406,25 @@ const ManageProductPage = () => {
                                             <label htmlFor='size' className='mb-[0.2rem] font-[700]'>
                                                 Size
                                             </label>
-                                            <Field
+                                            {/* <Field
                                                 name='size'
-                                                as={Select}
+                                                as='select'
                                                 closeMenuOnSelect={false}
                                                 components={animatedComponents}
                                                 isMulti
                                                 value={size}
                                                 onChange={handleChooseSize}
                                                 options={multipleSize}
-                                            />
+                                            /> */}
+                                            <div role='group' aria-labelledby='checkbox-group'>
+                                                {sizeList.length > 0 &&
+                                                    sizeList.map((option, index) => (
+                                                        <label>
+                                                            <Field type='checkbox' name='size' value={`${option}`} />
+                                                            {option}
+                                                        </label>
+                                                    ))}
+                                            </div>
                                             <ErrorMessage className={`${styles.error}`} name='size' component='div' />
                                         </div>
                                         <div className={`my-[0.8rem] grid`}>
@@ -448,7 +454,6 @@ const ManageProductPage = () => {
                                                 multiple
                                                 ref={fileInputRef}
                                             />
-                                            <button onClick={handleUpload}>Upload</button>
                                             <div className='flex flex-wrap'>
                                                 {selectedImages &&
                                                     Array.from(selectedImages).map((file, index) => (
@@ -507,28 +512,29 @@ const ManageProductPage = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {/* {productItems.map((product, index) => (
+                        {productAll.map((product: any, index: any) => (
                             <tr key={index}>
                                 <td className='w-11'>{index + 1}</td>
                                 <td className='w-36'>{product.title}</td>
                                 <td className='w-40'>{product.description}</td>
                                 <td className='w-32'>{product.category}</td>
                                 <td className='w-32'>{product.size}</td>
-                                <td className='w-40'>asdfsafdsdf</td>
-                                
+                                <td className='w-32'>{product.imgUrl}</td>
+                                <td className='w-40'>{product.price}</td>
+
                                 <td className='w-36'>
                                     <div>
                                         <button className={`${styles.editBtn}`}>Edit</button>
                                         <button
                                             className={`${styles.deleteBtn}`}
-                                            onClick={() => dispatch(removeToManageProduct(product._id))}
+                                            onClick={() => handleDeleteProduct(product._id)}
                                         >
                                             Delete
                                         </button>
                                     </div>
                                 </td>
                             </tr>
-                        ))} */}
+                        ))}
                     </tbody>
                 </table>
             </div>
