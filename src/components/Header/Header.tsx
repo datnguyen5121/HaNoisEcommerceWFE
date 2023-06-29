@@ -91,9 +91,6 @@ function Header() {
                             <div className='relative'>
                                 <Link to={'/cart'}>
                                     <FontAwesomeIcon icon={faCartShopping} className='text-xl cursor-pointer' />
-                                    <div className='absolute top-[-50%] right-[-50%] text-red-500 text-sm font-medium bg-gray-100 w-5 h-5 flex items-center justify-center rounded-full'>
-                                        3
-                                    </div>
                                 </Link>
                             </div>
                             <div className={`relative ${style.group}`}>

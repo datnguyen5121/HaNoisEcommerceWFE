@@ -15,6 +15,7 @@ const cartSlice = createSlice({
             const existingItem = state.items.findIndex((item) => item._id === action.payload._id)
             if (existingItem !== -1) {
                 state.items[existingItem].quantity += 1
+                toast('Product added to cart')
             } else {
                 state.items.push(action.payload)
                 toast('Product added to cart')
