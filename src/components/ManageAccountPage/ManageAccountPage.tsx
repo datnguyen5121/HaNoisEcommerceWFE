@@ -201,14 +201,18 @@ const ManageAccountPage = () => {
                                         <ErrorMessage className={`${styles.error}`} name='address' component='div' />
                                     </div>
                                     <div className={`my-[0.8rem] grid`}>
-                                        <label htmlFor='gender' className='mb-[0.2rem] font-[700]'>
+                                        <label htmlFor='gender' className='me-[10px] font-[700]'>
                                             Gender
                                         </label>
                                         <Field
-                                            as='input'
+                                            as='select'
                                             name='gender'
                                             className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-full px-[10px] py-[5px]`}
-                                        />
+                                        >
+                                            <option value='male'>Male</option>
+                                            <option value='female'>Female</option>
+                                            <option value='other'>Other</option>
+                                        </Field>
                                         <ErrorMessage className={`${styles.error}`} name='gender' component='div' />
                                     </div>
                                     <div className={`my-[0.8rem] grid`}>
@@ -227,10 +231,13 @@ const ManageAccountPage = () => {
                                             Role
                                         </label>
                                         <Field
-                                            as='input'
+                                            as='select'
                                             name='roleId'
                                             className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-full px-[10px] py-[5px]`}
-                                        />
+                                        >
+                                            <option value='USER'>USER</option>
+                                            <option value='ADMIN'>ADMIN</option>
+                                        </Field>
                                         <ErrorMessage className={`${styles.error}`} name='roleId' component='div' />
                                     </div>
                                     <div>
@@ -324,10 +331,14 @@ const ManageAccountPage = () => {
                                             Gender
                                         </label>
                                         <Field
-                                            as='input'
+                                            as='select'
                                             name='gender'
                                             className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px] w-full px-[10px] py-[5px]`}
-                                        />
+                                        >
+                                            <option value='male'>Male</option>
+                                            <option value='female'>Female</option>
+                                            <option value='other'>Other</option>
+                                        </Field>
                                         <ErrorMessage className={`${styles.error}`} name='gender' component='div' />
                                     </div>
                                     <div className={`my-[0.6rem] grid`}>
@@ -392,8 +403,8 @@ const ManageAccountPage = () => {
                                 <td className='w-16'>{account.gender}</td>
                                 <td className='w-16'>{account.phone}</td>
                                 <td className='w-16'>{account.roleId}</td>
-                                <td className='w-28'>
-                                    <div>
+                                <td className='w-24'>
+                                    <div className='button-container'>
                                         <button
                                             className={`${styles.editBtn}`}
                                             onClick={() => {

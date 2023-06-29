@@ -37,7 +37,6 @@ const ManageProductPage = () => {
         formData.append('productName', values.productName)
         formData.append('title', values.title)
         formData.append('description', values.description)
-        formData.append('datePublish', values.datePublish)
         formData.append('category', values.category)
         formData.append('size', values.size)
         formData.append('imgUrl', values.imgUrl)
@@ -142,21 +141,6 @@ const ManageProductPage = () => {
                                         </div>
 
                                         <ErrorMessage name='inputValue' component='div' />
-                                        <div className={`my-[0.8rem] grid`}>
-                                            <label htmlFor='datePublish' className='mb-[0.2rem] font-[700]'>
-                                                Date Publish
-                                            </label>
-                                            <Field
-                                                as='input'
-                                                name='datePublish'
-                                                className={`border-neutral-400 border-solid border-x-[1px] border-y-[1px]  px-[10px] py-[5px] rounded-md   `}
-                                            />
-                                            <ErrorMessage
-                                                className={`${styles.error}`}
-                                                name='datePublish'
-                                                component='div'
-                                            />
-                                        </div>
                                         <div className={`my-[0.8rem] grid`}>
                                             <label htmlFor='category' className='mb-[0.2rem] font-[700]'>
                                                 Category
@@ -379,12 +363,6 @@ const ManageProductPage = () => {
                                                 }}
                                                 multiple
                                             />
-                                            {/* <button
-                                                className='w-[4.6rem] h-[1.8rem] bg-blue-600 text-white rounded-md'
-                                                onClick={() => uploadImage(formik)}
-                                            >
-                                                Upload
-                                            </button> */}
                                             <ErrorMessage className={`${styles.error}`} name='imgUrl' component='div' />
                                         </div>
                                         <div>
