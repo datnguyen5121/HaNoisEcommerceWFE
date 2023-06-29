@@ -204,7 +204,11 @@ const ManageProductPage = () => {
 
         try {
             const response = await axios.post('/api/create-new-product', formData)
-
+            if (response.data && response) {
+                toast.success('Create New Product Success !')
+            } else {
+                toast.error('Create failed !')
+            }
             fetchAllProduct()
         } catch (error) {
             console.log(error)
@@ -233,18 +237,15 @@ const ManageProductPage = () => {
         formData.append('title', values.title)
         formData.append('description', values.description)
         formData.append('price', values.price)
-        let data = {
-            gender: values.gender,
-            productName: values.productName,
-            title: values.title,
-            description: values.description,
-            category: values.category,
-            size: values.size,
-            imgUrl: values.imgUrl,
-            price: values.price
-        }
+
         try {
             const response = await axios.put('/api/update-product-by-id', formData)
+            if (response.data && response) {
+                toast.success('Update New Product Success !')
+            } else {
+                toast.error('Update failed !')
+            }
+            fetchAllProduct()
             fetchAllProduct()
             handleCancelEdit()
         } catch (error) {
@@ -332,7 +333,7 @@ const ManageProductPage = () => {
         }
         if (confirm('Do you want to delete this product ?')) {
             let res = await axios.delete('/api/delete-product-by-id', { data })
-            if (res && res.data.EC == 0) {
+            if (res) {
                 toast.success('Delete success!')
             } else {
                 toast.error('Delete fail!')
@@ -500,7 +501,7 @@ const ManageProductPage = () => {
                                             <>
                                                 <div role='group' aria-labelledby='checkbox-group'>
                                                     {category.map((option, index) => (
-                                                        <label>
+                                                        <label key={index}>
                                                             <Field
                                                                 type='checkbox'
                                                                 name='category'

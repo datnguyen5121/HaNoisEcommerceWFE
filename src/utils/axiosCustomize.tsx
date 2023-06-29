@@ -34,7 +34,7 @@ instance.interceptors.response.use(
         // Do something with response error
         // const status = (error && error.response && error.response.status) || 500;
 
-        if (error.response.data && error.response.data.EC === -999) {
+        if (error.response.data && error.response.EC === -999) {
             window.location.href = '/'
         }
 

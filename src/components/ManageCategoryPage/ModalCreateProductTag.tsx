@@ -59,14 +59,9 @@ const ModalCreateProductTag: React.FC<IProps> = ({
     }
     return (
         <>
-            <Modal
-                title={`Create Product Tag `}
-                open={isModalCreateOpen}
-                onOk={handleCreateOk}
-                onCancel={handleCancelCreate}
-            >
+            <Modal title={`Create Product Tag `} open={isModalCreateOpen} footer={null} onCancel={handleCancelCreate}>
                 <section className='flex flex-col'>
-                    <label className='text-xl font-semibold'>SubnavName</label>
+                    <label className='text-xl font-semibold'>Product Type</label>
                     <input
                         className='border-[black] w-[80%] p-[10px] border-[1px] rounded-md'
                         value={subnavNameInput}
@@ -74,7 +69,7 @@ const ModalCreateProductTag: React.FC<IProps> = ({
                     ></input>
                 </section>
                 <section className='flex flex-col'>
-                    <label className='text-xl font-semibold'>navNameId</label>
+                    <label className='text-xl font-semibold'>Tag ID</label>
                     <div className='border-[black] w-[80%] p-[10px] border-[1px] rounded-md'>{navNameId}</div>
                 </section>
 
@@ -117,6 +112,14 @@ const ModalCreateProductTag: React.FC<IProps> = ({
                             )
                         })}
                 </section>
+                <div className='flex justify-end'>
+                    <button
+                        className=' bg-blue-600 w-[4.6rem]  mt-5 hover:opacity-50 h-[1.8rem] text-white rounded-md'
+                        onClick={handleCreateOk}
+                    >
+                        Submit
+                    </button>
+                </div>
             </Modal>
         </>
     )

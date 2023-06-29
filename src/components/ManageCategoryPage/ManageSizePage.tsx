@@ -87,9 +87,9 @@ const ManageSizePage = () => {
                     />
                 </div>
                 {size.length > 0 &&
-                    size.map((item) => {
+                    size.map((item, index) => {
                         return (
-                            <div className='p-3 mb-3 border-t rounded-lg shadow-md'>
+                            <div className='p-3 mb-3 border-t rounded-lg shadow-md' key={index}>
                                 <section className='flex gap-5 items-center pt-[20px]'>
                                     <span className='font-semibold'>{item.subnavName}</span>
                                     <button
@@ -110,9 +110,12 @@ const ManageSizePage = () => {
 
                                 <div className='flex flex-wrap  gap-[20px] my-[20px]'>
                                     {item.size.length > 0 &&
-                                        item.size.map((item1) => {
+                                        item.size.map((item1, index) => {
                                             return (
-                                                <li className='inline-block border-[1px] w-[50px] text-center p-[10px] hover:opacity-50 text-black-500 rounded-lg'>
+                                                <li
+                                                    key={index}
+                                                    className='inline-block border-[1px] w-[50px] text-center p-[10px] hover:opacity-50 text-black-500 rounded-lg'
+                                                >
                                                     {item1}
                                                 </li>
                                             )

@@ -36,8 +36,6 @@ function Account() {
         phone: userInfo.phone
     }
     useEffect(() => {
-        console.log(user)
-
         if (!user) {
             navigate('/')
         }

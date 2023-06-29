@@ -37,7 +37,7 @@ const Login: FC = () => {
                                     alt=''
                                     className={styles.logo}
                                 />
-                                <h1 className={styles.title}>YOUR ACCOUNT FOR EVERYTHING NIKE</h1>
+                                <h1 className={styles.title}>HANOIS GENZ</h1>
                             </div>
 
                             <div className=''>

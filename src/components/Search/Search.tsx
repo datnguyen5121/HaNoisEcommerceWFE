@@ -35,8 +35,6 @@ function Search() {
         fetch(`http://localhost:8080/api/get-search-value?q=${encodeURIComponent(debounceValue)}`)
             .then((res) => res.json())
             .then((res) => {
-                console.log('call api =>', res.data)
-
                 setSearchResult(res.data)
                 setLoading(false)
             })

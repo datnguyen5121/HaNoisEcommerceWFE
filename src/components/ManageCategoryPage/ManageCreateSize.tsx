@@ -46,8 +46,12 @@ const ManageCreateSize: React.FC<ISize> = ({ productList, isModalOpen, setIsModa
                 <select className='text-2xl' onChange={handleProduct}>
                     <option value=''>---Choose product</option>
                     {productList.length > 0 &&
-                        productList.map((item: any) => {
-                            return <option value={item.subnavName}>{item.subnavName}</option>
+                        productList.map((item: any, index: number) => {
+                            return (
+                                <option key={index} value={item.subnavName}>
+                                    {item.subnavName}
+                                </option>
+                            )
                         })}
                 </select>
                 <section className='flex flex-col text-md py-[10px]'>

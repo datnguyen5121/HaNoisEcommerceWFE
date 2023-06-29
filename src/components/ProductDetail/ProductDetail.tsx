@@ -32,8 +32,6 @@ function ProductDetail() {
             setProductData(res.data)
         }
     }
-    console.log('productData', productData)
-    console.log('productByGenderCategory', productByGenderCategory)
 
     const fetchProductByGenderCategory = async () => {
         const gender = productData?.gender
@@ -87,43 +85,6 @@ function ProductDetail() {
         }
     ]
 
-    const listCategoryProduct = [
-        {
-            imgUrl: img,
-            cost: '200000đ',
-            gender: 'Nam'
-        },
-        {
-            imgUrl: img,
-            cost: '200000đ',
-            gender: 'Nam'
-        },
-        {
-            imgUrl: img,
-            cost: '200000đ',
-            gender: 'Nam'
-        },
-        {
-            imgUrl: img,
-            cost: '200000đ',
-            gender: 'Nam'
-        },
-        {
-            imgUrl: img,
-            cost: '200000đ',
-            gender: 'Nam'
-        },
-        {
-            imgUrl: img,
-            cost: '200000đ',
-            gender: 'Nam'
-        },
-        {
-            imgUrl: img,
-            cost: '200000đ',
-            gender: 'Nam'
-        }
-    ]
     const handleChangeImgProductDetail = (index: number) => {
         setIndexImg(index)
     }
