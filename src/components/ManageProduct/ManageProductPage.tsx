@@ -302,8 +302,6 @@ const ManageProductPage = () => {
         const files: any = Array.from(inputElement.files || [])
 
         if (files && files.length > 0) {
-            console.log('0', files)
-
             const selectedFiles: any = Array.from(files)
             const dataTransfer = new DataTransfer()
 

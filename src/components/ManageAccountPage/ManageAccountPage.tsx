@@ -30,7 +30,6 @@ const ManageAccountPage = () => {
         setIsModalOpen(false)
     }
     const handleSubmit = async (values: any) => {
-        console.log(values)
         let data = {
             email: values.email,
             password: values.password,
@@ -42,7 +41,6 @@ const ManageAccountPage = () => {
             roleId: values.roleId
         }
         try {
-            console.log('form data === ', data)
             const response = await axios.post('/api/create-new-user', data)
             if (response.data) {
                 handleCancel()
@@ -50,14 +48,12 @@ const ManageAccountPage = () => {
             }
             setIsModalOpen(false)
             const getAccount = await axios.get('/api/get-all-user')
-            console.log('response data === ', response.data)
             setAccounts(getAccount.data)
         } catch (error) {
             console.log(error)
         }
     }
     const handleUpdate = async (accountId: string, values: any) => {
-        console.log(values)
         let data = {
             email: values.email,
             password: values.password,
@@ -83,7 +79,6 @@ const ManageAccountPage = () => {
     const accountsData = async () => {
         try {
             const response = await axios.get('/api/get-all-user')
-            console.log(response)
             setAccounts(response.data)
             return response.data
         } catch (error) {
@@ -95,7 +90,6 @@ const ManageAccountPage = () => {
     }, [])
     const deleteAccount = async (accountId: string) => {
         try {
-            console.log('account ID === ', accountId)
             if (confirm('Do you want to delete account')) {
                 await axios.delete(`/api/delete-user-by-id/?_id=${accountId}`)
             }
@@ -107,7 +101,6 @@ const ManageAccountPage = () => {
     }
     const updateAccount = (id: string, values: any) => {
         setAccountId(id)
-        console.log(values)
 
         let data = {
             email: values.email,

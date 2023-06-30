@@ -24,7 +24,6 @@ const ManageSizePage = () => {
     }, [])
     let fetchAllSize = async () => {
         let res = await getAllSize()
-        console.log(res.data)
 
         if (res) {
             setSize(res.data)
@@ -32,10 +31,8 @@ const ManageSizePage = () => {
     }
     let fetchAllProduct = async () => {
         let res = await getAllProductTag()
-        console.log(res.data)
 
         if (res.data.length > 0) {
-            console.log('dat')
             let cloneArr = res.data.filter((value: any, index: any, self: any) => {
                 return self.findIndex((item: any) => item.subnavName === value.subnavName) === index
             })

@@ -33,8 +33,6 @@ function ProductDetail() {
     const [quantity, setQuantity] = useState(1)
     const dispatch = useDispatch()
     const productItems = useSelector((state: any) => state.products.products)
-    console.log('productItems === ', productItems)
-    console.log('quantity === ', quantity)
     const fetchProductById = async () => {
         const res = await getProductById(productId)
         if (res.data) {
@@ -51,11 +49,12 @@ function ProductDetail() {
                 title: productData.title,
                 description: productData.description,
                 category: productData.category,
-                size: productData.size,
+                size: sizeSelect,
                 imgUrl: productData.imgUrl,
                 price: productData.price,
                 quantity: 1
             }
+
             dispatch(addToCart(cartItem))
             setQuantity(1)
         }
@@ -83,36 +82,12 @@ function ProductDetail() {
 
     const [indexImg, setIndexImg] = useState(0)
     const [rectDom, setRectDom] = useState(0)
-    const listImgArray = [
-        {
-            imgUrl: img
-        },
-        {
-            imgUrl: img
-        },
-        {
-            imgUrl: img
-        },
-        {
-            imgUrl: img
-        },
-        {
-            imgUrl: img
-        },
-        {
-            imgUrl: img
-        },
-        {
-            imgUrl: img
-        },
-        {
-            imgUrl: img
-        },
-        {
-            imgUrl: img
-        }
-    ]
+    const [sizeSelect, setSizeSelect] = useState('')
+    console.log(sizeSelect)
 
+    const handleSelectSize = (e: any) => {
+        setSizeSelect(e.target.value)
+    }
     const handleChangeImgProductDetail = (index: number) => {
         setIndexImg(index)
     }
@@ -223,6 +198,8 @@ function ProductDetail() {
                                         <button
                                             key={item}
                                             className='focus:border-[black] product-size-button border-[1px] w-[70px] h-[50px] rounded-md border-gray hover:border-black'
+                                            onClick={handleSelectSize}
+                                            value={item}
                                         >
                                             {item}
                                         </button>

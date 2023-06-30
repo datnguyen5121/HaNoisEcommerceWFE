@@ -41,7 +41,6 @@ const manageProductSlice = createSlice({
 
 export const getProducts = createAsyncThunk<Product[], void>('product/getProducts', async () => {
     const response = await axios.get('http://localhost:8080/api/get-all-product')
-    console.log(response.data.data)
     return response.data.data
 })
 export const { setSelectedIndex, removeToManageProduct } = manageProductSlice.actions

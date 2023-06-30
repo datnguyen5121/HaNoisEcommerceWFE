@@ -14,7 +14,6 @@ function Cart() {
     const handleCheckout = async () => {
         try {
             const stripe = await stripePromise
-            console.log(cart.items)
             const res = await axios.post('/stripe-payment', cart.items)
             await stripe?.redirectToCheckout({
                 sessionId: res.data.stripeSession.id
@@ -49,22 +48,7 @@ function Cart() {
                                             <label htmlFor='' className='me-[5px]'>
                                                 Size
                                             </label>
-                                            <select className='px-[1rem]' name='size' id=''>
-                                                <option value='37'>37</option>
-                                                <option value='37.5'>37.5</option>
-                                                <option value='38'>38</option>
-                                                <option value='38.5'>38.5</option>
-                                                <option value='39'>39</option>
-                                                <option value='39.5'>39.5</option>
-                                                <option value='40'>40</option>
-                                                <option value='40.5'>40.5</option>
-                                                <option value='41'>41</option>
-                                                <option value='41.5'>41.5</option>
-                                                <option value='42'>42</option>
-                                                <option value='42.5'>42.5</option>
-                                                <option value='43'>43</option>
-                                                <option value='43.5s'>43.5</option>
-                                            </select>
+                                            <div>{item.size}</div>
                                             <label htmlFor='quantity' className='px-[1rem]'>
                                                 Quantity
                                             </label>

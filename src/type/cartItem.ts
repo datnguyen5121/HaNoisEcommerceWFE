@@ -5,7 +5,7 @@ export interface cartItem {
     title: string
     description: string
     category: string[]
-    size: string[]
+    size: string
     imgUrl: string[]
     price: number
     quantity: number
