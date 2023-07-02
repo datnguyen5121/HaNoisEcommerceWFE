@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import axios from 'axios'
 // axios.defaults.baseURL = 'https://hanoisecommercewbe.onrender.com/api'
 // axios.defaults.baseURL = 'http://localhost:8080/api'
-axios.defaults.baseURL = 'https://hanoisbe.onrender.com/'
+axios.defaults.baseURL = 'https://hanoisbe.onrender.com/api'
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <Provider store={store}>

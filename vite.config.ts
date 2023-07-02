@@ -7,7 +7,7 @@ export default defineConfig({
         proxy: {
             // '/api': 'https://hanoisecommercewbe.onrender.com'
             // '/api': 'http://localhost:8080'
-            '/api': 'https://hanoisbe.onrender.com/'
+            '/api': 'https://hanoisbe.onrender.com'
             
         }
     },
