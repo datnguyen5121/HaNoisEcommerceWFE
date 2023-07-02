@@ -6,10 +6,8 @@ import { faChevronLeft, faChevronRight, faChevronUp } from '@fortawesome/free-so
 import { useLocation } from 'react-router-dom'
 import { getProductByGenderCategory, getProductById } from '../../services/productService'
 import ProductItem from '../ProductItem'
-import { setSelectedIndex } from '../../redux/features/manageProductSlice'
 import { addToCart } from '../../redux/features/cartSlice'
 import { useDispatch, useSelector } from 'react-redux'
-import { cartItem } from '../../type/cartItem'
 export interface IProductData {
     _id?: string
     category: string[]

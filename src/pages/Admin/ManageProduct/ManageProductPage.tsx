@@ -9,11 +9,8 @@ import axios from '../../../utils/axiosCustomize'
 import { toast } from 'react-toastify'
 
 import { validationSchemaProduct } from '../../../type/validationSchemaProduct'
-import makeAnimated from 'react-select/animated'
 import { getAllProductTag, getAllTag, getAllTagAdmin, getProductTag } from '../../../services/apiService'
 import { getAllSize } from '../../../services/sizeService'
-import { getProducts } from '../../../redux/features/manageProductSlice'
-const animatedComponents = makeAnimated()
 interface IProductTag {
     _id: string
     navName: { _id: string; navName: string }
