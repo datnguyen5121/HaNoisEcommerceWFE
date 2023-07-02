@@ -1,18 +1,18 @@
-import HeaderManageProduct from '../HeaderManageProduct/HeaderManageProduct'
+import HeaderManageProduct from '../../../components/HeaderManageProduct/HeaderManageProduct'
 import styles from './ManageProductPage.module.css'
 import { useEffect, useRef, useState } from 'react'
 import { Button, Modal } from 'antd'
-import { ProductValues } from '../../type/ProductValues'
+import { ProductValues } from '../../../type/ProductValues'
 import { ErrorMessage, Field, Formik, Form } from 'formik'
 import { useLocation } from 'react-router-dom'
-import axios from '../../utils/axiosCustomize'
+import axios from '../../../utils/axiosCustomize'
 import { toast } from 'react-toastify'
 
-import { validationSchemaProduct } from '../../type/validationSchemaProduct'
+import { validationSchemaProduct } from '../../../type/validationSchemaProduct'
 import makeAnimated from 'react-select/animated'
-import { getAllProductTag, getAllTag, getAllTagAdmin, getProductTag } from '../../services/apiService'
-import { getAllSize } from '../../services/sizeService'
-import { getProducts } from '../../redux/features/manageProductSlice'
+import { getAllProductTag, getAllTag, getAllTagAdmin, getProductTag } from '../../../services/apiService'
+import { getAllSize } from '../../../services/sizeService'
+import { getProducts } from '../../../redux/features/manageProductSlice'
 const animatedComponents = makeAnimated()
 interface IProductTag {
     _id: string

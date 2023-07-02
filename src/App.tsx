@@ -2,24 +2,23 @@ import { lazy, Suspense } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import Loading from './components/Loading'
-import ManageSizePage from './components/ManageCategoryPage/ManageSizePage'
+import ManageSizePage from './pages/Admin/ManageCategoryPage/ManageSizePage'
 
 const RootLayout = lazy(() => import('./pages/RootLayout'))
-const Home = lazy(() => import('./pages/FrontEnd/Home'))
-const Login = lazy(() => import('./pages/FrontEnd/Login'))
-const Register = lazy(() => import('./pages/FrontEnd/Register'))
-const Cart = lazy(() => import('./pages/FrontEnd/Cart'))
+const Home = lazy(() => import('./pages/UserPage/Home'))
+const Login = lazy(() => import('./pages/UserPage/Login'))
+const Register = lazy(() => import('./pages/UserPage/Register'))
+const Cart = lazy(() => import('./pages/UserPage/Cart'))
 
-const ProductByCategory = lazy(() => import('./pages/FrontEnd/ProductByCategory'))
-const Checkout = lazy(() => import('./pages/FrontEnd/Checkout/Checkout'))
+const ProductByCategory = lazy(() => import('./pages/UserPage/ProductByCategory'))
+const Checkout = lazy(() => import('./pages/UserPage/Checkout/Checkout'))
 const NotFound = lazy(() => import('./pages/NotFound'))
-const Category = lazy(() => import('./pages/FrontEnd/Category'))
 const AdminLayout = lazy(() => import('./pages/Admin/RootLayout'))
 const ProductDetail = lazy(() => import('./components/ProductDetail'))
-const ManageProductPage = lazy(() => import('./components/ManageProduct/ManageProductPage'))
-const ManageAccountPage = lazy(() => import('./components/ManageAccountPage/ManageAccountPage'))
-const ManageCategoryPage = lazy(() => import('./components/ManageCategoryPage/ManageCategoryPage'))
-const Account = lazy(() => import('./pages/FrontEnd/Account'))
+const ManageProductPage = lazy(() => import('./pages/Admin/ManageProduct/ManageProductPage'))
+const ManageAccountPage = lazy(() => import('./pages/Admin/ManageAccountPage/ManageAccountPage'))
+const ManageCategoryPage = lazy(() => import('./pages/Admin/ManageCategoryPage/ManageCategoryPage'))
+const Account = lazy(() => import('./pages/UserPage/Account'))
 
 function App() {
     return (
@@ -41,7 +40,7 @@ function App() {
                     <Routes>
                         <Route path='/' element={<RootLayout />}>
                             <Route path='/' element={<Home />} />
-                            <Route path=':gender' element={<Category />}>
+                            <Route path=':gender' element={<ProductByCategory />}>
                                 <Route path=':category' element={<ProductByCategory />}>
                                     <Route path=':subCategory' element={<ProductByCategory />} />
                                 </Route>

@@ -1,4 +1,4 @@
-import { Link, NavLink, useLocation } from 'react-router-dom'
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import style from './Navbar.module.css'
 import { getAllProductTag, getAllTag } from '../../services/apiService'
 import { useEffect, useState } from 'react'
@@ -25,6 +25,7 @@ interface IProductTag {
 
 function Navbar() {
     const location = useLocation()
+    const navigate = useNavigate()
     const pathName: string = location.pathname
     const [subCategory, setSubCategory] = useState<ProductTagState[]>([])
     const [category, setCategory] = useState<string[]>([])
@@ -89,18 +90,29 @@ function Navbar() {
     if (pathName == '/login' || pathName == '/register') {
         return
     }
+    const setLocation = (newLocation) => {
+        navigate(newLocation)
+    }
+    const handleLinkClick = (url: string) => {
+        console.log(url)
+
+        window.history.pushState(null, '', url)
+        setLocation({ ...location, pathname: url })
+    }
+
     return (
         <>
             <nav className='flex justify-center pb-3 relative z-50 bg-white '>
                 {category.map((categoryItem) => (
                     <div key={categoryItem} className=''>
                         <div className={`${style.navbar}`}>
-                            <NavLink
+                            <Link
                                 to={`/${categoryItem}`}
                                 className={`${style.category}absolute z-50 capitalize text-xl py-2 px-3 border-b-2 font-medium border-transparent hover:border-black`}
+                                onClick={() => handleLinkClick(`/${categoryItem}`)}
                             >
                                 {categoryItem}
-                            </NavLink>
+                            </Link>
 
                             <ul
                                 className={`${style.subnav} absolute    mt-3 left-0 right-0  hidden  p-6 bg-white text-center  `}

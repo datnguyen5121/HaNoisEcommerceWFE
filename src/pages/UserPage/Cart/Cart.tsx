@@ -109,7 +109,7 @@ function Cart() {
                                         </div>
                                     </div>
                                     <div className='price-container'>
-                                        <p>{item.price} VND</p>
+                                        <p>{item.price * item.quantity} VND</p>
                                     </div>
                                 </div>
                             </div>

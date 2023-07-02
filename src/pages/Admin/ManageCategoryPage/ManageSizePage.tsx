@@ -1,9 +1,9 @@
-import HeaderManageProduct from '../HeaderManageProduct/HeaderManageProduct'
+import HeaderManageProduct from '../../../components/HeaderManageProduct/HeaderManageProduct.tsx'
 import { useEffect, useState } from 'react'
-import axios from '../../utils/axiosCustomize.tsx'
-import ManageCreateSize from './ManageCreateSize'
-import { getAllSize } from '../../services/sizeService'
-import { getAllProductTag, getProductTag } from '../../services/apiService'
+import axios from '../../../utils/axiosCustomize.tsx'
+import ManageCreateSize from './ManageCreateSize.tsx'
+import { getAllSize } from '../../../services/sizeService.tsx'
+import { getAllProductTag, getProductTag } from '../../../services/apiService.tsx'
 import ManageEditSize from './ModalEditSize.tsx'
 interface ISize {
     _id: string

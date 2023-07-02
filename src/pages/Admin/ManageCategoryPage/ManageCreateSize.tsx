@@ -1,6 +1,6 @@
 import Modal from 'antd/es/modal/Modal'
 import { useState } from 'react'
-import { createNewSize } from '../../services/sizeService'
+import { createNewSize } from '../../../services/sizeService'
 interface ISize {
     productList: any
     isModalOpen: boolean

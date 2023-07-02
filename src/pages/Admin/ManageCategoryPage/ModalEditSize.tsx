@@ -1,6 +1,6 @@
 import Modal from 'antd/es/modal/Modal'
 import { useState } from 'react'
-import { createNewSize, updateSize } from '../../services/sizeService'
+import { createNewSize, updateSize } from '../../../services/sizeService'
 interface ISize {
     sizeId: string
     sizeItem: string[]

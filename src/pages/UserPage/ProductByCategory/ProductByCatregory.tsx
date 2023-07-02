@@ -12,7 +12,11 @@ import Tippy from '@tippyjs/react/headless'
 
 import { ProductValues } from '../../../type/ProductValues'
 import { useLocation } from 'react-router-dom'
-import { getProductByGenderCategory } from '../../../services/productService'
+import {
+    getProductByGender,
+    getProductByGenderCategory,
+    getProductByGenderProduct
+} from '../../../services/productService'
 import FilterByPrice from '../../../components/FilterItem/FilterByPrice'
 import FilterBySize from '../../../components/FilterItem/FilterBySize'
 import FilterItem from '../../../components/FilterItem'
@@ -25,15 +29,38 @@ function ProductByCategory() {
     const [productList, setProductList] = useState<IProductData[]>([])
     const [filteredProducts, setFilteredProducts] = useState<IProductData[]>([])
     const [sortBy, setSortBy] = useState('')
-    const [gender, category, subCategory] = location.pathname.split('/').filter((item) => item !== '')
+    const segments = location.pathname.split('/').filter((item) => item !== '')
+    const processedSegments = segments.map((item) => {
+        if (item.includes('%20')) {
+            return item.split('%20').join(' ')
+        }
+        return item
+    })
+
+    const [gender, category, subCategory] = processedSegments
+
     const [showFilterOnMobile, setShowFilterOnMobile] = useState(false)
     //filter item
     const [selectedPriceRange, setSelectedPriceRange] = useState('')
     const [selectedSize, setSelectedSize] = useState<string[]>([])
     const handleFetchProduct = async () => {
-        const res = await getProductByGenderCategory(gender, category, subCategory)
-        setProductList(res.data)
-        setFilteredProducts(res.data)
+        if (gender && !category && !subCategory) {
+            const res = await getProductByGender(gender)
+            console.log(res)
+
+            setProductList(res.data)
+            setFilteredProducts(res.data)
+        }
+        if (gender && category && !subCategory) {
+            const res = await getProductByGenderProduct(gender, category)
+            setProductList(res.data)
+            setFilteredProducts(res.data)
+        }
+        if (gender && category && subCategory) {
+            const res = await getProductByGenderCategory(gender, category, subCategory)
+            setProductList(res.data)
+            setFilteredProducts(res.data)
+        }
     }
 
     const handleShowFilter = () => {
@@ -91,6 +118,7 @@ function ProductByCategory() {
 
         return newFilteredProducts
     }
+    console.log(location)
 
     useEffect(() => {
         handleFetchProduct()
@@ -100,7 +128,17 @@ function ProductByCategory() {
         <>
             <section className='w-11/12 mx-auto'>
                 <div className='sticky top-0 flex justify-between py-3 w-full bg-white z-10'>
-                    <h5 className='text-lg  sm:text-2xl'>{location.pathname.split('/').join(' ')}</h5>
+                    <h5 className='text-lg  sm:text-2xl'>
+                        {location.pathname
+                            .split('/')
+                            .map((item) => {
+                                if (item.includes('%20')) {
+                                    return item.split('%20').join(' ')
+                                }
+                                return item
+                            })
+                            .join(' ')}{' '}
+                    </h5>
                     <div className='flex gap-5 overflow-hidden '>
                         <button className='hidden md:block' onClick={handleShowFilter}>
                             {showFilter ? 'Hide Filters' : 'Show Filters'} <FontAwesomeIcon icon={faArrowsRotate} />

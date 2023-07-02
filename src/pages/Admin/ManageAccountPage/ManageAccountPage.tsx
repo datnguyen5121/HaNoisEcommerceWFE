@@ -1,13 +1,13 @@
-import HeaderManageProduct from '../HeaderManageProduct/HeaderManageProduct'
+import HeaderManageProduct from '../../../components/HeaderManageProduct/HeaderManageProduct.tsx'
 import styles from './ManageAccountPage.module.css'
 import { ChangeEvent, useEffect, useState } from 'react'
 import { Button, Modal } from 'antd'
 import { ErrorMessage, Field, Form, Formik } from 'formik'
 import { useLocation } from 'react-router-dom'
-import { AccountValues } from '../../type/AccountValues'
-import { validationSchemaAccount } from '../../type/validationSchemaAccount'
-import { initialAccountValues } from '../../type/initialAccountValues'
-import axios from '../../utils/axiosCustomize.tsx'
+import { AccountValues } from '../../../type/AccountValues.ts'
+import { validationSchemaAccount } from '../../../type/validationSchemaAccount.ts'
+import { initialAccountValues } from '../../../type/initialAccountValues.ts'
+import axios from '../../../utils/axiosCustomize.tsx'
 import { toast } from 'react-toastify'
 
 const ManageAccountPage = () => {

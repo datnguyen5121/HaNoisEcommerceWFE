@@ -1,12 +1,13 @@
 import Modal from 'antd/es/modal/Modal'
 import { ProductForm } from './ManageCategoryPage'
 import React from 'react'
-import { updateProductTag } from '../../services/apiService'
+import { createNewProductTag } from '../../../services/apiService'
 interface IProps {
-    isModalEditOpen: boolean
-    setIsModalEditOpen: (value: boolean) => void
-    handleCancelEdit: () => void
+    isModalCreateOpen: boolean
+    setIsModalCreateOpen: (value: boolean) => void
+    handleCancelCreate: () => void
     subnavNameInput: string
+    navNameId: string
     productForm: ProductForm
     categoryInput: string
     subnavNameListInput: string[]
@@ -15,18 +16,18 @@ interface IProps {
     setCategoryInput: (value: string) => void
     FetchAllProductTag: () => void
 }
-const ModalEditProductTag: React.FC<IProps> = ({
-    isModalEditOpen,
-    setIsModalEditOpen,
-    handleCancelEdit,
+const ModalCreateProductTag: React.FC<IProps> = ({
+    isModalCreateOpen,
+    setIsModalCreateOpen,
+    handleCancelCreate,
     subnavNameInput,
-    FetchAllProductTag,
-    productForm,
+    navNameId,
     categoryInput,
     subnavNameListInput,
     setSubNavNameListInput,
     setSubNavNameInput,
-    setCategoryInput
+    setCategoryInput,
+    FetchAllProductTag
 }) => {
     let handleOnChangeSubNavName = (e: any) => {
         setSubNavNameInput(e.target.value)
@@ -43,49 +44,43 @@ const ModalEditProductTag: React.FC<IProps> = ({
         const updatedList = subnavNameListInput.filter((_, i) => i !== index)
         setSubNavNameListInput(updatedList)
     }
-    const handleEditOk = async () => {
+    const handleCreateOk = async () => {
         try {
-            const res = await updateProductTag(productForm.subnavNameId, {
+            const res = await createNewProductTag({
                 subnavName: subnavNameInput,
-                list: subnavNameListInput
+                list: subnavNameListInput,
+                navName: navNameId
             })
             FetchAllProductTag()
-            setSubNavNameInput('')
-            setSubNavNameListInput([])
-            setIsModalEditOpen(false)
+            setIsModalCreateOpen(false)
         } catch (error) {
-            console.error('Error updating product tag:', error)
+            console.error('Error Create product tag:', error)
         }
     }
     return (
         <>
-            <Modal
-                title='Update The Product Tag'
-                open={isModalEditOpen}
-                onOk={handleEditOk}
-                onCancel={handleCancelEdit}
-            >
+            <Modal title={`Create Product Tag `} open={isModalCreateOpen} footer={null} onCancel={handleCancelCreate}>
                 <section className='flex flex-col'>
-                    <label className=''>Product Tag Name</label>
+                    <label className='text-xl font-semibold'>Product Type</label>
                     <input
-                        className='border-[black] p-[10px] border-[1px] rounded-md'
+                        className='border-[black] w-[80%] p-[10px] border-[1px] rounded-md'
                         value={subnavNameInput}
                         onChange={handleOnChangeSubNavName}
                     ></input>
                 </section>
                 <section className='flex flex-col'>
-                    <label>Product Tag Name Id</label>
-                    <div className='border-[black] p-[10px] border-[1px] rounded-md'>{productForm.subnavNameId}</div>
-                </section>
-                <section className='flex flex-col'>
-                    <label>List Category</label>
+                    <label className='text-xl font-semibold'>Tag ID</label>
+                    <div className='border-[black] w-[80%] p-[10px] border-[1px] rounded-md'>{navNameId}</div>
                 </section>
 
+                <section className='flex flex-col'>
+                    <label className='text-xl font-semibold'>Category List</label>
+                </section>
                 <section className='flex justify-between'>
                     <input
+                        placeholder='Please enter category...'
                         className='border-[black] w-[80%] p-[10px] border-[1px] rounded-md'
                         type='text'
-                        placeholder='Please enter category...'
                         name=''
                         id=''
                         value={categoryInput}
@@ -100,6 +95,7 @@ const ModalEditProductTag: React.FC<IProps> = ({
                         Add
                     </button>
                 </section>
+
                 <section className=' py-[10px] gap-[10px] flex flex-col'>
                     {subnavNameListInput.length >= 0 &&
                         subnavNameListInput.map((item, index) => {
@@ -116,8 +112,16 @@ const ModalEditProductTag: React.FC<IProps> = ({
                             )
                         })}
                 </section>
+                <div className='flex justify-end'>
+                    <button
+                        className=' bg-blue-600 w-[4.6rem]  mt-5 hover:opacity-50 h-[1.8rem] text-white rounded-md'
+                        onClick={handleCreateOk}
+                    >
+                        Submit
+                    </button>
+                </div>
             </Modal>
         </>
     )
 }
-export default ModalEditProductTag
+export default ModalCreateProductTag

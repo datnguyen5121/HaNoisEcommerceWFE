@@ -1,7 +1,7 @@
 import Modal from 'antd/es/modal/Modal'
 import { ProductForm } from './ManageCategoryPage'
 import React from 'react'
-import { updateTagById } from '../../services/apiService'
+import { updateTagById } from '../../../services/apiService'
 interface IProps {
     isModalEditTagOpen: boolean
     setIsModalEditTagOpen: (value: boolean) => void

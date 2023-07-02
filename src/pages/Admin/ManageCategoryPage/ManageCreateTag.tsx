@@ -3,7 +3,7 @@ import { ProductForm } from './ManageCategoryPage'
 import React from 'react'
 import { toast } from 'react-toastify'
 
-import { createNewTag, updateTagById } from '../../services/apiService'
+import { createNewTag, updateTagById } from '../../../services/apiService'
 interface IProps {
     isModalCreateTagOpen: boolean
     setIsModalCreateTagOpen: (value: boolean) => void

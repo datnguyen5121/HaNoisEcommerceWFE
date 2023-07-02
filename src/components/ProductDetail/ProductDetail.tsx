@@ -28,17 +28,20 @@ export interface IProductData {
 function ProductDetail() {
     const location = useLocation()
     const productId = location.pathname.split('/')[2]
+    const pathName: string = location.pathname
+
+    const [indexImg, setIndexImg] = useState(0)
+    const [sizeSelect, setSizeSelect] = useState('')
     const [productData, setProductData] = useState<IProductData>()
     const [productByGenderCategory, setProductByGenderCategory] = useState<IProductData[]>([])
-    const [quantity, setQuantity] = useState(1)
     const dispatch = useDispatch()
-    const productItems = useSelector((state: any) => state.products.products)
     const fetchProductById = async () => {
         const res = await getProductById(productId)
         if (res.data) {
             setProductData(res.data)
         }
     }
+    console.log(pathName)
 
     const handleAddToCart = () => {
         if (productData) {
@@ -56,7 +59,6 @@ function ProductDetail() {
             }
 
             dispatch(addToCart(cartItem))
-            setQuantity(1)
         }
     }
 
@@ -72,6 +74,7 @@ function ProductDetail() {
 
     useEffect(() => {
         fetchProductById()
+        setIndexImg(0)
     }, [location])
 
     useEffect(() => {
@@ -80,9 +83,6 @@ function ProductDetail() {
         }
     }, [productData])
 
-    const [indexImg, setIndexImg] = useState(0)
-    const [rectDom, setRectDom] = useState(0)
-    const [sizeSelect, setSizeSelect] = useState('')
     console.log(sizeSelect)
 
     const handleSelectSize = (e: any) => {
@@ -154,7 +154,7 @@ function ProductDetail() {
                                 className=' max-h-[700px] relative w-[100%] object-cover m-auto rounded-sm'
                                 src={productData?.imgUrl ? productData?.imgUrl[indexImg] : ''}
                             ></img>
-                            <div className='absolute flex flex-row gap-[10px] right-[10px] bottom-[20px]'>
+                            <div className='absolute flex flex-row gap-[10px] right-[10px] bottom-[20px] xl:bottom-[-80px]'>
                                 <button
                                     className='w-[45px] h-[45px] bg-[white] shadow-sm active:bg-gray-400 border-gray-100 font-bold border-[1px] rounded-full'
                                     onClick={() => handleLeftImgProduct()}
@@ -240,7 +240,7 @@ function ProductDetail() {
                         </div>
                     </div>
                 </section>
-                <section className='w-11/12 mx-auto content-2 '>
+                <section className='w-11/12 mx-auto content-2 pt-5 mt-[200px]'>
                     <section className='relative'>
                         <article className='text-lg py-[20px] font-semibold'>You Might Also Like</article>
                         <div className='absolute flex flex-row gap-[10px] right-[10px] bottom-[20px]'>

@@ -1,8 +1,8 @@
-import HeaderManageProduct from '../HeaderManageProduct/HeaderManageProduct'
+import HeaderManageProduct from '../../../components/HeaderManageProduct/HeaderManageProduct'
 import styles from './ManageCategoryPage.module.css'
 import { Dispatch, useEffect, useState } from 'react'
 import { Button, Modal } from 'antd'
-import { ProductValues } from '../../type/ProductValues'
+import { ProductValues } from '../../../type/ProductValues'
 import { useLocation } from 'react-router-dom'
 import {
     createNewProductTag,
@@ -15,7 +15,7 @@ import {
     getTag,
     updateProductTag,
     updateTagById
-} from '../../services/apiService'
+} from '../../../services/apiService'
 import ModalEditProductTag from './ModalEditProductTag'
 import ModalCreateProductTag from './ModalCreateProductTag'
 import ModalEditTag from './ManageEditTag'

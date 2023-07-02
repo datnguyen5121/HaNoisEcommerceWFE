@@ -13,9 +13,18 @@ const createNewProduct = (product: newProduct) => axios.post('/api/create-new-pr
 
 const getProductByGenderCategory = (gender: string, productName: string, category: string) =>
     axios.get(`/api/get-product-by-gender-category?category=${category}&gender=${gender}&productName=${productName}`)
-
+const getProductByGender = (gender: string) => axios.get(`/api/get-product-by-gender?gender=${gender}`)
+const getProductByGenderProduct = (gender: string, productName: string) =>
+    axios.get(`/api/get-product-by-gender-product?gender=${gender}&productName=${productName}`)
 const getProductByCategory = (category: string) => axios.get(`/api/get-product-by-category?category=${category}`)
 
 const getProductById = (id: string) => axios.get(`/api/get-product-by-id?_id=${id}`)
 
-export { createNewProduct, getProductByGenderCategory, getProductById, getProductByCategory }
+export {
+    createNewProduct,
+    getProductByGenderCategory,
+    getProductByGender,
+    getProductByGenderProduct,
+    getProductById,
+    getProductByCategory
+}
