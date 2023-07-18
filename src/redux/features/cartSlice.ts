@@ -14,8 +14,14 @@ const cartSlice = createSlice({
         addToCart: (state, action: PayloadAction<cartItem>) => {
             const existingItem = state.items.findIndex((item) => item._id === action.payload._id)
             if (existingItem !== -1) {
-                state.items[existingItem].quantity += 1
+                const existingSize = state.items.findIndex((item) => item.size !== action.payload.size)
+              if(existingSize !== -1){
+                state.items.push(action.payload)
                 toast('Product added to cart')
+              }  else {
+                  state.items[existingItem].quantity += 1
+                  toast('Product added to cart')
+              }
             } else {
                 state.items.push(action.payload)
                 toast('Product added to cart')

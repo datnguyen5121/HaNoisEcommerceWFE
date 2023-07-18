@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import productImage from '../../assets/productItem.webp'
 import { IProductData } from '../ProductDetail/ProductDetail'
+import { memo } from 'react'
 interface IProps {
     isSearch?: boolean
     isCheckout?: boolean
@@ -12,17 +13,17 @@ function ProductItem(props: IProps) {
     if (isSearch) {
         return (
             <Link to={`/product/${data._id}`}>
-                <div className='flex gap-4'>
+                <div className='flex gap-4 dat'>
                     <img
                         src={data.imgUrl && data.imgUrl.length > 0 && data.imgUrl[0]}
                         alt='image'
-                        className='max-w-[120px] '
+                        className='max-w-[200px] sm:w-1/2 md:w-1/3'
                     />
                     <div className='py-3 flex-1'>
                         <p className='capitalize line-clamp-1'>{data.title}</p>
                         <p className='text-gray-500'>{data.gender}</p>
                         <p className='text-gray-500'>{data.size.length} size</p>
-                        <p className='mt-2'>
+                        <p className='mt-2 text-semibold'>
                             {data.price}
                             <sup>₫</sup>
                         </p>
@@ -38,7 +39,7 @@ function ProductItem(props: IProps) {
                     <img
                         src={data.imgUrl && data.imgUrl.length > 0 && data.imgUrl[0]}
                         alt='image'
-                        className='max-w-full'
+                        className='md:max-w-[300px]  sm:max-w-[200px]'
                     />
                     <div className='py-3'>
                         <p className='capitalize'>{data.title}</p>
@@ -54,4 +55,4 @@ function ProductItem(props: IProps) {
     }
 }
 
-export default ProductItem
+export default memo(ProductItem)

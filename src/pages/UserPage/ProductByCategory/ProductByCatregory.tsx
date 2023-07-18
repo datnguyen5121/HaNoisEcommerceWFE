@@ -5,7 +5,8 @@ import {
     faArrowsRotate,
     faChevronDown
 } from '@fortawesome/free-solid-svg-icons'
-import ProductItem from '../../../components/ProductItem'
+import { lazy } from 'react'
+const ProductItem = lazy(() => import('../../../components/ProductItem'))
 import noProductImg from '../../../assets/no-product.png'
 import { useState, useEffect } from 'react'
 import Tippy from '@tippyjs/react/headless'
@@ -46,8 +47,6 @@ function ProductByCategory() {
     const handleFetchProduct = async () => {
         if (gender && !category && !subCategory) {
             const res = await getProductByGender(gender)
-            console.log(res)
-
             setProductList(res.data)
             setFilteredProducts(res.data)
         }
@@ -118,10 +117,10 @@ function ProductByCategory() {
 
         return newFilteredProducts
     }
-    console.log(location)
 
     useEffect(() => {
         handleFetchProduct()
+        console.log(location)
     }, [location])
 
     return (

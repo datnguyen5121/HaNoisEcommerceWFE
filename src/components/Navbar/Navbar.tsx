@@ -2,7 +2,7 @@ import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import style from './Navbar.module.css'
 import { getAllProductTag, getAllTag } from '../../services/apiService'
 import { useEffect, useState } from 'react'
-
+import useProductTag from '../../customhooks/useProductTag'
 interface ProductTagState {
     navName: string
     list: SubNavName[]
@@ -33,54 +33,10 @@ function Navbar() {
     const FetchAllProductTag = async () => {
         const res = await getAllProductTag()
         const category = await getAllTag()
-        const data = handleBuildCategoryData(res.data)
+        const data = useProductTag(res.data)
 
         setCategory(category.data)
         setSubCategory(data)
-    }
-
-    const handleBuildCategoryData = (data: IProductTag[]) => {
-        const newData = data.map((item) => {
-            return {
-                navName: item.navName.navName,
-                navNameId: item.navName._id,
-                subnavNameId: item._id,
-                subnavName: item.subnavName,
-                list: item.list
-            }
-        })
-
-        const newObj = newData.reduce((result: any, obj) => {
-            const navName = obj.navName
-            const navNameId = obj.navNameId
-            const subnavNameId = obj.subnavNameId
-            const indexNav = result.findIndex((item: any) => item.navName === navName)
-
-            if (indexNav !== -1) {
-                result[indexNav].list.push({
-                    navName: navName,
-                    navNameId: navNameId,
-                    subnavNameId: subnavNameId,
-                    subnavName: obj.subnavName,
-                    list: obj.list
-                })
-            } else {
-                result.push({
-                    navName: navName,
-                    list: [
-                        {
-                            navName: navName,
-                            navNameId: navNameId,
-                            subnavNameId: subnavNameId,
-                            subnavName: obj.subnavName,
-                            list: obj.list
-                        }
-                    ]
-                })
-            }
-            return result
-        }, [])
-        return newObj
     }
 
     useEffect(() => {
@@ -94,8 +50,6 @@ function Navbar() {
         navigate(newLocation)
     }
     const handleLinkClick = (url: string) => {
-        console.log(url)
-
         window.history.pushState(null, '', url)
         setLocation({ ...location, pathname: url })
     }

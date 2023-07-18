@@ -1,74 +1,80 @@
 import { FC } from 'react'
-import styles from './HomeSlide.module.css'
+// import styles from './HomeSlide.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
-interface Props {
-    heading: string
-    data: Array<{
-        _id: string
-        imgUrl: string[]
-        title: string
-        description: string
-        price: string
-    }>
-    index: number
-}
+import ProductItem from '../ProductItem'
+import styles from '../ProductDetail/ProductDetail.module.css'
 
-const HomeSlide: FC<Props> = ({ data, heading, index }) => {
+export interface IProductData {
+    _id?: string
+    category: string[]
+    createdAt?: string
+    updatedAt?: string
+    description: string
+    gender: string
+    imgUrl: string[] | null
+    price: number
+    productName: string
+    size: string[]
+    title: string
+    __v?: number
+}
+export interface IProp {
+    data: IProductData[]
+    heading: string
+}
+const HomeSlide: FC<IProp> = ({ data, heading }) => {
     function scrollLeft() {
-        const container = document.getElementById(`homeSlideContainer${index}`)
+        const container = document.getElementById('carousel-product')!
+        container.style.scrollBehavior = 'smooth'
         if (container) {
-            container.style.scrollBehavior = 'smooth'
             container.scrollLeft -= 300
         }
     }
 
     function scrollRight() {
-        const container = document.getElementById(`homeSlideContainer${index}`)
+        const container = document.getElementById('carousel-product')!
+        container.style.scrollBehavior = 'smooth'
         if (container) {
-            container.style.scrollBehavior = 'smooth'
             container.scrollLeft += 300
         }
     }
 
     return (
-        <div className={styles.homeSlide}>
-            <div className={`${styles.slideHeading} w-11/12 mx-auto`}>
-                <h2 className={styles.heading}>{heading}</h2>
-                <div className={styles.btnGrp}>
-                    <p className='text-lg font-medium'>Shop</p>
-                    <button onClick={scrollLeft}>
-                        <FontAwesomeIcon icon={faChevronLeft} />
-                    </button>
-                    <button onClick={scrollRight}>
-                        <FontAwesomeIcon icon={faChevronRight} />
-                    </button>
-                </div>
-            </div>
-
-            <div
-                className={`${styles['no-scrollbar']} ${styles.slide} w-11/12 mx-auto `}
-                id={`homeSlideContainer${index}`}
-            >
-                <div className={styles.slideItems}>
-                    {data.map((item, index) => (
-                        <Link to={`/product/${item._id}`} key={index}>
-                            <div className={styles.slideItem}>
-                                <img src={item.imgUrl[0]} alt='' />
-                                <div className={styles.slideItemText}>
-                                    <div className={styles.textLeft}>
-                                        <h5>{item.title}</h5>
-                                        <p>{item.price} đ</p>
-                                    </div>
-                                    <h5></h5>
-                                </div>
+        <>
+            <section className='w-11/12 mx-auto content-2 pt-5 my-[100px]'>
+                <section className='relative'>
+                    <article className='text-lg py-[20px] font-semibold'>{heading}</article>
+                    <div className='absolute flex flex-row gap-[10px] right-[10px] bottom-[20px]'>
+                        <button
+                            className='w-[45px] h-[45px] bg-[white] shadow-sm active:bg-gray-400 border-gray-100 font-bold border-[1px] rounded-full'
+                            onClick={() => scrollLeft()}
+                        >
+                            <FontAwesomeIcon icon={faChevronLeft} />
+                        </button>
+                        <button
+                            className='w-[45px] h-[45px] bg-[white] shadow-sm active:bg-gray-400 border-gray-100 font-bold border-[1px] rounded-full'
+                            onClick={() => scrollRight()}
+                        >
+                            <FontAwesomeIcon icon={faChevronRight} />
+                        </button>
+                    </div>
+                </section>
+                <section
+                    className={` flex flex-row ${styles['no-scrollbar']}  gap-[10px] overflow-x-auto `}
+                    id='carousel-product'
+                >
+                    {data &&
+                        data.length > 0 &&
+                        data.map((product) => (
+                            <div className=' ' key={product._id}>
+                                <ProductItem isSearch={false} data={product} />
                             </div>
-                        </Link>
-                    ))}
-                </div>
-            </div>
-        </div>
+                        ))}
+                </section>
+            </section>
+        </>
     )
 }
 

@@ -7,7 +7,7 @@ import { ErrorMessage, Field, Formik, Form } from 'formik'
 import { useLocation } from 'react-router-dom'
 import axios from '../../../utils/axiosCustomize'
 import { toast } from 'react-toastify'
-
+import useProductTag from '../../../customhooks/useProductTag'
 import { validationSchemaProduct } from '../../../type/validationSchemaProduct'
 import { getAllProductTag, getAllTag, getAllTagAdmin, getProductTag } from '../../../services/apiService'
 import { getAllSize } from '../../../services/sizeService'
@@ -104,7 +104,6 @@ const ManageProductPage = () => {
 
     const handleGetTagList = async () => {
         let res = await getAllTagAdmin()
-
         setTagList(res.data)
     }
     useEffect(() => {
@@ -120,7 +119,7 @@ const ManageProductPage = () => {
     const fetchAllProductTag = async () => {
         const res = await getAllProductTag()
         if (res) {
-            const data = handleBuildCategoryData(res.data)
+            const data = useProductTag(res.data)
             setProductTagDataList(data)
         }
     }
@@ -134,49 +133,6 @@ const ManageProductPage = () => {
 
             setSizeList(sizeList[0].size)
         }
-    }
-    const handleBuildCategoryData = (data: IProductTag[]) => {
-        const newData = data.map((item) => {
-            return {
-                navName: item.navName.navName,
-                navNameId: item.navName._id,
-                subnavNameId: item._id,
-                subnavName: item.subnavName,
-                list: item.list
-            }
-        })
-
-        const newObj = newData.reduce((result: any, obj) => {
-            const navName = obj.navName
-            const navNameId = obj.navNameId
-            const subnavNameId = obj.subnavNameId
-            const indexNav = result.findIndex((item: any) => item.navName === navName)
-
-            if (indexNav !== -1) {
-                result[indexNav].list.push({
-                    navName: navName,
-                    navNameId: navNameId,
-                    subnavNameId: subnavNameId,
-                    subnavName: obj.subnavName,
-                    list: obj.list
-                })
-            } else {
-                result.push({
-                    navName: navName,
-                    list: [
-                        {
-                            navName: navName,
-                            navNameId: navNameId,
-                            subnavNameId: subnavNameId,
-                            subnavName: obj.subnavName,
-                            list: obj.list
-                        }
-                    ]
-                })
-            }
-            return result
-        }, [])
-        return newObj
     }
 
     const handleSubmit = async (values: any, setFieldValue: any) => {
@@ -354,7 +310,7 @@ const ManageProductPage = () => {
         const res1 = await getAllProductTag()
 
         if (res1) {
-            const data = handleBuildCategoryData(res1.data)
+            const data = useProductTag(res1.data)
 
             let data1 = data.filter((item1: any) => item1.navName == item.gender)
             let cloneProductTagList = [...data1[0].list]

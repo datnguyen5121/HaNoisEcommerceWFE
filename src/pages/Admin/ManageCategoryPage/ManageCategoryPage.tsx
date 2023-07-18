@@ -16,10 +16,13 @@ import {
     updateProductTag,
     updateTagById
 } from '../../../services/apiService'
-import ModalEditProductTag from './ModalEditProductTag'
-import ModalCreateProductTag from './ModalCreateProductTag'
-import ModalEditTag from './ManageEditTag'
-import ModalCreateTag from './ManageCreateTag'
+import { lazy, Suspense } from 'react'
+const ModalEditProductTag = lazy(() => import('./ModalEditProductTag'))
+const ModalCreateProductTag = lazy(() => import('./ModalCreateProductTag'))
+const ModalEditTag = lazy(() => import('./ManageEditTag'))
+const ModalCreateTag = lazy(() => import('./ManageCreateTag'))
+
+import useProductTag from '../../../customhooks/useProductTag'
 
 interface ITag {
     _id: string
@@ -93,7 +96,7 @@ const ManageCategoryPage = () => {
     }
     const FetchAllProductTag = async () => {
         const res = await getAllProductTag()
-        const data = handleBuildCategoryData(res.data)
+        const data = useProductTag(res.data)
         setProductTagList(data)
     }
     useEffect(() => {
@@ -101,49 +104,6 @@ const ManageCategoryPage = () => {
         FetchAllProductTag()
     }, [])
 
-    const handleBuildCategoryData = (data: IProductTag[]) => {
-        const newData = data.map((item) => {
-            return {
-                navName: item.navName.navName,
-                navNameId: item.navName._id,
-                subnavNameId: item._id,
-                subnavName: item.subnavName,
-                list: item.list
-            }
-        })
-
-        const newObj = newData.reduce((result: any, obj) => {
-            const navName = obj.navName
-            const navNameId = obj.navNameId
-            const subnavNameId = obj.subnavNameId
-            const indexNav = result.findIndex((item: any) => item.navName === navName)
-
-            if (indexNav !== -1) {
-                result[indexNav].list.push({
-                    navName: navName,
-                    navNameId: navNameId,
-                    subnavNameId: subnavNameId,
-                    subnavName: obj.subnavName,
-                    list: obj.list
-                })
-            } else {
-                result.push({
-                    navName: navName,
-                    list: [
-                        {
-                            navName: navName,
-                            navNameId: navNameId,
-                            subnavNameId: subnavNameId,
-                            subnavName: obj.subnavName,
-                            list: obj.list
-                        }
-                    ]
-                })
-            }
-            return result
-        }, [])
-        return newObj
-    }
     useEffect(() => {
         setSubNavNameInput(productForm.subnavName)
         setSubNavNameListInput(productForm.list)

@@ -98,8 +98,9 @@ function Home() {
                 btn1='Running'
                 btn2='Jordan'
             />
-
-            <HomeSlide heading='Find Your Flow Fits' data={products.length > 0 ? products : fakeData} index={0} />
+            <div>
+                <HomeSlide heading='Find Your Flow Fits' data={products.length > 0 ? products : fakeData} />
+            </div>
 
             <HomeBox
                 image='https://wearecollins.imgix.net/uploads/3%20Collins%20x%20Air%20Max.gif?auto=format%2Ccompress&dpr=2.63&fit=max&q=90&w=400'
@@ -109,8 +110,6 @@ function Home() {
                 btn1='Kids Wear'
                 btn2=''
             />
-
-            <HomeSlide heading='Find Your Flow Fits' data={products.length > 0 ? products : fakeData} index={1} />
         </div>
     )
 }

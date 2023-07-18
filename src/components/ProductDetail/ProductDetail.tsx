@@ -8,6 +8,12 @@ import { getProductByGenderCategory, getProductById } from '../../services/produ
 import ProductItem from '../ProductItem'
 import { addToCart } from '../../redux/features/cartSlice'
 import { useDispatch, useSelector } from 'react-redux'
+import HomeSlide from '../HomeSlide/HomeSlide'
+import FilterItem from '../FilterItem'
+import { useNavigate } from 'react-router-dom'
+import Button from '../Button/Button'
+import { toast } from 'react-toastify'
+
 export interface IProductData {
     _id?: string
     category: string[]
@@ -24,6 +30,7 @@ export interface IProductData {
 }
 
 function ProductDetail() {
+    const navigate = useNavigate()
     const location = useLocation()
     const productId = location.pathname.split('/')[2]
     const pathName: string = location.pathname
@@ -39,10 +46,9 @@ function ProductDetail() {
             setProductData(res.data)
         }
     }
-    console.log(pathName)
 
     const handleAddToCart = () => {
-        if (productData) {
+        if (productData && sizeSelect) {
             const cartItem = {
                 _id: productData._id || '',
                 gender: productData.gender,
@@ -57,6 +63,8 @@ function ProductDetail() {
             }
 
             dispatch(addToCart(cartItem))
+        } else {
+            toast.error('You have to choose size for product !')
         }
     }
 
@@ -81,8 +89,6 @@ function ProductDetail() {
         }
     }, [productData])
 
-    console.log(sizeSelect)
-
     const handleSelectSize = (e: any) => {
         setSizeSelect(e.target.value)
     }
@@ -105,21 +111,87 @@ function ProductDetail() {
             }
         }
     }
-    function scrollLeft() {
-        const container = document.getElementById('carousel-product')!
-        container.style.scrollBehavior = 'smooth'
-        if (container) {
-            container.scrollLeft -= 300
-        }
-    }
 
-    function scrollRight() {
-        const container = document.getElementById('carousel-product')!
-        container.style.scrollBehavior = 'smooth'
-        if (container) {
-            container.scrollLeft += 300
+    const fakeData: IProductData[] = [
+        {
+            _id: '1',
+            imgUrl: [
+                'https://media.istockphoto.com/id/1335247217/vector/loading-icon-vector-illustration.jpg?s=612x612&w=0&k=20&c=jARr4Alv-d5U3bCa8eixuX2593e1rDiiWnvJLgHCkQM='
+            ],
+            title: 'Loading',
+            description: 'Loading',
+            price: 0,
+            category: [],
+            gender: 'Gender loading',
+            productName: 'Product name',
+            size: []
+        },
+        {
+            _id: '2',
+            imgUrl: [
+                'https://media.istockphoto.com/id/1335247217/vector/loading-icon-vector-illustration.jpg?s=612x612&w=0&k=20&c=jARr4Alv-d5U3bCa8eixuX2593e1rDiiWnvJLgHCkQM='
+            ],
+            title: 'Loading',
+            description: 'Loading',
+            price: 0,
+            category: [],
+            gender: 'Gender loading',
+            productName: 'Product name',
+            size: []
+        },
+        {
+            _id: '3',
+            imgUrl: [
+                'https://media.istockphoto.com/id/1335247217/vector/loading-icon-vector-illustration.jpg?s=612x612&w=0&k=20&c=jARr4Alv-d5U3bCa8eixuX2593e1rDiiWnvJLgHCkQM='
+            ],
+            title: 'Loading',
+            description: 'Loading',
+            price: 0,
+            category: [],
+            gender: 'Gender loading',
+            productName: 'Product name',
+            size: []
+        },
+        {
+            _id: '4',
+            imgUrl: [
+                'https://media.istockphoto.com/id/1335247217/vector/loading-icon-vector-illustration.jpg?s=612x612&w=0&k=20&c=jARr4Alv-d5U3bCa8eixuX2593e1rDiiWnvJLgHCkQM='
+            ],
+            title: 'Loading',
+            description: 'Loading',
+            price: 0,
+            category: [],
+            gender: 'Gender loading',
+            productName: 'Product name',
+            size: []
+        },
+        {
+            _id: '5',
+            imgUrl: [
+                'https://media.istockphoto.com/id/1335247217/vector/loading-icon-vector-illustration.jpg?s=612x612&w=0&k=20&c=jARr4Alv-d5U3bCa8eixuX2593e1rDiiWnvJLgHCkQM='
+            ],
+            title: 'Loading',
+            description: 'Loading',
+            price: 0,
+            category: [],
+            gender: 'Gender loading',
+            productName: 'Product name',
+            size: []
+        },
+        {
+            _id: '6',
+            imgUrl: [
+                'https://media.istockphoto.com/id/1335247217/vector/loading-icon-vector-illustration.jpg?s=612x612&w=0&k=20&c=jARr4Alv-d5U3bCa8eixuX2593e1rDiiWnvJLgHCkQM='
+            ],
+            title: 'Loading',
+            description: 'Loading',
+            price: 0,
+            category: [],
+            gender: 'Gender loading',
+            productName: 'Product name',
+            size: []
         }
-    }
+    ]
     return (
         <>
             <section className='product-img'>
@@ -205,70 +277,42 @@ function ProductDetail() {
                             </div>
                         </div>
                         <div className='mt-[20px] lg:w-[80%] w-[100%] add-product flex flex-col gap-[10px]'>
-                            <button
+                            <Button
+                                text='Add to Bag'
+                                textClass='bg-black text-white px-[24px] py-[18px]'
                                 onClick={() => handleAddToCart()}
-                                className='bg-black text-white px-[24px] py-[18px] rounded-full hover:opacity-70'
-                            >
-                                Add to Bag
-                            </button>
-                            <button className='bg-white text-black px-[24px] py-[18px] border-gray-500 border-[1px] rounded-full hover:border-black'>
-                                Home
-                            </button>
+                            />
+                            <Button
+                                text='Home'
+                                textClass='bg-white text-black px-[24px] py-[18px]  border-gray-500 border-[1px]'
+                                onClick={() => navigate('/')}
+                            />
                         </div>
-                        <div className='py-[30px] product-detail-description font-medium '>
+                        <div className='w-100% first-letter:py-[30px] py-[30px] product-detail-description font-medium '>
                             {productData?.description}
                         </div>
-                        <div className='border-t-[1px] product-delivery-rule font-medium'>
-                            <div className='py-[30px]  flex justify-between cursor-pointer'>
-                                <h3 className='font-semibold text-xl '>Free Delivery and Returns </h3>
-                                <FontAwesomeIcon icon={faChevronUp} className='pr-[20px]' />
-                            </div>
-
-                            <div className='flex gap-[20px] flex-col'>
-                                <div>Your order of 5.000.000₫ or more gets free standard delivery.</div>
-                                <ul className='list-disc px-[20px]'>
-                                    <li>Standard delivered 4-5 Business Days</li>
-                                    <li>Express delivered 2-4 Business Days </li>
-                                </ul>
-                                <div>
-                                    Orders are processed and delivered Monday-Friday (excluding public holidays) Nike
-                                    Members enjoy free returns.
+                        <div className='border-t-[1px] w-[100%] product-delivery-rule font-medium'>
+                            <FilterItem text='Free Delivery and Returns'>
+                                <div className='flex gap-[20px] flex-col'>
+                                    <div>Your order of 5.000.000₫ or more gets free standard delivery.</div>
+                                    <ul className='list-disc px-[20px]'>
+                                        <li>Standard delivered 4-5 Business Days</li>
+                                        <li>Express delivered 2-4 Business Days </li>
+                                    </ul>
+                                    <div>
+                                        Orders are processed and delivered Monday-Friday (excluding public holidays)
+                                        Nike Members enjoy free returns.
+                                    </div>
                                 </div>
-                            </div>
+                            </FilterItem>
                         </div>
                     </div>
                 </section>
-                <section className='w-11/12 mx-auto content-2 pt-5 mt-[200px]'>
-                    <section className='relative'>
-                        <article className='text-lg py-[20px] font-semibold'>You Might Also Like</article>
-                        <div className='absolute flex flex-row gap-[10px] right-[10px] bottom-[20px]'>
-                            <button
-                                className='w-[45px] h-[45px] bg-[white] shadow-sm active:bg-gray-400 border-gray-100 font-bold border-[1px] rounded-full'
-                                onClick={() => scrollLeft()}
-                            >
-                                <FontAwesomeIcon icon={faChevronLeft} />
-                            </button>
-                            <button
-                                className='w-[45px] h-[45px] bg-[white] shadow-sm active:bg-gray-400 border-gray-100 font-bold border-[1px] rounded-full'
-                                onClick={() => scrollRight()}
-                            >
-                                <FontAwesomeIcon icon={faChevronRight} />
-                            </button>
-                        </div>
-                    </section>
-                    <section
-                        className={` flex flex-row ${styles['no-scrollbar']}  gap-[10px] overflow-x-auto `}
-                        id='carousel-product'
-                    >
-                        {productByGenderCategory &&
-                            productByGenderCategory.length > 0 &&
-                            productByGenderCategory.map((product) => (
-                                <div className=' w-full sm:w-1/2 md:w-1/3' key={product._id}>
-                                    <ProductItem isSearch={false} data={product} />
-                                </div>
-                            ))}
-                    </section>
-                </section>
+
+                <HomeSlide
+                    heading='You Might Also Like'
+                    data={productByGenderCategory.length > 0 ? productByGenderCategory : fakeData}
+                />
             </section>
         </>
     )
